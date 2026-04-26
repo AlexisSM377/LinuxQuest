@@ -1,0 +1,53 @@
+# Dependencies (nunca los necesita)
+node_modules/
+venv/
+__pycache__/
+
+# Build outputs (se regeneran)
+build/
+dist/
+out/
+.next/
+.vite/
+
+# Logs (pueden ser enormes)
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+
+# Environment (secretos)
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDE
+.vscode/settings.json
+.idea/
+
+# Lockfiles (Claude los regenera si hace falta)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Testing artifacts
+coverage/
+*.snap
+
+# Database locals
+*.db
+*.sqlite
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Claude session data
+.claude/sessions/

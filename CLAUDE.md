@@ -29,5 +29,6 @@
 
 ## Al iniciar sesión
 1. Lee STATUS.md
-2. Propón 2-3 tareas del día
-3. Confirma con usuario antes de ejecutar
+2. Pregunta qué vamos a trabajar hoy
+3. Propón 2-3 tareas del día
+4. Confirma con usuario antes de ejecutar
