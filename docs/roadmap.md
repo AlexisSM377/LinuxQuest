@@ -67,17 +67,25 @@
 - [x] Logros por mundo completado
 - [x] Bonus XP por achievements
 
-## Semana 9-10: Mundos 2-3 ⏳
-- [ ] Tema 2: Archivos y permisos
-- [ ] Tema 3: Procesos
-- [ ] Sistema de combate
-- [ ] Enemigos y bosses
+## Semana 9: Mundo 2 - Archivos & Permisos ⏳
+- [x] 20 quests sobre ls, chmod, chown, find, etc (SEEDED)
+- [ ] NPCs temáticos para Mundo 2
+- [ ] Validación de comandos por quest
+- [ ] UI mejorada: Quest cards con dificultad visual
 
-## Semana 11: Mundos 4-5 ⏳
-- [ ] Tema 4: Redes
-- [ ] Tema 5: Scripts
-- [ ] Jefe final
+## Semana 10: Mundo 3 - Procesos & Sistema de Combate ⏳
+- [x] 15 quests sobre ps, kill, top, systemctl, etc (SEEDED)
+- [ ] Sistema de combate básico (boss quests)
+- [ ] Enemigos/adversarios en quests de Mundo 3
+- [ ] NPCs de combate
+- [ ] Health/damage system (opcional)
+
+## Semana 11: Mundos 4-5 - Redes, Scripts & Jefe Final ⏳
+- [x] Mundo 4: 20 quests sobre ifconfig, netstat, ssh, etc (SEEDED)
+- [x] Mundo 5: 25 quests sobre bash scripting, variables, loops, etc (SEEDED)
+- [ ] Quest final/Jefe final (Boss quest en Mundo 5)
 - [ ] Polish y bug fixes
+- [ ] Performance optimization
 
 ## Semana 12: Deploy 🟡
 - [ ] Deploy frontend en Vercel (tu amigo)
@@ -86,6 +94,32 @@
 - [ ] Conectar frontend + backend en producción
 - [ ] Dominio personalizado (opcional)
 - [ ] Anuncio público
+
+## Plan Detallado - Semanas 9-11
+
+### Semana 9: Polish + NPCs Mundo 2
+**Objetivo:** Mejorar UX y agregar contexto narrativo
+- Quest Card redesign: Mostrar dificultad con colores, XP reward, tiempo estimado
+- NPC system: Agregar NPC names con personalidades (Archivista, Guardián de Permisos)
+- Quest hints mejorados: Animations y tooltips
+- Validación mejorada: Mostrar "Casi lo logras" vs "Comando no válido"
+- Testing: Verificar todas las 20 quests del Mundo 2 funcionan
+
+### Semana 10: Combat System Básico (Mundo 3)
+**Objetivo:** Agregar elemento de "combate" narrativo a quests de procesos
+- Battle UI: Componente de combate simple (enemy HP, player actions)
+- Enemy encounters: Algunos quests tienen "enemigos" (procesos zombie, etc)
+- Victory/Defeat: Condiciones de victoria/derrota distintas
+- Boss quest en Mundo 3: Quest final de procesos con "Boss Jefe de Sistema"
+- Animations: Victory celebration, defeat retry
+
+### Semana 11: Jefe Final + Polish (Mundos 4-5)
+**Objetivo:** Completar contenido y pulir para producción
+- World 5 Boss Quest: Misión final complejísima (script completo para automatizar)
+- Leaderboard básico: Top 10 usuarios por XP/nivel
+- Stats page: Ver historial de quests, logros timeline
+- Bug fixes y optimizaciones de performance
+- Documentation: Actualizar guides y FAQs
 
 ## Stack Final
 - **Frontend:** React 18 + Vite → Vercel
@@ -105,18 +139,43 @@
 **Próximas:** Semanas 9-12 (Boss Battles, Inventory, Leaderboard, Deploy)
 **Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL
 
+## Contenido Seeded - 95 Quests Distribuidas
+```
+Mundo 1: Fundamentos Linux (15 quests)
+  ├─ Conceptos: uname, /etc/os-release, familias de distros
+  ├─ Software Libre: FSF, OSI, GPL vs MIT
+  ├─ Alternativas: Office, diseño, desarrollo
+  └─ Servidores: Apache, Nginx, MySQL, Postfix
+
+Mundo 2: Archivos & Permisos (20 quests) ← Semana 9
+  ├─ Navegación: ls, pwd, cd, mkdir, rmdir
+  ├─ Manipulación: cp, mv, rm, touch, cat
+  ├─ Permisos: chmod, chown, umask, ACLs
+  └─ Búsqueda: find, locate, grep
+
+Mundo 3: Procesos & Usuarios (15 quests) ← Semana 10
+  ├─ Procesos: ps, top, htop, kill, nice
+  ├─ Servicios: systemctl, service, init
+  ├─ Usuarios: useradd, userdel, groups, sudo
+  └─ Logs: journalctl, tail, dmesg
+
+Mundo 4: Redes (20 quests) ← Semana 11
+  ├─ Configuración: ifconfig, ip, route
+  ├─ Diagnostico: ping, traceroute, netstat, ss
+  ├─ Servicios de red: ssh, ftp, curl, wget
+  └─ Firewall y seguridad: iptables, ufw
+
+Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
+  ├─ Bash: variables, operadores, estructuras
+  ├─ Funciones: definir, parámetros, retorno
+  ├─ Loops: for, while, until
+  ├─ Avanzado: sed, awk, regex, pipes
+  └─ Proyectos: cron, background jobs, logging
+```
+
 ## Cambios Recientes (2026-04-27)
 - ✅ Semana 7 COMPLETADA: XP system con 20 niveles + nivel-up notifications
-  - levelSystem.js: Cálculo XP no-lineal (0 a 9070 XP para nivel 20)
-  - quests.js: POST /:id/complete otorga XP y actualiza nivel
-  - XpNotification.jsx: Animaciones de level-up
-  - GamePage.jsx: HUD con barra de progreso y stats
-  
 - ✅ Semana 8 COMPLETADA: Quest unlock system + 12 achievements
-  - Progress.js: checkPrerequisites() valida desbloqueo de quests
-  - achievementChecker.js: Detecta logros automáticamente
-  - achievementsConfig.js: 12 badges (primer_paso, nivel_5/10/20, mundo_1/2/3, etc)
-  - AchievementsPanel.jsx: Galería de logros desbloqueados/bloqueados
-  - Quest.jsx: Muestra requisitos previos y candado visual
+- ✅ 95 Quests SEEDED: 5 mundos con 15-25 quests cada uno
 - ✅ Database: Tablas quests + user_quest_progress pobladas
 - ✅ Socket.io: Terminal ↔ Backend validando comandos por quest
