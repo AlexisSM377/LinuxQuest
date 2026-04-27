@@ -10,7 +10,7 @@ import { useGameStore } from '../store/gameStore';
 export default function GamePage() {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuthStore();
-  const { currentQuestId, userStats, achievements, userAchievements, fetchQuests, fetchUserStats, fetchAchievements, fetchUserAchievements, fetchNPCs, completeQuest } = useGameStore();
+  const { currentQuestId, userStats, achievements, userAchievements, fetchQuests, fetchUserStats, fetchAchievements, fetchUserAchievements, fetchNPCs, fetchEnemies, completeQuest } = useGameStore();
   const [notification, setNotification] = useState(null);
   const [showAchievements, setShowAchievements] = useState(false);
 
@@ -26,7 +26,8 @@ export default function GamePage() {
     fetchAchievements();
     fetchUserAchievements();
     fetchNPCs();
-  }, [fetchQuests, fetchUserStats, fetchAchievements, fetchUserAchievements, fetchNPCs]);
+    fetchEnemies();
+  }, [fetchQuests, fetchUserStats, fetchAchievements, fetchUserAchievements, fetchNPCs, fetchEnemies]);
 
   const handleLogout = () => {
     logout();

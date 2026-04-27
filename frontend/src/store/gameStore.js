@@ -9,6 +9,7 @@ export const useGameStore = create((set) => ({
   achievements: [],
   userAchievements: [],
   npcs: [],
+  enemies: [],
   loading: true,
 
   setCurrentQuestId: (questId) => set({ currentQuestId: questId }),
@@ -19,6 +20,7 @@ export const useGameStore = create((set) => ({
   setAchievements: (achievements) => set({ achievements }),
   setUserAchievements: (userAchievements) => set({ userAchievements }),
   setNPCs: (npcs) => set({ npcs }),
+  setEnemies: (enemies) => set({ enemies }),
   setLoading: (loading) => set({ loading }),
 
   fetchQuests: async () => {
@@ -175,6 +177,16 @@ export const useGameStore = create((set) => ({
       set({ npcs });
     } catch (error) {
       console.error('Error fetching NPCs:', error);
+    }
+  },
+
+  fetchEnemies: async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/enemies`);
+      const enemies = await response.json();
+      set({ enemies });
+    } catch (error) {
+      console.error('Error fetching enemies:', error);
     }
   }
 }));

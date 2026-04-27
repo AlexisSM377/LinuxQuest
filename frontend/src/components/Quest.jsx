@@ -3,15 +3,24 @@ import { useGameStore } from '../store/gameStore';
 import { useAuthStore } from '../store/authStore';
 import QuestCard from './QuestCard';
 import NPCProfile from './NPCProfile';
+import BattleSystem from './BattleSystem';
 
 export default function Quest({ onCompleteClick }) {
-  const { currentQuestId, currentQuest, quests, loading, npcs, setCurrentQuest, setCurrentQuestId, userProgress, fetchUserProgress, fetchNPCs } = useGameStore();
+  const { currentQuestId, currentQuest, quests, loading, npcs, enemies, setCurrentQuest, setCurrentQuestId, userProgress, fetchUserProgress, fetchNPCs } = useGameStore();
   const { user } = useAuthStore();
   const [expandedWorlds, setExpandedWorlds] = useState({ 1: true });
   const [completing, setCompleting] = useState(false);
+  const [showBattle, setShowBattle] = useState(false);
+  const [currentBattle, setCurrentBattle] = useState(null);
 
   const getNPC = (npcName) => {
     return npcs.find(npc => npc.name === npcName);
+  };
+
+  const getBossEnemy = () => {
+    if (!currentQuest || currentQuest.difficulty < 4) return null;
+    // Retorna el boss apropiado según el mundo
+    return enemies.find(e => e.world === currentQuest.world && e.isBoss);
   };
 
   const handleCompleteClick = async () => {
@@ -225,6 +234,23 @@ export default function Quest({ onCompleteClick }) {
           </div>
         )}
       </div>
+
+      {/* Boss Battle */}
+      {getBossEnemy() && currentQuest.difficulty >= 4 && (
+        <div className="border-t border-gray-700 p-3">
+          <BattleSystem
+            enemy={getBossEnemy()}
+            onVictory={() => {
+              setShowBattle(false);
+              // Automáticamente completar la quest tras victoria
+              onCompleteClick?.();
+            }}
+            onDefeat={() => {
+              setShowBattle(false);
+            }}
+          />
+        </div>
+      )}
 
       {/* Complete Button */}
       <div className="border-t border-gray-700 p-3">

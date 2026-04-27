@@ -9,6 +9,7 @@ import lessonRoutes from './routes/lessons.js';
 import questRoutes from './routes/quests.js';
 import achievementRoutes from './routes/achievements.js';
 import npcRoutes from './routes/npcs.js';
+import enemyRoutes from './routes/enemies.js';
 import { executeCommand } from './services/commandService.js';
 import { createUserSandbox, deleteUserSandbox, getSandboxPath, cleanupUserSandbox } from './services/sandboxService.js';
 import auditLogger from './security/auditLogger.js';
@@ -42,6 +43,7 @@ app.use('/api/lessons', lessonRoutes);
 app.use('/api/quests', questRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/npcs', npcRoutes);
+app.use('/api/enemies', enemyRoutes);
 
 // Socket.io middleware para autenticación
 io.use((socket, next) => {
