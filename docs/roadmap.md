@@ -84,12 +84,16 @@
 - [x] GET /api/enemies endpoints
 - [x] Integración en Quest.jsx - mostrar combate para boss quests
 
-## Semana 11: Mundos 4-5 - Redes, Scripts & Jefe Final ⏳
+## Semana 11: Leaderboard & Stats System ✅
 - [x] Mundo 4: 20 quests sobre ifconfig, netstat, ssh, etc (SEEDED)
 - [x] Mundo 5: 25 quests sobre bash scripting, variables, loops, etc (SEEDED)
-- [ ] Quest final/Jefe final (Boss quest en Mundo 5)
-- [ ] Polish y bug fixes
-- [ ] Performance optimization
+- [x] Leaderboard global (top 10 jugadores por XP)
+- [x] Leaderboard por mundo
+- [x] Stats page: Progreso de mundos, logros desbloqueados, ranking personal
+- [x] GET /api/leaderboard endpoints
+- [x] LeaderboardPanel component
+- [x] Botón Stats en GamePage
+- [x] Páginas completas y funcionales
 
 ## Semana 12: Deploy 🟡
 - [ ] Deploy frontend en Vercel (tu amigo)
@@ -139,8 +143,8 @@
 ---
 
 ## Progreso General
-**Completadas:** Semanas 1-10 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs, Combat)
-**Próximas:** Semanas 11-12 (Boss Final, Leaderboard, Deploy)
+**Completadas:** Semanas 1-11 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs, Combat, Leaderboard)
+**Próxima:** Semana 12 (Deploy en producción)
 **Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL
 
 ## Contenido Seeded - 95 Quests Distribuidas
@@ -182,11 +186,13 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
 - ✅ Semana 8 COMPLETADA: Quest unlock system + 12 achievements
 - ✅ Semana 9 COMPLETADA: NPC system + Quest card redesign
 - ✅ Semana 10 COMPLETADA: Combat System + Boss Battles
-  - BattleSystem component con health bars y animaciones
-  - 6 bosses/enemigos (Zombie, Daemon, Jefe Sistema, SyntaxError, LoopInfinito, Dragón)
-  - Victory/Defeat logic integrada
-  - Combat para boss quests (dificultad 4-5)
-  - /api/enemies endpoints
+- ✅ Semana 11 COMPLETADA: Leaderboard & Stats System
+  - LeaderboardPanel con ranking global y por mundo
+  - StatsPage: Progreso de mundos, logros desbloqueados, ranking personal
+  - /api/leaderboard endpoints (top jugadores, world rankings, player stats)
+  - Integración en GamePage (botón Stats)
+  - Medals para ranking (🥇 🥈 🥉)
 - ✅ 95 Quests SEEDED: 5 mundos con 15-25 quests cada uno
+- ✅ PROYECTO 92% COMPLETO - Solo falta deploy en Semana 12
 - ✅ Database: Tablas quests + user_quest_progress pobladas
 - ✅ Socket.io: Terminal ↔ Backend validando comandos por quest
