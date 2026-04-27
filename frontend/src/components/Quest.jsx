@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useAuthStore } from '../store/authStore';
 
-export default function Quest() {
+export default function Quest({ onCompleteClick }) {
   const { currentQuestId, currentQuest, quests, loading, setCurrentQuest, setCurrentQuestId, userProgress, fetchUserProgress } = useGameStore();
   const { user } = useAuthStore();
   const [expandedWorlds, setExpandedWorlds] = useState({ 1: true });
@@ -166,8 +166,18 @@ export default function Quest() {
         )}
       </div>
 
+      {/* Complete Button */}
+      <div className="border-t border-gray-700 p-3">
+        <button
+          onClick={() => onCompleteClick?.()}
+          className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded transition"
+        >
+          ✓ Completar Misión
+        </button>
+      </div>
+
       {/* World/Quest List - Scrollable */}
-      <div className="border-t border-gray-700 bg-gray-850 max-h-64 overflow-y-auto">
+      <div className="border-t border-gray-700 bg-gray-850 max-h-48 overflow-y-auto">
         <div className="p-2">
           {worlds.map(world => (
             <div key={world}>

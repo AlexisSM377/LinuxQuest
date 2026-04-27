@@ -27,7 +27,14 @@ router.post('/register', async (req, res) => {
     );
 
     res.status(201).json({
-      user: { id: user.id, email: user.email, username: user.username },
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        xp: user.xp || 0,
+        level: user.level || 1,
+        coins: user.coins || 0
+      },
       token
     });
   } catch (error) {
@@ -61,7 +68,14 @@ router.post('/login', async (req, res) => {
     );
 
     res.json({
-      user: { id: user.id, email: user.email, username: user.username },
+      user: {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        xp: user.xp || 0,
+        level: user.level || 1,
+        coins: user.coins || 0
+      },
       token
     });
   } catch (error) {
