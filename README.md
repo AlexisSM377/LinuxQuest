@@ -1,16 +1,16 @@
 # LinuxQuest 🐧
 
-**Interactive Linux Learning Platform** — Master Linux fundamentals through gamified quests, command execution, and progressive difficulty levels.
+**Plataforma Interactiva para Aprender Linux** — Domina los fundamentos de Linux a través de misiones gamificadas, ejecución de comandos y niveles progresivos.
 
-[![Status](https://img.shields.io/badge/status-PRODUCTION%20READY-brightgreen)](docs/roadmap.md)
-[![Security](https://img.shields.io/badge/security-8%20LAYERS-blue)](docs/SECURITY-HARDENED.md)
-[![Quests](https://img.shields.io/badge/quests-95%20missions-blue)](docs/LINUXQUEST_CONTENT.md)
+[![Estado](https://img.shields.io/badge/estado-LISTO%20PRODUCCI%C3%93N-brightgreen)](docs/roadmap.md)
+[![Seguridad](https://img.shields.io/badge/seguridad-8%20CAPAS-blue)](docs/SECURITY-HARDENED.md)
+[![Misiones](https://img.shields.io/badge/misiones-95%20quests-blue)](docs/LINUXQUEST_CONTENT.md)
 
-**Current Status:** ✅ **WEEKS 1-12 COMPLETED** | Ready for Vercel deployment
+**Estado Actual:** ✅ **SEMANAS 1-12 COMPLETADAS** | Listo para deployment en Vercel
 
 ---
 
-## 🎮 Quick Start
+## 🎮 Inicio Rápido
 
 ```bash
 # Terminal 1: Backend
@@ -19,225 +19,225 @@ cd backend && npm install && npm run dev
 # Terminal 2: Frontend
 cd frontend && npm install && npm run dev
 
-# Browser
+# Navegador
 # http://localhost:5173
-# 1. Register/Login
-# 2. Select quest and type commands in terminal
-# 3. Earn XP, level up, unlock achievements
+# 1. Registrarse/Iniciar sesión
+# 2. Seleccionar misión y escribir comandos en la terminal
+# 3. Ganar XP, subir de nivel, desbloquear logros
 ```
 
 ---
 
-## 📦 What's Included
+## 📦 Qué Incluye
 
-**5 Learning Worlds | 95 Linux Quests | 20 Progression Levels | 12 Achievements**
+**5 Mundos de Aprendizaje | 95 Misiones Linux | 20 Niveles de Progresión | 12 Logros**
 
-### Mundo 1: Linux Fundamentals (15 quests)
-- Conceptos: `uname`, `/etc/os-release`, distro families
-- Software Libre: FSF, OSI, GPL vs MIT licenses
-- Alternativas open-source: Office, design, dev tools
+### Mundo 1: Fundamentos Linux (15 misiones)
+- Conceptos: `uname`, `/etc/os-release`, familias de distros
+- Software Libre: FSF, OSI, GPL vs MIT
+- Alternativas open-source: Office, diseño, herramientas de desarrollo
 - Servidores: Apache, Nginx, MySQL, Postfix
 
-### Mundo 2: Files & Permissions (20 quests)
+### Mundo 2: Archivos & Permisos (20 misiones)
 - Navegación: `ls`, `pwd`, `cd`, `mkdir`, `rmdir`
 - Manipulación: `cp`, `mv`, `rm`, `touch`, `cat`
 - Permisos: `chmod`, `chown`, `umask`, ACLs
 - Búsqueda: `find`, `locate`, `grep`
 
-### Mundo 3: Processes & Users (15 quests)
+### Mundo 3: Procesos & Usuarios (15 misiones)
 - Procesos: `ps`, `top`, `htop`, `kill`, `nice`
 - Servicios: `systemctl`, `service`, `init`
 - Usuarios: `useradd`, `userdel`, `groups`, `sudo`
 - Logs: `journalctl`, `tail`, `dmesg`
 
-### Mundo 4: Networking (20 quests)
+### Mundo 4: Redes (20 misiones)
 - Configuración: `ifconfig`, `ip`, `route`
 - Diagnóstico: `ping`, `traceroute`, `netstat`, `ss`
 - Servicios: `ssh`, `ftp`, `curl`, `wget`
 - Firewall: `iptables`, `ufw`
 
-### Mundo 5: Scripting & Automation (25 quests)
-- Bash: variables, operators, structures
-- Functions: definir, parámetros, return
+### Mundo 5: Scripts & Automatización (25 misiones)
+- Bash: variables, operadores, estructuras
+- Funciones: definir, parámetros, return
 - Loops: `for`, `while`, `until`
 - Avanzado: `sed`, `awk`, `regex`, pipes
 - Proyectos: `cron`, background jobs, logging
 
 ---
 
-## 🎯 Game Mechanics
+## 🎯 Mecánicas del Juego
 
-### 🎖️ XP & Leveling
-- **20 Levels** with nonlinear XP progression (0-9070 XP)
-- Rewards per quest: XP + coins
-- Auto level-up notifications with animations
-- Level-up bonuses and tracking
+### 🎖️ XP y Nivelación
+- **20 Niveles** con progresión XP no-lineal (0-9070 XP total)
+- Recompensas por misión: XP + monedas
+- Notificaciones automáticas de nivel-up con animaciones
+- Bonificaciones y seguimiento de nivel-up
 
-### 🏆 Achievement System
-- **12 Auto-Unlocked Badges:**
-  - `primer_paso` — Complete first quest
-  - `nivel_5/10/20` — Reach level milestones
-  - `mundo_1/2/3` — Complete world progression
-  - `velocista` — Complete 5 quests daily
-  - `coleccionista` — Complete 50 quests
-  - `completista` — Master all 95 quests
-  - `sin_errores` — Complete world without failures
-  - `guerrero_persistente` — Retry & persist through challenges
+### 🏆 Sistema de Logros
+- **12 Badges Desbloqueables Automáticamente:**
+  - `primer_paso` — Completa tu primer quest
+  - `nivel_5/10/20` — Alcanza hitos de nivel
+  - `mundo_1/2/3` — Completa la progresión de mundos
+  - `velocista` — Completa 5 quests en un día
+  - `coleccionista` — Completa 50 quests
+  - `completista` — Domina los 95 quests
+  - `sin_errores` — Completa mundo sin fallos
+  - `guerrero_persistente` — Persiste y reintenta desafíos
 
-### 🔓 Quest Unlock System
-- Prerequisites validation: some quests require prior missions
-- Visual lock indicators showing missing requirements
-- Progressive difficulty curve across worlds
+### 🔓 Sistema de Desbloqueo de Quests
+- Validación de prerequisitos: algunos quests requieren misiones previas
+- Indicadores visuales de candado mostrando requisitos faltantes
+- Curva de dificultad progresiva entre mundos
 
-### 🗺️ Leaderboards
-- **Global Rankings:** Top 10 players by total XP
-- **World Rankings:** Per-world completion leaderboards
-- **Player Stats:** Individual rank, progression, achievements
-- Medals: 🥇🥈🥉 for top 3
+### 🗺️ Tablas de Clasificación
+- **Ranking Global:** Top 10 jugadores por XP total
+- **Ranking por Mundo:** Clasificación de completación por mundo
+- **Estadísticas Personales:** Rango individual, progresión, logros
+- Medallas: 🥇🥈🥉 para los top 3
 
-### ⚔️ Boss Battles
-- 6 narrative enemies: Zombie Process, Runaway Daemon, Process Manager Boss, Syntax Error, Infinite Loop, Final Dragon
-- Combat encounters integrated with boss quests
-- Defeat/retry mechanics with persistence
+### ⚔️ Batallas con Jefes
+- 6 enemigos narrativos: Zombie Process, Daemon Descontrolado, Jefe de Procesos, Syntax Error, Loop Infinito, Dragón Final
+- Encuentros de combate integrados con quests de jefe
+- Mecánicas de derrota/reintento con persistencia
 
-### 🧑‍💼 NPC System
-- **9 Thematic NPCs** with unique personalities
-- Each world has quest givers (Archivista, Guardian de Permisos, Maestro de Procesos, etc.)
-- NPC profiles with greetings and specialties
+### 🧑‍💼 Sistema de NPCs
+- **9 NPCs Temáticos** con personalidades únicas
+- Cada mundo tiene personajes que ofrecen misiones (Archivista, Guardián de Permisos, Maestro de Procesos, etc.)
+- Perfiles de NPC con saludos y especialidades
 
 ---
 
-## 🏗️ Project Structure
+## 🏗️ Estructura del Proyecto
 
 ```
 LinuxQuest/
 ├── frontend/                    # React 18 + Vite
 │   ├── src/
-│   │   ├── components/         # Reusable React components
-│   │   ├── pages/              # Page components (Game, Stats, etc)
+│   │   ├── components/         # Componentes reutilizables
+│   │   ├── pages/              # Componentes de página (Game, Stats, etc)
 │   │   ├── hooks/              # Custom React hooks
-│   │   ├── store/              # Zustand state management
-│   │   ├── utils/              # Utility functions
-│   │   └── App.jsx             # Main router
+│   │   ├── store/              # Gestión estado Zustand
+│   │   ├── utils/              # Funciones auxiliares
+│   │   └── App.jsx             # Router principal
 │   └── vite.config.js
 │
 ├── backend/                     # Node.js + Express
 │   ├── src/
-│   │   ├── models/             # Database models (User, Quest, Progress)
-│   │   ├── routes/             # API endpoints
-│   │   ├── middleware/         # Auth, validation, errors
-│   │   ├── services/           # Business logic (command execution, sandbox)
-│   │   ├── config/             # Achievements, NPCs, Enemies configs
+│   │   ├── models/             # Modelos BD (User, Quest, Progress)
+│   │   ├── routes/             # Endpoints API
+│   │   ├── middleware/         # Auth, validación, errores
+│   │   ├── services/           # Lógica de negocio
+│   │   ├── config/             # Configs (Achievements, NPCs, Enemies)
 │   │   ├── utils/              # Helpers (XP system, achievement checker)
-│   │   ├── security/           # Security modules (validator, audit logger)
-│   │   └── server.js           # Express app setup
+│   │   ├── security/           # Módulos de seguridad
+│   │   └── server.js           # Setup Express
 │   ├── scripts/
-│   │   ├── init-db.js          # Database setup
-│   │   ├── seed-quests.js      # Populate 95 quests
-│   │   ├── seed-achievements.js # Populate achievements
-│   │   └── audit-monitor.js    # Real-time security audit
+│   │   ├── init-db.js          # Inicializar BD
+│   │   ├── seed-quests.js      # Poblar 95 misiones
+│   │   ├── seed-achievements.js # Poblar logros
+│   │   └── audit-monitor.js    # Auditoría en tiempo real
 │   └── package.json
 │
-├── docs/                        # Documentation
-│   ├── roadmap.md              # 12-week development plan
-│   ├── SECURITY.md             # Comprehensive security guide
-│   ├── SECURITY-HARDENED.md    # Security validation checklist
-│   ├── LINUXQUEST_CONTENT.md   # Quest database reference
-│   └── DEPLOYMENT.md           # Production deployment guide
+├── docs/                        # Documentación
+│   ├── roadmap.md              # Plan de 12 semanas
+│   ├── SECURITY.md             # Guía de seguridad completa
+│   ├── SECURITY-HARDENED.md    # Checklist validación seguridad
+│   ├── LINUXQUEST_CONTENT.md   # Referencia BD de misiones
+│   └── DEPLOYMENT.md           # Guía deployment producción
 │
-└── README.md                    # This file
+└── README.md                    # Este archivo
 ```
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Stack Tecnológico
 
 **Frontend:**
-- React 18 + Vite (fast build & HMR)
-- TailwindCSS (responsive design)
-- Zustand (lightweight state management)
-- xterm.js (terminal emulation)
-- React Router (SPA routing)
-- Socket.io client (real-time updates)
+- React 18 + Vite (build rápido & HMR)
+- TailwindCSS (diseño responsivo)
+- Zustand (gestión estado ligera)
+- xterm.js (emulación de terminal)
+- React Router (enrutamiento SPA)
+- Socket.io cliente (actualizaciones en tiempo real)
 
 **Backend:**
 - Node.js 20 + Express
-- PostgreSQL (Neon) with SSL
-- Socket.io (WebSocket server)
-- JWT authentication (7-day expiration)
-- bcrypt (password hashing)
-- Helmet.js (HTTP security headers)
-- express-validator (input validation)
-- express-rate-limit (DOS protection)
+- PostgreSQL (Neon) con SSL
+- Socket.io (servidor WebSocket)
+- JWT authentication (expiración 7 días)
+- bcrypt (hashing de contraseñas)
+- Helmet.js (headers seguridad HTTP)
+- express-validator (validación inputs)
+- express-rate-limit (protección DOS)
 
-**Infrastructure:**
+**Infraestructura:**
 - **Frontend Deploy:** Vercel (auto-scaling, CDN)
-- **Backend Deploy:** Fly.io (Linux containers)
-- **Database:** Neon PostgreSQL (managed, auto-backups)
-- **All HTTPS** with auto-renewal certificates
+- **Backend Deploy:** Fly.io (containers Linux)
+- **Base de Datos:** Neon PostgreSQL (managed, auto-backups)
+- **Todo con HTTPS** y renovación automática de certificados
 
 ---
 
-## 🔒 Security Features (8 Layers)
+## 🔒 Características de Seguridad (8 Capas)
 
-LinuxQuest implements comprehensive security to prevent abuse and protect the system:
+LinuxQuest implementa seguridad integral para prevenir abusos y proteger el sistema:
 
-### 1. Audit Logging
-- Complete trail of all command attempts
-- Real-time threat detection
-- Forensic analysis capabilities
+### 1. Auditoría Completa
+- Registro completo de todos los intentos de comando
+- Detección de amenazas en tiempo real
+- Capacidades de análisis forense
 
-### 2. Global Allowlist
-- 40+ approved commands only
-- Blocks dangerous commands: `sudo`, `docker`, `mount`, `dd`, etc.
+### 2. Allowlist Global
+- Solo 40+ comandos aprobados
+- Bloquea comandos peligrosos: `sudo`, `docker`, `mount`, `dd`, etc.
 
-### 3. Pattern Detection
-- Blocks shell injection: `&&`, `||`, `;`, `$()`, command substitution
-- Prevents redirections: `>`, `<`, `>>`, `|`
+### 3. Detección de Patrones
+- Bloquea inyección shell: `&&`, `||`, `;`, `$()`, sustitución de comandos
+- Previene redirecciones: `>`, `<`, `>>`, `|`
 
-### 4. Sandbox Validation
-- Path traversal prevention
-- Sensitive file protection (`/etc/*`, `/root`, `/sys`, `/proc`)
-- Per-user isolation
+### 4. Validación de Sandbox
+- Prevención de path traversal
+- Protección de archivos sensibles (`/etc/*`, `/root`, `/sys`, `/proc`)
+- Aislamiento por usuario
 
-### 5. Per-Quest Whitelist
-- Each quest has specific allowed commands
-- Quest 1 (uname): only `uname` allowed
-- Quest on files: only `ls`, `cd`, `pwd`, `cat` allowed
+### 5. Whitelist por Quest
+- Cada misión tiene comandos específicos permitidos
+- Quest 1 (uname): solo `uname` permitido
+- Quest archivos: solo `ls`, `cd`, `pwd`, `cat` permitidos
 
-### 6. Sandbox Execution
-- User-isolated execution directory: `/tmp/linuxquest-sandbox/user_<id>/`
-- No cross-user access possible
-- Auto-cleanup on disconnect
+### 6. Ejecución en Sandbox
+- Directorio de ejecución aislado por usuario: `/tmp/linuxquest-sandbox/user_<id>/`
+- Acceso cruzado entre usuarios es imposible
+- Auto-cleanup al desconectar
 
-### 7. Resource Limits
-- Timeout: 30 seconds max per command
-- Output: 5MB max buffer
-- Lines: 10,000 max output lines
-- Prevents resource exhaustion
+### 7. Límites de Recursos
+- Timeout: máximo 30 segundos por comando
+- Output: buffer máximo 5MB
+- Líneas: máximo 10,000 líneas de output
+- Previene agotamiento de recursos
 
-### 8. HTTP Security
-- **Helmet.js:** CSP, X-Frame-Options: DENY, HSTS, MIME sniffing protection
-- **CORS:** Frontend domain only (strict origin checking)
-- **Rate Limiting:** 100 requests/15min global + 10 commands/10s per user
-- **Input Validation:** Email, username, password regex enforcement
+### 8. Seguridad HTTP
+- **Helmet.js:** CSP, X-Frame-Options: DENY, HSTS, protección MIME sniffing
+- **CORS:** Solo dominio frontend (verificación estricta de origen)
+- **Rate Limiting:** 100 requests/15min global + 10 comandos/10s por usuario
+- **Validación Input:** Enfoque regex en email, username, password
 
-**Result:** Mathematically impossible to escape validation or compromise the system.
+**Resultado:** Matemáticamente imposible escapar validación o comprometer el sistema.
 
 ---
 
-## 🚀 Development
+## 🚀 Desarrollo
 
-### Prerequisites
+### Requisitos Previos
 ```bash
 node -v  # v20+
 npm -v   # v10+
 ```
 
-### First Time Setup
+### Primer Setup
 
 ```bash
-# 1. Clone & install dependencies
+# 1. Clonar e instalar dependencias
 git clone <repo>
 cd LinuxQuest
 
@@ -245,84 +245,84 @@ cd LinuxQuest
 cd backend
 npm install
 
-# 3. Database initialization
-npm run init-db      # Create tables
-npm run seed-quests  # Populate 95 quests
-npm run seed-achievements  # Populate achievements
+# 3. Inicializar base de datos
+npm run init-db      # Crear tablas
+npm run seed-quests  # Poblar 95 misiones
+npm run seed-achievements  # Poblar logros
 
 # 4. Setup frontend
 cd ../frontend
 npm install
 
-# 5. Environment variables
+# 5. Variables de entorno
 # backend/.env:
-DATABASE_URL=postgresql://...  # Neon PostgreSQL URL
-JWT_SECRET=your_secret_32_chars_min
+DATABASE_URL=postgresql://...  # URL Neon PostgreSQL
+JWT_SECRET=tu_secret_32_chars_minimo
 FRONTEND_URL=http://localhost:5173
 NODE_ENV=development
 
-# frontend/.env (optional):
+# frontend/.env (opcional):
 VITE_API_URL=http://localhost:3000
 ```
 
-### Run Development Servers
+### Ejecutar Servidores de Desarrollo
 
 ```bash
 # Terminal 1: Backend
 cd backend
 npm run dev
-# Runs on http://localhost:3000
+# Se ejecuta en http://localhost:3000
 
 # Terminal 2: Frontend
 cd frontend
 npm run dev
-# Runs on http://localhost:5173
+# Se ejecuta en http://localhost:5173
 ```
 
 ---
 
-## 📡 API Endpoints
+## 📡 Endpoints API
 
-### Authentication
-- `POST /api/auth/register` — Create account
-- `POST /api/auth/login` — Login & get JWT
-- `GET /api/auth/me` — Current user profile
+### Autenticación
+- `POST /api/auth/register` — Crear cuenta
+- `POST /api/auth/login` — Iniciar sesión y obtener JWT
+- `GET /api/auth/me` — Perfil del usuario actual
 
-### Quests
-- `GET /api/quests` — All quests
-- `GET /api/quests/:id` — Quest details
-- `GET /api/quests/world/:worldId` — Quests by world
-- `POST /api/quests/:id/complete` — Mark quest complete (grant XP)
-- `GET /api/quests/user/progress` — User's quest progress
-- `GET /api/quests/user/stats` — User's XP, level, coins
+### Misiones
+- `GET /api/quests` — Todas las misiones
+- `GET /api/quests/:id` — Detalles de misión
+- `GET /api/quests/world/:worldId` — Misiones por mundo
+- `POST /api/quests/:id/complete` — Marcar misión completa (otorgar XP)
+- `GET /api/quests/user/progress` — Progreso de misiones del usuario
+- `GET /api/quests/user/stats` — XP, nivel, monedas del usuario
 
-### Achievements
-- `GET /api/achievements` — All achievements
-- `GET /api/achievements/mine` — User's earned badges
+### Logros
+- `GET /api/achievements` — Todos los logros
+- `GET /api/achievements/mine` — Logros ganados del usuario
 
-### Leaderboard
-- `GET /api/leaderboard/top` — Top 10 global players
-- `GET /api/leaderboard/world/:worldId` — World rankings
-- `GET /api/leaderboard/player/:userId` — Player stats & rank
+### Tabla de Clasificación
+- `GET /api/leaderboard/top` — Top 10 jugadores globales
+- `GET /api/leaderboard/world/:worldId` — Ranking por mundo
+- `GET /api/leaderboard/player/:userId` — Estadísticas & rango del jugador
 
-### NPCs & Enemies
-- `GET /api/npcs` — All NPCs
-- `GET /api/npcs/world/:worldId` — World NPCs
-- `GET /api/enemies` — All enemies
-- `GET /api/enemies/world/:worldId` — World enemies
+### NPCs & Enemigos
+- `GET /api/npcs` — Todos los NPCs
+- `GET /api/npcs/world/:worldId` — NPCs del mundo
+- `GET /api/enemies` — Todos los enemigos
+- `GET /api/enemies/world/:worldId` — Enemigos del mundo
 
-### WebSocket Events (Socket.io)
-- `command` — Execute Linux command in sandbox
-- `xp:earned` — XP notification to client
-- `achievement:unlocked` — Achievement earned
+### Eventos WebSocket (Socket.io)
+- `command` — Ejecutar comando Linux en sandbox
+- `xp:earned` — Notificación XP al cliente
+- `achievement:unlocked` — Logro ganado
 
 ---
 
-## 📊 Database Schema
+## 📊 Schema de Base de Datos
 
 ### users
 ```sql
-id, email, username, password (hashed), xp, level, coins, created_at
+id, email, username, password (hasheada), xp, level, coins, created_at
 ```
 
 ### quests
@@ -349,98 +349,98 @@ user_id, achievement_id, earned_at (timestamp)
 
 ---
 
-## 📈 Project Statistics
+## 📈 Estadísticas del Proyecto
 
-| Metric | Count |
-|--------|-------|
-| Learning Worlds | 5 |
-| Quest Missions | 95 |
-| Progression Levels | 20 |
-| Achievement Badges | 12 |
-| NPC Characters | 9 |
-| Boss Encounters | 6 |
-| API Endpoints | 16+ |
-| Security Layers | 8 |
-| Audit Log Files | 4 |
-| Lines of Code | 5,000+ |
+| Métrica | Cantidad |
+|---------|----------|
+| Mundos de Aprendizaje | 5 |
+| Misiones | 95 |
+| Niveles de Progresión | 20 |
+| Badges de Logros | 12 |
+| Personajes NPC | 9 |
+| Encuentros de Jefe | 6 |
+| Endpoints API | 16+ |
+| Capas de Seguridad | 8 |
+| Archivos de Auditoría | 4 |
+| Líneas de Código | 5,000+ |
 
 ---
 
-## 🚀 Production Deployment
+## 🚀 Deployment en Producción
 
 ### Frontend (Vercel)
 ```bash
-1. Go to https://vercel.com
-2. Connect GitHub account
-3. Import: proyecto/LinuxQuest
-4. Root directory: frontend/
-5. Environment:
+1. Ir a https://vercel.com
+2. Conectar cuenta GitHub
+3. Importar: proyecto/LinuxQuest
+4. Directorio raíz: frontend/
+5. Variables de entorno:
    VITE_API_URL=https://linuxquest-backend.fly.dev
-6. Deploy (Vercel auto-detects Vite)
+6. Hacer deploy (Vercel auto-detecta Vite)
 ```
 
 ### Backend (Fly.io)
 ```bash
-# Already deployed at:
+# Ya deployado en:
 # https://linuxquest-backend.fly.dev
 # Health check:
 # https://linuxquest-backend.fly.dev/api/health
 ```
 
-### Database (Neon)
+### Base de Datos (Neon)
 ```
-Status: ✅ LIVE
-95 Quests: SEEDED
-12 Achievements: SEEDED
-All tables: CREATED
+Estado: ✅ LIVE
+95 Misiones: SEEDED
+12 Logros: SEEDED
+Todas las tablas: CREADAS
 ```
 
 ---
 
-## 📚 Documentation
+## 📚 Documentación
 
-- **[Roadmap](docs/roadmap.md)** — 12-week development timeline & completion status
-- **[Security Guide](docs/SECURITY.md)** — Comprehensive security architecture
-- **[Security Hardened](docs/SECURITY-HARDENED.md)** — Security validation checklist
-- **[Quest Content](docs/LINUXQUEST_CONTENT.md)** — Complete quest database reference
-- **[Deployment](docs/DEPLOYMENT.md)** — Production deployment instructions
-
----
-
-## ✅ Week 1-12 Completion Status
-
-- ✅ **Weeks 1-4:** Setup + Frontend + Backend + Auth
-- ✅ **Week 5:** Quest System + Command Execution
-- ✅ **Week 6:** Sandbox Validation + Security (8 layers)
-- ✅ **Week 7:** XP System + Level Progression (20 levels)
-- ✅ **Week 8:** Quest Unlock + Achievement System (12 badges)
-- ✅ **Week 9:** NPC System + UI Polish
-- ✅ **Week 10:** Combat System + Boss Battles
-- ✅ **Week 11:** Leaderboard + Stats Page
-- ✅ **Week 12:** Security Hardening + Production Ready
-
-**Status:** 🟢 PRODUCTION READY
+- **[Roadmap](docs/roadmap.md)** — Cronograma de 12 semanas y estado de completación
+- **[Guía de Seguridad](docs/SECURITY.md)** — Arquitectura de seguridad completa
+- **[Seguridad Endurecida](docs/SECURITY-HARDENED.md)** — Checklist validación seguridad
+- **[Contenido de Misiones](docs/LINUXQUEST_CONTENT.md)** — Referencia completa BD de misiones
+- **[Deployment](docs/DEPLOYMENT.md)** — Instrucciones deployment producción
 
 ---
 
-## 📋 Next Steps (Post-Launch)
+## ✅ Estado de Completación Semanas 1-12
 
-- [ ] Verify login/register in production
-- [ ] Load testing with concurrent users
-- [ ] Security penetration testing
-- [ ] Mobile app (React Native)
-- [ ] Advanced analytics dashboard
-- [ ] Tournament/competitive mode
-- [ ] Community features (forums, chat)
+- ✅ **Semanas 1-4:** Setup + Frontend + Backend + Autenticación
+- ✅ **Semana 5:** Sistema de Misiones + Ejecución de Comandos
+- ✅ **Semana 6:** Validación Sandbox + Seguridad (8 capas)
+- ✅ **Semana 7:** Sistema XP + Progresión de Niveles (20 niveles)
+- ✅ **Semana 8:** Desbloqueo de Quests + Sistema de Logros (12 badges)
+- ✅ **Semana 9:** Sistema de NPCs + Polish de UI
+- ✅ **Semana 10:** Sistema de Combate + Batallas de Jefes
+- ✅ **Semana 11:** Tabla de Clasificación + Página de Estadísticas
+- ✅ **Semana 12:** Endurecimiento de Seguridad + Listo para Producción
+
+**Estado:** 🟢 LISTO PARA PRODUCCIÓN
 
 ---
 
-## 📝 License & Credits
+## 📋 Próximos Pasos (Post-Lanzamiento)
 
-**Created:** 2026-04 | **Stack:** React + Node.js + PostgreSQL
-**Security:** Helmet.js + 8-layer validation pipeline
+- [ ] Verificar login/register en producción
+- [ ] Testing de carga con usuarios concurrentes
+- [ ] Testing de penetración de seguridad
+- [ ] Aplicación móvil (React Native)
+- [ ] Dashboard de análisis avanzados
+- [ ] Modo competitivo/torneos
+- [ ] Características comunitarias (foros, chat)
+
+---
+
+## 📝 Licencia & Créditos
+
+**Creado:** 2026-04 | **Stack:** React + Node.js + PostgreSQL
+**Seguridad:** Helmet.js + pipeline validación 8 capas
 **Deployment:** Vercel + Fly.io + Neon
 
 ---
 
-**Last Updated:** 2026-04-27 | **All 12 Weeks Complete** ✅
+**Última Actualización:** 2026-04-27 | **Las 12 Semanas Completas** ✅
