@@ -46,12 +46,26 @@
 - [x] Auditoría completa - auditLogger.js con logs de sesiones y violaciones
 - [x] 8 capas de seguridad - Global + Per-quest validation + Resource limits
 
-## Semana 7-8: Mundo 1 completo ⏳
-- [ ] Tema 1: Comandos básicos
-- [ ] 4 misiones completas
-- [ ] NPCs del tema 1
-- [ ] Sistema de XP
-- [ ] Sistema de niveles
+## Semana 7: XP System & Level Progression ✅
+- [x] Sistema de XP con 20 niveles
+- [x] Cálculo de XP no-lineal (levelSystem.js)
+- [x] Rewards por quest (xp + coins)
+- [x] Barra de progreso con porcentaje
+- [x] Notificaciones de level-up
+- [x] HUD con stats en tiempo real
+- [x] Almacenamiento en BD (users table)
+
+## Semana 8: Quest Unlock System & Achievements ✅
+- [x] Sistema de desbloqueo de quests (prerequisites)
+- [x] Validación de prerequisitos en backend
+- [x] Panel de logros/achievements con 12 badges
+- [x] Detección de logros completados
+- [x] Notificaciones de logros con iconos
+- [x] Galería de logros desbloqueados
+- [x] Logros por nivel (5, 10, 20)
+- [x] Logros por conteo (50, 100, 95 quests)
+- [x] Logros por mundo completado
+- [x] Bonus XP por achievements
 
 ## Semana 9-10: Mundos 2-3 ⏳
 - [ ] Tema 2: Archivos y permisos
@@ -87,16 +101,22 @@
 ---
 
 ## Progreso General
-**Completadas:** Semanas 1-6 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución)
-**En progreso:** Semana 7-8 (XP system, progresión visible)
+**Completadas:** Semanas 1-8 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements)
+**Próximas:** Semanas 9-12 (Boss Battles, Inventory, Leaderboard, Deploy)
 **Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL
 
 ## Cambios Recientes (2026-04-27)
-- ✅ Semana 5 COMPLETADA: 95+ quests seeded a BD
-- ✅ Semana 6 COMPLETADA: 8-layer validation + per-quest command whitelisting
-- ✅ questCommands.js: Configuración para cada quest (allowedCommands, patterns)
-- ✅ commandService.js: Validación multi-capa (líneas 58-274)
-- ✅ Quest.jsx UI: Rediseñado con estado visual (🔒 locked, ► in-progress, ✓ completed)
-- ✅ gameStore.js: fetchUserProgress con autenticación
+- ✅ Semana 7 COMPLETADA: XP system con 20 niveles + nivel-up notifications
+  - levelSystem.js: Cálculo XP no-lineal (0 a 9070 XP para nivel 20)
+  - quests.js: POST /:id/complete otorga XP y actualiza nivel
+  - XpNotification.jsx: Animaciones de level-up
+  - GamePage.jsx: HUD con barra de progreso y stats
+  
+- ✅ Semana 8 COMPLETADA: Quest unlock system + 12 achievements
+  - Progress.js: checkPrerequisites() valida desbloqueo de quests
+  - achievementChecker.js: Detecta logros automáticamente
+  - achievementsConfig.js: 12 badges (primer_paso, nivel_5/10/20, mundo_1/2/3, etc)
+  - AchievementsPanel.jsx: Galería de logros desbloqueados/bloqueados
+  - Quest.jsx: Muestra requisitos previos y candado visual
 - ✅ Database: Tablas quests + user_quest_progress pobladas
 - ✅ Socket.io: Terminal ↔ Backend validando comandos por quest

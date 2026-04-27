@@ -71,24 +71,37 @@
 - [x] Integration in server.js - Session logging + sandbox audit
 - [x] Complete audit trail - commands, threats, violations, sessions
 
-## 📋 Next Phase - Week 7-8: XP System & Progression
-- [ ] XP system (rewards per quest)
-- [ ] Level progression (1-20 levels)
-- [ ] Progress bar (current XP / next level)
-- [ ] Achievement unlocks
-- [ ] Quest completion tracking
-- [ ] Difficulty scaling
-- [ ] Leaderboard (optional)
+### Week 7: XP System & Level Progression ✅ (COMPLETED 2026-04-27)
+- [x] XP calculation system (levelSystem.js - 20 levels)
+- [x] Per-quest rewards (xp + coins)
+- [x] User stats tracking (xp, level, coins)
+- [x] Progress bar with percentage
+- [x] Level-up animations and notifications
+- [x] Nonlinear XP scaling (cumulative to level 20)
+- [x] HUD display with real-time stats
 
-## Todo - Week 9-12
+### Week 8: Quest Unlock System & Achievements ✅ (COMPLETED 2026-04-27)
+- [x] Quest prerequisites validation
+- [x] Unlock system - block quests until prerequisites met
+- [x] Achievement system with 12 badges
+- [x] Achievement detection on quest completion
+- [x] Achievement panel/gallery view
+- [x] Achievement notifications with icons
+- [x] Level-based achievements (5, 10, 20)
+- [x] Quest count milestones (50, 100, all 95)
+- [x] World completion achievements
+- [x] XP bonus per achievement
+
+## 📋 Next Phase - Week 9-12
 - [ ] Boss battle missions (visual/narrative)
-- [ ] Achievement system with icons
 - [ ] Item/reward inventory UI
-- [ ] User progression page
-- [ ] Settings/preferences
+- [ ] User progression page (stats + achievements timeline)
+- [ ] Settings/preferences (language, difficulty, etc)
+- [ ] Daily quests & streaks
+- [ ] Leaderboard system
 - [ ] Performance monitoring dashboard
-- [ ] Advanced threat detection
 - [ ] Timed challenges
+- [ ] Advanced threat detection
 
 ## Architecture
 ```
@@ -184,6 +197,24 @@ npm run dev --prefix frontend
 # 5. See output in terminal
 ```
 
+## Week 7-8 Implementation Summary (2026-04-27)
+
+### Backend Changes
+- **Progress.js**: Added `checkPrerequisites()` method for quest unlock validation
+- **quests.js**: Added prerequisite checking in POST /:id/complete endpoint
+- **achievementChecker.js**: Detects earned achievements based on user progress
+- **achievementsConfig.js**: 12 achievements with icons and XP bonuses
+- **achievements.js routes**: GET /api/achievements, GET /api/achievements/mine
+- **init-db.js**: Added achievements and user_achievements tables
+- **seed-achievements.js**: Scripts to populate achievements database
+
+### Frontend Changes
+- **gameStore.js**: Added achievements state and fetch methods
+- **Quest.jsx**: Shows lock state for prerequisites with list of missing quests
+- **XpNotification.jsx**: Extended to show achievement badges
+- **AchievementsPanel.jsx**: New component showing achievements gallery
+- **GamePage.jsx**: Added achievements button and panel integration
+
 ## Last Updated
-2026-04-27 23:45 UTC - Semanas 5-6 COMPLETADAS ✅
-Próxima: Semana 7 (XP System & Level Progression)
+2026-04-27 - Semanas 7-8 COMPLETADAS ✅
+Próxima: Semana 9 (Boss Battles & Inventory System)
