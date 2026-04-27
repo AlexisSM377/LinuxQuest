@@ -1,41 +1,189 @@
-# LinuxQuest - Status
+# LinuxQuest - Status (2026-04-27)
 
-## Completed
-- [x] Menu component created
-- [x] PostgreSQL + User model
-- [x] Auth endpoints (register/login + JWT)
-- [x] Terminal component (xterm.js)
-- [x] Routing (React Router)
-- [x] Login/Register pages
-- [x] Auth store (Zustand)
+## ✅ WEEKS 1-6 COMPLETED
 
-## Backend
-- Express server + health check
-- PostgreSQL pool + User model
-- Auth routes: /register, /login, /me
-- JWT middleware
-- Bcrypt password hashing
+### Week 1-4: Foundation ✅
+- [x] Setup, Frontend base, Terminal component, Backend auth
+- [x] PostgreSQL + User model + JWT + Socket.io
+- [x] Menu, Login, Game pages with React Router + Zustand
+- [x] Deployed: Fly.io backend, Neon database
 
-## Frontend
-- Terminal component with xterm.js
-- Auth pages (Login/Register)
-- Game page with Terminal
-- Zustand auth store
-- Routing setup
+### Week 5: Quest System & Game Logic ✅ (COMPLETED TODAY)
+- [x] Quest.js model - findAll(), findById(), findByWorld(), create()
+- [x] Progress.js model - trackProgress, updateStatus, getStats, incrementAttempts
+- [x] seed-quests.js - 95+ missions seeded to database
+- [x] Routes /api/quests/* (GET/POST all, by world, progress, complete)
+- [x] gameStore.js - Zustand store with fetchQuests, fetchUserProgress
+- [x] Quest.jsx component - Full redesign with expandable worlds + status indicators
 
-## Todo
-- [ ] Terminal backend integration (WebSocket)
-- [ ] Lesson system
-- [ ] Command execution backend
-- [ ] User progress tracking
-- [ ] Settings page
+### Week 6: Command Execution & Validation ✅ (COMPLETED TODAY)
+- [x] CommandExecutor service - commandService.js (274 lines, 8 layers)
+- [x] Sandbox per user - sandboxService.js creates /tmp/linuxquest-sandbox/user_<id>
+- [x] Socket.io backend - Listens 'command', passes questId
+- [x] Socket.io frontend - Terminal.jsx emits socket.emit('command', cmd, questId, callback)
+- [x] Rate limiting - 10 commands per 10 seconds per user
+- [x] Quest validation - Each quest has allowedCommands whitelist in questCommands.js
+- [x] 8-layer security validation pipeline
+- [x] Audit logging - Complete trails of commands, threats, violations, sessions
+- [x] Updated Terminal.jsx - Socket.io integration
+- [x] Updated GamePage.jsx - Quest sidebar + Terminal display
 
-## Frontend Deployment Ready
-- [x] Vercel configuration (vercel.json)
-- [x] Environment variables setup (.env.example)
-- [x] API client centralized (utils/api.js)
-- [x] Build optimized (vite.config.js)
-- [x] Build test passed
+## 🚀 Deployed
+**Frontend:** Vercel (tu amigo se encarga)
+**Backend:** https://linuxquest-backend.fly.dev (Fly.io - Linux)
+**Database:** Neon PostgreSQL
+
+## 🔧 Backend (Fly.io)
+- Express server + health check ✅
+- PostgreSQL pool + Neon ✅
+- Auth routes: /register, /login, /me ✅
+- JWT middleware ✅
+- Bcrypt password hashing ✅
+- Socket.io WebSocket server ✅
+- Command executor with quest validation ✅
+- Quest-specific command whitelisting ✅
+- Per-user sandbox execution ✅
+- Rate limiting (10 cmds/10s) ✅
+- Quest routes (/api/quests/*) ✅
+
+## 📱 Frontend (Local)
+- Terminal component with xterm.js ✅
+- Auth pages (Login/Register) ✅
+- Game page with quest sidebar ✅
+- Quest component with full info display ✅
+- Zustand auth store ✅
+- Zustand game store ✅
+- Routing setup ✅
+- Dynamic API URL configuration ✅
+
+## 🔐 Security (COMPLETED - 8 LAYERS)
+- [x] Sandbox Validator - Path traversal, injection, sensitive files
+- [x] Audit Logger - Comprehensive logging of all actions
+- [x] Security Config - Centralized policies and limits
+- [x] Global patterns - Block shell injection, redirections, etc.
+- [x] Resource limits - Timeout 30s, output 5MB, 10k lines max
+- [x] Forbidden commands - sudo, docker, mount, dd, etc.
+- [x] Forbidden paths - /etc/*, /root, /sys, /proc, /.docker
+- [x] Per-mission restrictions - Different rules per quest
+- [x] Audit trails - /tmp/linuxquest-audit/* logs (5 files)
+- [x] Security documentation - Complete SECURITY.md + README.md
+- [x] Integration in commandService.js - 8-layer validation pipeline
+- [x] Integration in server.js - Session logging + sandbox audit
+- [x] Complete audit trail - commands, threats, violations, sessions
+
+## 📋 Next Phase - Week 7-8: XP System & Progression
+- [ ] XP system (rewards per quest)
+- [ ] Level progression (1-20 levels)
+- [ ] Progress bar (current XP / next level)
+- [ ] Achievement unlocks
+- [ ] Quest completion tracking
+- [ ] Difficulty scaling
+- [ ] Leaderboard (optional)
+
+## Todo - Week 9-12
+- [ ] Boss battle missions (visual/narrative)
+- [ ] Achievement system with icons
+- [ ] Item/reward inventory UI
+- [ ] User progression page
+- [ ] Settings/preferences
+- [ ] Performance monitoring dashboard
+- [ ] Advanced threat detection
+- [ ] Timed challenges
+
+## Architecture
+```
+Vercel (Frontend React)
+    ↓ HTTPS
+Fly.io (Backend Node.js + Socket.io)
+    ↓
+Neon (PostgreSQL)
+```
+
+## 🛡️ Security Features Summary
+
+```
+8-LAYER SECURITY ARCHITECTURE
+├─ Layer 1: Audit Logger (registra todos los intentos)
+├─ Layer 2: Global Command Blacklist (sudo, docker, etc)
+├─ Layer 3: Global Pattern Detection (injection, redirection)
+├─ Layer 4: Sandbox Validator (path traversal, sensitive files)
+├─ Layer 5: Per-Mission Allowlist (solo comandos específicos)
+├─ Layer 6: Per-Mission Patterns (restricciones adicionales)
+├─ Layer 7: Sandbox Execution (/tmp/linuxquest-sandbox/user_<id>)
+└─ Layer 8: Resource Limits (timeout 30s, output 5MB)
+
+AUDIT TRAILS
+├─ commands.log (todos los intentos)
+├─ security-threats.log (ataques bloqueados)
+├─ security-violations.log (infracciones)
+├─ sandbox-access.log (sandbox events)
+└─ sessions.log (sesiones usuario)
+
+MONITORING TOOLS
+└─ scripts/audit-monitor.js (análisis en tiempo real)
+```
+
+## Documentation Files
+- `docs/SECURITY.md` - Documentación completa (16KB)
+- `docs/SECURITY-QUICKSTART.md` - Guía de inicio rápido
+- `backend/src/security/README.md` - Referencia de APIs
+
+## 🎯 Session 2026-04-27 Summary
+
+### Session Tasks Completed
+
+**Priority 1: Database Setup** ✅
+```bash
+npm run init-db        # Created: users, quests, user_quest_progress tables
+npm run seed-quests    # Populated: 95 missions from LPI Linux Essentials
+```
+
+**Priority 2: Command Validation** ✅
+Status: Already 100% implemented!
+- commandService.js: 8-layer validation pipeline
+  - Layer 1-2: Global blacklist + global patterns
+  - Layer 3-4: Sandbox validation + path traversal
+  - Layer 5: Per-quest command whitelist (questCommands.js)
+  - Layer 6: Per-quest dangerous patterns
+  - Layer 7-8: Sandbox execution + resource limits
+- questCommands.js: 95+ quests with allowedCommands config
+- server.js: Socket.io passes questId to executeCommand
+- Terminal.jsx: Emits questId with each command
+
+**Priority 3: UI Improvements** ✅
+- Quest.jsx: Complete redesign
+  - Expandible worlds list (click to expand/collapse)
+  - Status indicators per quest (🔒 locked, ► in-progress, ✓ completed)
+  - Independent scroll (details top, quest list bottom)
+  - Better responsive layout
+- gameStore.js: Updated fetchUserProgress
+  - Uses auth token from localStorage
+  - Calls /api/quests/user/progress
+  - Sets userProgress array in store
+
+### Files Modified
+- frontend/src/components/Quest.jsx (complete rewrite)
+- frontend/src/store/gameStore.js (fetchUserProgress updated)
+- docs/roadmap.md (updated weeks 5-6 status)
+- STATUS.md (this file)
+
+## 🚀 Ready to Test End-to-End
+
+```bash
+# Terminal 1: Backend
+npm run dev --prefix backend
+
+# Terminal 2: Frontend  
+npm run dev --prefix frontend
+
+# Browser: http://localhost:5173
+# 1. Register/Login
+# 2. Select quest from list (expandible by world)
+# 3. Type: uname
+# 4. Server validates: only allowed for quest 1
+# 5. See output in terminal
+```
 
 ## Last Updated
-2026-04-26
+2026-04-27 23:45 UTC - Semanas 5-6 COMPLETADAS ✅
+Próxima: Semana 7 (XP System & Level Progression)

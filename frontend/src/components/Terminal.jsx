@@ -5,7 +5,7 @@ import { io } from 'socket.io-client';
 import { useAuthStore } from '../store/authStore';
 import 'xterm/css/xterm.css';
 
-export default function Terminal() {
+export default function Terminal({ questId = null }) {
   const terminalRef = useRef(null);
   const socketRef = useRef(null);
   const commandBuffer = useRef('');
@@ -71,8 +71,8 @@ export default function Terminal() {
 
         if (command.length > 0) {
           term.write('\r\n');
-          console.log('Enviando comando:', command);
-          socketRef.current.emit('command', command, (response) => {
+          console.log('Enviando comando:', command, 'questId:', questId);
+          socketRef.current.emit('command', command, questId, (response) => {
             console.log('Respuesta recibida:', response);
             if (response?.error) {
               term.write(`\x1b[91m${response.error}\x1b[0m\r\n`);
