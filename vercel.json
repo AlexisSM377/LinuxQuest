@@ -6,7 +6,7 @@
     "VITE_API_URL": {
       "description": "Backend API URL",
       "required": false,
-      "default": "http://localhost:3000"
+      "default": "https://linuxquest-backend.fly.dev"
     }
   }
 }
