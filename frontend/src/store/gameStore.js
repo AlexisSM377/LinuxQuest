@@ -8,6 +8,7 @@ export const useGameStore = create((set) => ({
   userStats: { xp: 0, level: 1, coins: 0, xpToNext: 100, progress: 0 },
   achievements: [],
   userAchievements: [],
+  npcs: [],
   loading: true,
 
   setCurrentQuestId: (questId) => set({ currentQuestId: questId }),
@@ -17,6 +18,7 @@ export const useGameStore = create((set) => ({
   setUserStats: (stats) => set({ userStats: stats }),
   setAchievements: (achievements) => set({ achievements }),
   setUserAchievements: (userAchievements) => set({ userAchievements }),
+  setNPCs: (npcs) => set({ npcs }),
   setLoading: (loading) => set({ loading }),
 
   fetchQuests: async () => {
@@ -164,5 +166,15 @@ export const useGameStore = create((set) => ({
       .filter(p => p.status === 'completed')
       .map(p => p.quest_id);
     return quest.prerequisites.every(prereqId => completedQuestIds.includes(prereqId));
+  },
+
+  fetchNPCs: async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/npcs`);
+      const npcs = await response.json();
+      set({ npcs });
+    } catch (error) {
+      console.error('Error fetching NPCs:', error);
+    }
   }
 }));

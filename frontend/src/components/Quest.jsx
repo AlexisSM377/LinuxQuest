@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { useAuthStore } from '../store/authStore';
+import QuestCard from './QuestCard';
+import NPCProfile from './NPCProfile';
 
 export default function Quest({ onCompleteClick }) {
-  const { currentQuestId, currentQuest, quests, loading, setCurrentQuest, setCurrentQuestId, userProgress, fetchUserProgress } = useGameStore();
+  const { currentQuestId, currentQuest, quests, loading, npcs, setCurrentQuest, setCurrentQuestId, userProgress, fetchUserProgress, fetchNPCs } = useGameStore();
   const { user } = useAuthStore();
   const [expandedWorlds, setExpandedWorlds] = useState({ 1: true });
   const [completing, setCompleting] = useState(false);
+
+  const getNPC = (npcName) => {
+    return npcs.find(npc => npc.name === npcName);
+  };
 
   const handleCompleteClick = async () => {
     if (completing) return;
@@ -30,7 +36,8 @@ export default function Quest({ onCompleteClick }) {
     if (user?.id) {
       fetchUserProgress();
     }
-  }, [user, fetchUserProgress]);
+    fetchNPCs();
+  }, [user, fetchUserProgress, fetchNPCs]);
 
   if (loading) {
     return (
@@ -132,15 +139,33 @@ export default function Quest({ onCompleteClick }) {
       {/* Quest Details - Scrollable */}
       <div className="flex-1 overflow-y-auto">
         <div className="p-4 border-b border-gray-700 bg-gray-850 sticky top-0">
-          <div className="flex justify-between items-start mb-2">
-            <h2 className="text-emerald-400 font-bold text-lg">{currentQuest.title}</h2>
-            <span className={`text-xs font-bold px-2 py-1 rounded ${getDifficultyColor(currentQuest.difficulty)}`}>
+          <div className="flex justify-between items-start mb-3">
+            <div>
+              <h2 className="text-emerald-400 font-bold text-lg mb-1">{currentQuest.title}</h2>
+              <p className="text-gray-400 text-xs">Mundo {currentQuest.world} • Misión {currentQuest.order}</p>
+            </div>
+            <span className={`text-xs font-bold px-3 py-1 rounded bg-gradient-to-r ${
+              currentQuest.difficulty === 1 ? 'from-green-500 to-green-600' :
+              currentQuest.difficulty === 2 ? 'from-blue-500 to-blue-600' :
+              currentQuest.difficulty === 3 ? 'from-yellow-500 to-yellow-600' :
+              currentQuest.difficulty === 4 ? 'from-orange-500 to-orange-600' :
+              'from-red-500 to-red-600'
+            }`}>
               {getDifficultyLabel(currentQuest.difficulty)}
             </span>
           </div>
-          <p className="text-gray-400 text-sm mb-1">Mundo {currentQuest.world}</p>
-          <p className="text-gray-500 text-sm italic">PNJ: {currentQuest.npc}</p>
+          <div className="flex items-center gap-2 p-2 bg-gray-900 rounded">
+            <span className="text-2xl">🎭</span>
+            <div>
+              <p className="text-purple-400 font-bold text-sm">{currentQuest.npc}</p>
+              <p className="text-gray-500 text-xs">Guía de esta misión</p>
+            </div>
+          </div>
         </div>
+
+        {currentQuest.npc && <div className="p-4 border-b border-gray-700">
+          <NPCProfile npc={getNPC(currentQuest.npc)} />
+        </div>}
 
         <div className="p-4 border-b border-gray-700">
           <h3 className="text-blue-400 font-bold mb-2">Descripción</h3>
@@ -251,26 +276,24 @@ export default function Quest({ onCompleteClick }) {
               </button>
 
               {expandedWorlds[world] && (
-                <div className="pl-2 space-y-1">
+                <div className="pl-2 space-y-1.5">
                   {quests
                     .filter(q => q.world === world)
                     .sort((a, b) => a.order - b.order)
                     .map(quest => {
                       const status = getQuestStatus(quest.id);
                       const isActive = currentQuest.id === quest.id;
+                      const locked = !isQuestUnlocked(quest);
                       return (
-                        <button
+                        <QuestCard
                           key={quest.id}
+                          quest={quest}
+                          isActive={isActive}
+                          isCompleted={status === 'completed'}
+                          isLocked={locked}
+                          status={locked ? 'locked' : status}
                           onClick={() => selectQuest(quest)}
-                          className={`w-full px-3 py-2 rounded text-left text-xs transition border ${
-                            isActive
-                              ? 'bg-emerald-600 text-white border-emerald-500 font-bold'
-                              : `${getStatusColor(status)} hover:opacity-80`
-                          }`}
-                        >
-                          <span className="mr-2">{getStatusIcon(status)}</span>
-                          <span>M{quest.order}: {quest.title.substring(0, 20)}</span>
-                        </button>
+                        />
                       );
                     })}
                 </div>
