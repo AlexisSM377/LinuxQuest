@@ -5,13 +5,5 @@ export default defineConfig({
   plugins: [react()],
   build: {
     chunkSizeWarningLimit: 600,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          xterm: ["xterm", "@xterm/addon-fit"],
-          "react-router": ["react-router-dom"],
-        },
-      },
-    },
   },
 });
