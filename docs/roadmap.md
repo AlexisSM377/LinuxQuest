@@ -67,11 +67,13 @@
 - [x] Logros por mundo completado
 - [x] Bonus XP por achievements
 
-## Semana 9: Mundo 2 - Archivos & Permisos ⏳
+## Semana 9: NPC System & UI Polish ✅
 - [x] 20 quests sobre ls, chmod, chown, find, etc (SEEDED)
-- [ ] NPCs temáticos para Mundo 2
-- [ ] Validación de comandos por quest
-- [ ] UI mejorada: Quest cards con dificultad visual
+- [x] NPCs temáticos para todos los mundos (9 NPCs)
+- [x] Quest card redesign con dificultad visual
+- [x] NPC Profile component con avatar y personalidad
+- [x] GET /api/npcs endpoints
+- [x] Integración de NPCs en gameStore
 
 ## Semana 10: Mundo 3 - Procesos & Sistema de Combate ⏳
 - [x] 15 quests sobre ps, kill, top, systemctl, etc (SEEDED)
@@ -135,8 +137,8 @@
 ---
 
 ## Progreso General
-**Completadas:** Semanas 1-8 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements)
-**Próximas:** Semanas 9-12 (Boss Battles, Inventory, Leaderboard, Deploy)
+**Completadas:** Semanas 1-9 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs)
+**Próximas:** Semanas 10-12 (Combat System, Boss Final, Deploy)
 **Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL
 
 ## Contenido Seeded - 95 Quests Distribuidas
@@ -176,6 +178,11 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
 ## Cambios Recientes (2026-04-27)
 - ✅ Semana 7 COMPLETADA: XP system con 20 niveles + nivel-up notifications
 - ✅ Semana 8 COMPLETADA: Quest unlock system + 12 achievements
+- ✅ Semana 9 COMPLETADA: NPC system + Quest card redesign
+  - 9 NPCs únicos con personalidades (Linux Sabio, Archivista, Maestro de Procesos, etc)
+  - Quest cards mejoradas con dificultad visual (gradientes por color)
+  - NPC Profile component con greeting personalizado
+  - /api/npcs endpoints funcionando
 - ✅ 95 Quests SEEDED: 5 mundos con 15-25 quests cada uno
 - ✅ Database: Tablas quests + user_quest_progress pobladas
 - ✅ Socket.io: Terminal ↔ Backend validando comandos por quest

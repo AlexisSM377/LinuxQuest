@@ -197,6 +197,16 @@ npm run dev --prefix frontend
 # 5. See output in terminal
 ```
 
+### Week 9: NPC System & Quest Card Redesign ✅ (COMPLETED 2026-04-27)
+- [x] NPC system with 9 unique NPCs (one per theme)
+- [x] NPC personalities and specialties
+- [x] NPCProfile component with avatar and greeting
+- [x] Quest card redesign with difficulty gradients
+- [x] Show XP rewards on quest cards
+- [x] Better NPC information display in quest details
+- [x] GET /api/npcs endpoints
+- [x] gameStore integration for fetching NPCs
+
 ## Week 7-8 Implementation Summary (2026-04-27)
 
 ### Backend Changes
