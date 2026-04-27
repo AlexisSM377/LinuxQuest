@@ -75,12 +75,14 @@
 - [x] GET /api/npcs endpoints
 - [x] Integración de NPCs en gameStore
 
-## Semana 10: Mundo 3 - Procesos & Sistema de Combate ⏳
+## Semana 10: Combat System & Boss Battles ✅
 - [x] 15 quests sobre ps, kill, top, systemctl, etc (SEEDED)
-- [ ] Sistema de combate básico (boss quests)
-- [ ] Enemigos/adversarios en quests de Mundo 3
-- [ ] NPCs de combate
-- [ ] Health/damage system (opcional)
+- [x] Sistema de combate básico (boss quests)
+- [x] 5 enemigos/bosses (Zombie, Daemon, Jefe Procesos, SyntaxError, Loop Infinito, Dragón Final)
+- [x] BattleSystem component con health bars y batalla log
+- [x] Victory/Defeat animations
+- [x] GET /api/enemies endpoints
+- [x] Integración en Quest.jsx - mostrar combate para boss quests
 
 ## Semana 11: Mundos 4-5 - Redes, Scripts & Jefe Final ⏳
 - [x] Mundo 4: 20 quests sobre ifconfig, netstat, ssh, etc (SEEDED)
@@ -137,8 +139,8 @@
 ---
 
 ## Progreso General
-**Completadas:** Semanas 1-9 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs)
-**Próximas:** Semanas 10-12 (Combat System, Boss Final, Deploy)
+**Completadas:** Semanas 1-10 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs, Combat)
+**Próximas:** Semanas 11-12 (Boss Final, Leaderboard, Deploy)
 **Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL
 
 ## Contenido Seeded - 95 Quests Distribuidas
@@ -179,10 +181,12 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
 - ✅ Semana 7 COMPLETADA: XP system con 20 niveles + nivel-up notifications
 - ✅ Semana 8 COMPLETADA: Quest unlock system + 12 achievements
 - ✅ Semana 9 COMPLETADA: NPC system + Quest card redesign
-  - 9 NPCs únicos con personalidades (Linux Sabio, Archivista, Maestro de Procesos, etc)
-  - Quest cards mejoradas con dificultad visual (gradientes por color)
-  - NPC Profile component con greeting personalizado
-  - /api/npcs endpoints funcionando
+- ✅ Semana 10 COMPLETADA: Combat System + Boss Battles
+  - BattleSystem component con health bars y animaciones
+  - 6 bosses/enemigos (Zombie, Daemon, Jefe Sistema, SyntaxError, LoopInfinito, Dragón)
+  - Victory/Defeat logic integrada
+  - Combat para boss quests (dificultad 4-5)
+  - /api/enemies endpoints
 - ✅ 95 Quests SEEDED: 5 mundos con 15-25 quests cada uno
 - ✅ Database: Tablas quests + user_quest_progress pobladas
 - ✅ Socket.io: Terminal ↔ Backend validando comandos por quest
