@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import axios from 'axios';
+import { apiClient } from '../utils/api';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -25,16 +25,16 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/register', {
+      const response = await apiClient.post('/api/auth/register', {
         email,
         username,
         password
       });
 
-      register(response.data.user, response.data.token);
+      register(response.user, response.token);
       navigate('/game');
     } catch (err) {
-      setError(err.response?.data?.error || 'Register error');
+      setError(err.message || 'Register error');
     } finally {
       setLoading(false);
     }

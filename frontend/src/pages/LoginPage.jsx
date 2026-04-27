@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import axios from 'axios';
+import { apiClient } from '../utils/api';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -17,15 +17,15 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:3000/api/auth/login', {
+      const response = await apiClient.post('/api/auth/login', {
         email,
         password
       });
 
-      login(response.data.user, response.data.token);
+      login(response.user, response.token);
       navigate('/game');
     } catch (err) {
-      setError(err.response?.data?.error || 'Login error');
+      setError(err.message || 'Login error');
     } finally {
       setLoading(false);
     }
