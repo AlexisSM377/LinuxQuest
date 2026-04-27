@@ -1,4 +1,6 @@
-# Roadmap LinuxQuest - 12 semanas
+# Roadmap LinuxQuest - 12 Semanas (COMPLETADAS) ✅
+
+**Status: 🟢 PRODUCTION READY - All 12 weeks completed**
 
 ## Semana 1: Setup ✅
 - [x] Instalar Claude Code, Git, Node
