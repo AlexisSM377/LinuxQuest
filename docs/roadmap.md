@@ -95,13 +95,14 @@
 - [x] Botón Stats en GamePage
 - [x] Páginas completas y funcionales
 
-## Semana 12: Deploy 🟡
+## Semana 12: Production Deployment 🚀
 - [ ] Deploy frontend en Vercel (tu amigo)
 - [x] Deploy backend en Fly.io
 - [x] Configurar Neon PostgreSQL
-- [ ] Conectar frontend + backend en producción
-- [ ] Dominio personalizado (opcional)
-- [ ] Anuncio público
+- [x] Conectar frontend + backend en producción (ready)
+- [ ] Production testing & QA
+- [ ] Performance optimization
+- [ ] Final sign-off & go live
 
 ## Plan Detallado - Semanas 9-11
 

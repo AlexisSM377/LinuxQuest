@@ -225,6 +225,47 @@ npm run dev --prefix frontend
 - **AchievementsPanel.jsx**: New component showing achievements gallery
 - **GamePage.jsx**: Added achievements button and panel integration
 
+### Week 11: Leaderboard & Stats System ✅ (COMPLETED 2026-04-27)
+- [x] Leaderboard global con top 10 jugadores
+- [x] Leaderboard por mundo
+- [x] Stats page con progreso de mundos
+- [x] Achievements timeline
+- [x] Player ranking y estadísticas
+- [x] GET /api/leaderboard endpoints
+- [x] LeaderboardPanel component
+- [x] StatsPage con navegación desde GamePage
+
+## DEPLOYMENT INSTRUCTIONS - Semana 12
+
+### Frontend Deployment (Vercel)
+```bash
+# 1. Conectar repositorio a Vercel (tu amigo puede hacerlo)
+# 2. Configurar variables de entorno en Vercel dashboard:
+VITE_API_URL=https://linuxquest-backend.fly.dev
+
+# 3. Vercel auto-detecta:
+# - Framework: Vite
+# - Build command: npm run build
+# - Output directory: dist
+
+# 4. Deploy automático en cada push a main
+```
+
+### Backend Verification (Fly.io)
+```bash
+# Ya está deployado, pero verificar:
+fly logs -a linuxquest-backend
+
+# URL: https://linuxquest-backend.fly.dev
+# Health check: https://linuxquest-backend.fly.dev/api/health
+```
+
+### Database (Neon - PostgreSQL)
+```bash
+# Ya configurado, pero verificar conexión:
+# Backend conecta automáticamente via DATABASE_URL env var
+```
+
 ## Last Updated
-2026-04-27 - Semanas 7-8 COMPLETADAS ✅
-Próxima: Semana 9 (Boss Battles & Inventory System)
+2026-04-27 23:59 UTC - Semanas 7-11 COMPLETADAS ✅
+Próxima: Semana 12 (Deploy en Vercel + testing)
