@@ -300,35 +300,44 @@ Database: Neon PostgreSQL (SSL)
 All tables: CREATED
 ```
 
-## 🚀 WHAT'S NEXT (After Deployment)
+## 📋 TAREAS PENDIENTES - Semana 13
 
-### Testing in Production
-- [ ] Verify login/register
-- [ ] Test command execution
-- [ ] Verify Socket.io connection
-- [ ] Test XP gain
-- [ ] Test achievements unlock
-- [ ] Test leaderboard
-- [ ] Load testing (concurrent users)
-- [ ] Security penetration testing
+### Interfaz de Usuario (PRIORIDAD ALTA)
+- [ ] Traducir toda la UI frontend al español
+  - [ ] Textos en componentes React
+  - [ ] Placeholders de inputs
+  - [ ] Botones y etiquetas
+  - [ ] Mensajes de error y validación
+  - [ ] Notificaciones del sistema
+  - [ ] Tooltips e hints
 
-### Monitoring
-- [ ] Monitor API response times
-- [ ] Check error rates
-- [ ] Review audit logs
-- [ ] Monitor user activity
-- [ ] Disk space monitoring (/tmp)
-- [ ] Database performance
+### Testing en Producción
+- [ ] Verificar login/register
+- [ ] Probar ejecución de comandos
+- [ ] Verificar conexión Socket.io
+- [ ] Probar ganancia de XP
+- [ ] Probar desbloqueo de logros
+- [ ] Probar tabla de clasificación
+- [ ] Testing de carga (usuarios concurrentes)
+- [ ] Testing de seguridad (penetration testing)
 
-### Future Enhancements (Post-Launch)
-- [ ] Mobile app (React Native)
-- [ ] Advanced analytics dashboard
-- [ ] Tournament/competitive mode
-- [ ] Persistent game saves
-- [ ] Custom challenge creation
-- [ ] Difficulty adjustments
-- [ ] Community features (forums, chat)
-- [ ] Certification badges
+### Monitoreo
+- [ ] Monitorear tiempos respuesta API
+- [ ] Verificar tasa de errores
+- [ ] Revisar logs de auditoría
+- [ ] Monitorear actividad de usuarios
+- [ ] Monitoreo de espacio disco (/tmp)
+- [ ] Performance de base de datos
+
+### Mejoras Futuras (Post-Lanzamiento)
+- [ ] Aplicación móvil (React Native)
+- [ ] Dashboard de análisis avanzados
+- [ ] Modo competitivo/torneos
+- [ ] Guardado persistente de progreso
+- [ ] Creación de desafíos personalizados
+- [ ] Ajustes de dificultad
+- [ ] Características comunitarias (foros, chat)
+- [ ] Badges de certificación
 
 ## Last Updated
 2026-04-27 - Semanas 1-12 COMPLETADAS ✅

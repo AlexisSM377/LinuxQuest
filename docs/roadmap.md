@@ -195,7 +195,20 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
   - /api/leaderboard endpoints (top jugadores, world rankings, player stats)
   - Integración en GamePage (botón Stats)
   - Medals para ranking (🥇 🥈 🥉)
+- ✅ Semana 12 COMPLETADA: Security Hardening + Documentación
+  - 8 capas de seguridad implementadas y documentadas
+  - README.md, STATUS.md, roadmap.md en español
+  - Helmet.js, CORS, Rate limiting, Input validation
+  - Audit logging completo (4 archivos)
 - ✅ 95 Quests SEEDED: 5 mundos con 15-25 quests cada uno
-- ✅ PROYECTO 92% COMPLETO - Solo falta deploy en Semana 12
+- ✅ PROYECTO 100% BACKEND COMPLETO
 - ✅ Database: Tablas quests + user_quest_progress pobladas
 - ✅ Socket.io: Terminal ↔ Backend validando comandos por quest
+
+## Semana 13: Localización (PENDIENTE)
+- [ ] Traducir UI frontend al español (PRIORIDAD ALTA)
+  - [ ] Componentes React: textos, placeholders, botones, etiquetas
+  - [ ] Mensajes de error y validación
+  - [ ] Notificaciones del sistema
+  - [ ] Tooltips e hints
+  - [ ] Toda la interfaz visible al usuario debe estar en español
