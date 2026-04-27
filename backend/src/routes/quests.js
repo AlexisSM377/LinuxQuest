@@ -85,6 +85,9 @@ router.post('/:id/complete', verifyToken, async (req, res) => {
 
     // Obtener XP actual del usuario
     const userResult = await pool.query('SELECT xp, level FROM users WHERE id = $1', [req.userId]);
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
     const oldXp = userResult.rows[0].xp;
     const oldLevel = userResult.rows[0].level;
 
@@ -99,6 +102,9 @@ router.post('/:id/complete', verifyToken, async (req, res) => {
       [newXp, newLevel, coinsGained, req.userId]
     );
 
+    const progressPercent = levelSystem.getLevelProgress(newXp);
+    const xpToNext = levelSystem.getXpToNextLevel(newXp);
+
     res.json({
       success: true,
       progress: updated,
@@ -108,7 +114,8 @@ router.post('/:id/complete', verifyToken, async (req, res) => {
       oldLevel,
       newLevel,
       leveledUp,
-      xpToNext: levelSystem.getXpToNextLevel(newXp)
+      xpToNext,
+      progress: progressPercent
     });
   } catch (error) {
     console.error('Error completing quest:', error);

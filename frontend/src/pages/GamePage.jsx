@@ -30,16 +30,21 @@ export default function GamePage() {
 
   const handleQuestComplete = async () => {
     if (!currentQuestId) return;
-    const result = await completeQuest(currentQuestId);
-    if (result?.success) {
-      setNotification({
-        xpGained: result.xpGained,
-        coinsGained: result.coinsGained,
-        questTitle: 'Quest Completada',
-        leveledUp: result.leveledUp,
-        newLevel: result.newLevel
-      });
-      setTimeout(() => fetchUserStats(), 100);
+    try {
+      const result = await completeQuest(currentQuestId);
+      if (result?.success) {
+        setNotification({
+          xpGained: result.xpGained,
+          coinsGained: result.coinsGained,
+          questTitle: 'Quest Completada',
+          leveledUp: result.leveledUp,
+          newLevel: result.newLevel
+        });
+      } else {
+        console.error('Failed to complete quest:', result?.error || 'Unknown error');
+      }
+    } catch (error) {
+      console.error('Error completing quest:', error);
     }
   };
 

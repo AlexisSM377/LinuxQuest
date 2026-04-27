@@ -94,21 +94,25 @@ export const useGameStore = create((set) => ({
         }
       });
 
+      if (!response.ok) {
+        console.error('Failed to complete quest:', response.status);
+        return null;
+      }
+
       const data = await response.json();
       if (data.success) {
         set(state => ({
           userProgress: state.userProgress.map(p =>
             p.quest_id === questId ? { ...p, status: 'completed' } : p
-          )
+          ),
+          userStats: {
+            xp: data.totalXp,
+            level: data.newLevel,
+            coins: state.userStats.coins + data.coinsGained,
+            xpToNext: data.xpToNext,
+            progress: data.progress || 0
+          }
         }));
-        const newStats = {
-          xp: data.totalXp,
-          level: data.newLevel,
-          coins: state => state.userStats.coins + data.coinsGained,
-          xpToNext: data.xpToNext,
-          progress: Math.round(((data.totalXp - (data.newLevel * 475 - 475)) / 475) * 100)
-        };
-        set({ userStats: newStats });
       }
       return data;
     } catch (error) {

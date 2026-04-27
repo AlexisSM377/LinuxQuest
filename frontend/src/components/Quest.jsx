@@ -6,6 +6,17 @@ export default function Quest({ onCompleteClick }) {
   const { currentQuestId, currentQuest, quests, loading, setCurrentQuest, setCurrentQuestId, userProgress, fetchUserProgress } = useGameStore();
   const { user } = useAuthStore();
   const [expandedWorlds, setExpandedWorlds] = useState({ 1: true });
+  const [completing, setCompleting] = useState(false);
+
+  const handleCompleteClick = async () => {
+    if (completing) return;
+    setCompleting(true);
+    try {
+      await onCompleteClick?.();
+    } finally {
+      setCompleting(false);
+    }
+  };
 
   useEffect(() => {
     if (quests.length > 0 && !currentQuest && !currentQuestId) {
@@ -169,10 +180,15 @@ export default function Quest({ onCompleteClick }) {
       {/* Complete Button */}
       <div className="border-t border-gray-700 p-3">
         <button
-          onClick={() => onCompleteClick?.()}
-          className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-4 rounded transition"
+          onClick={handleCompleteClick}
+          disabled={completing}
+          className={`w-full font-bold py-2 px-4 rounded transition ${
+            completing
+              ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+              : 'bg-emerald-600 hover:bg-emerald-500 text-white'
+          }`}
         >
-          ✓ Completar Misión
+          {completing ? '⏳ Completando...' : '✓ Completar Misión'}
         </button>
       </div>
 
