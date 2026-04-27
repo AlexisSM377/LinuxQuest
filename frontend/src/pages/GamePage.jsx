@@ -70,7 +70,7 @@ export default function GamePage() {
       <div className="bg-gray-900 border-b border-gray-700 px-4 py-2 flex justify-between items-center">
         <h1 className="text-emerald-400 font-bold text-lg">LinuxQuest</h1>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <div className="flex items-center gap-3 bg-gray-800 px-4 py-2 rounded">
             <div className="text-right">
               <div className="text-emerald-400 font-bold text-sm">Nivel {userStats.level}</div>
@@ -84,6 +84,14 @@ export default function GamePage() {
             </div>
             <div className="text-amber-400 font-bold">🪙 {userStats.coins}</div>
           </div>
+
+          <button
+            onClick={() => navigate('/stats')}
+            className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-sm transition font-bold"
+            title="Estadísticas"
+          >
+            📊 Stats
+          </button>
 
           <button
             onClick={() => setShowAchievements(true)}
