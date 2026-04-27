@@ -2,10 +2,19 @@ import express from 'express';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import { verifyToken } from '../middleware/auth.js';
+import {
+  validateEmail,
+  validateUsername,
+  validatePassword,
+  handleValidationErrors
+} from '../middleware/inputValidator.js';
 
 const router = express.Router();
 
-router.post('/register', async (req, res) => {
+router.post('/register',
+  [validateEmail, validateUsername, validatePassword],
+  handleValidationErrors,
+  async (req, res) => {
   try {
     const { email, password, username } = req.body;
 
@@ -43,7 +52,10 @@ router.post('/register', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login',
+  [validateEmail, validatePassword],
+  handleValidationErrors,
+  async (req, res) => {
   try {
     const { email, password } = req.body;
 
