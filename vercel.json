@@ -1,6 +1,12 @@
 {
-  "buildCommand": "npm install --prefix frontend && npm run build --prefix frontend",
+  "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "framework": "vite",
-  "installCommand": "npm install --prefix frontend"
+  "env": {
+    "VITE_API_URL": {
+      "description": "Backend API URL",
+      "required": false,
+      "default": "https://linuxquest-backend.fly.dev"
+    }
+  }
 }
