@@ -4,7 +4,7 @@ export const useGameStore = create((set) => ({
   currentQuestId: null,
   currentQuest: null,
   quests: [],
-  userProgress: {},
+  userProgress: [],
   loading: true,
 
   setCurrentQuestId: (questId) => set({ currentQuestId: questId }),
@@ -41,7 +41,11 @@ export const useGameStore = create((set) => ({
 
   fetchUserProgress: async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('token');
+      if (!token) {
+        set({ userProgress: [] });
+        return;
+      }
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/quests/user/progress`, {
         headers: {
           'Authorization': `Bearer ${token}`

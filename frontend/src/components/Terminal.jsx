@@ -8,6 +8,8 @@ import 'xterm/css/xterm.css';
 export default function Terminal({ questId = null }) {
   const terminalRef = useRef(null);
   const socketRef = useRef(null);
+  const fitAddonRef = useRef(null);
+  const termRef = useRef(null);
   const commandBuffer = useRef('');
   const { token } = useAuthStore();
 
@@ -20,103 +22,108 @@ export default function Terminal({ questId = null }) {
       return;
     }
 
-    const term = new XTerm({
-      cursorBlink: true,
-      theme: {
-        background: '#1a1a1a',
-        foreground: '#00ff00'
-      }
-    });
-
-    const fitAddon = new FitAddon();
-    term.loadAddon(fitAddon);
-    term.open(terminalRef.current);
-
-    // Esperar a que el contenedor tenga dimensiones antes de ajustar
-    const fitTerminal = () => {
-      try {
-        const rect = terminalRef.current?.getBoundingClientRect();
-        if (rect && rect.width > 0 && rect.height > 0) {
-          fitAddon.fit();
-        } else {
-          setTimeout(fitTerminal, 50);
+    try {
+      const term = new XTerm({
+        cursorBlink: true,
+        theme: {
+          background: '#1a1a1a',
+          foreground: '#00ff00'
         }
-      } catch (error) {
-        console.error('FitAddon error:', error);
-      }
-    };
+      });
+      termRef.current = term;
 
-    fitTerminal();
+      const fitAddon = new FitAddon();
+      fitAddonRef.current = fitAddon;
+      term.loadAddon(fitAddon);
+      term.open(terminalRef.current);
 
-    // Conectar Socket.io
-    socketRef.current = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
-      auth: { token }
-    });
+      const fitTerminal = () => {
+        try {
+          const rect = terminalRef.current?.getBoundingClientRect();
+          if (rect && rect.width > 0 && rect.height > 0 && fitAddonRef.current) {
+            fitAddonRef.current.fit();
+          } else {
+            setTimeout(fitTerminal, 50);
+          }
+        } catch (error) {
+          console.warn('FitAddon not ready');
+        }
+      };
 
-    socketRef.current.on('connect', () => {
-      term.write('Conectado al servidor\r\n');
-      term.write('Welcome to LinuxQuest Terminal\r\nType "help" for available commands\r\n\r\n$ ');
-    });
+      setTimeout(fitTerminal, 0);
 
-    socketRef.current.on('connect_error', (error) => {
-      term.write(`\r\nError de conexión: ${error.message}\r\n$ `);
-    });
+      const authToken = token || localStorage.getItem('token');
+      socketRef.current = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
+        auth: { token: authToken }
+      });
 
-    // Manejar entrada del usuario
-    term.onData((data) => {
-      if (data === '\r') {
-        // Enviar comando al backend
-        const command = commandBuffer.current.trim();
-        commandBuffer.current = '';
+      socketRef.current.on('connect', () => {
+        term.write('Conectado al servidor\r\n');
+        term.write('Welcome to LinuxQuest Terminal\r\nType "help" for available commands\r\n\r\n$ ');
+      });
 
-        if (command.length > 0) {
-          term.write('\r\n');
-          console.log('Enviando comando:', command, 'questId:', questId);
-          socketRef.current.emit('command', command, questId, (response) => {
-            console.log('Respuesta recibida:', response);
-            if (response?.error) {
-              term.write(`\x1b[91m${response.error}\x1b[0m\r\n`);
-            } else if (response?.output) {
-              const output = response.output.replace(/\n/g, '\r\n');
-              term.write(`${output}\r\n`);
-            } else {
-              term.write('(sin salida)\r\n');
-            }
+      socketRef.current.on('connect_error', (error) => {
+        term.write(`\r\nError de conexión: ${error.message}\r\n$ `);
+      });
+
+      term.onData((data) => {
+        if (data === '\r') {
+          const command = commandBuffer.current.trim();
+          commandBuffer.current = '';
+
+          if (command.length > 0) {
+            term.write('\r\n');
+            console.log('Enviando comando:', command, 'questId:', questId);
+            socketRef.current.emit('command', command, questId, (response) => {
+              console.log('Respuesta recibida:', response);
+              if (response?.error) {
+                term.write(`\x1b[91m${response.error}\x1b[0m\r\n`);
+              } else if (response?.output) {
+                const output = response.output.replace(/\n/g, '\r\n');
+                term.write(`${output}\r\n`);
+              } else {
+                term.write('(sin salida)\r\n');
+              }
+              term.write('$ ');
+            });
+          } else {
             term.write('$ ');
-          });
-        } else {
-          term.write('$ ');
+          }
+        } else if (data === '' || data === '\b') {
+          if (commandBuffer.current.length > 0) {
+            commandBuffer.current = commandBuffer.current.slice(0, -1);
+            term.write('\b \b');
+          }
+        } else if (data >= ' ' && data <= '~') {
+          commandBuffer.current += data;
+          term.write(data);
         }
-      } else if (data === '\u007F') {
-        // Backspace
-        if (commandBuffer.current.length > 0) {
-          commandBuffer.current = commandBuffer.current.slice(0, -1);
-          term.write('\b \b');
+      });
+
+      const handleResize = () => {
+        try {
+          if (fitAddonRef.current && termRef.current) {
+            fitAddonRef.current.fit();
+          }
+        } catch (error) {
+          console.warn('Terminal resize:', error.message);
         }
-      } else if (data >= ' ' && data <= '~') {
-        // Caracteres imprimibles
-        commandBuffer.current += data;
-        term.write(data);
-      }
-    });
+      };
 
-    const handleResize = () => {
-      try {
-        fitAddon.fit();
-      } catch (error) {
-        console.error('Terminal resize error:', error);
-      }
-    };
+      window.addEventListener('resize', handleResize);
 
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-      term.dispose();
-    };
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        if (socketRef.current) {
+          socketRef.current.disconnect();
+        }
+        if (termRef.current) {
+          termRef.current.dispose();
+        }
+      };
+    } catch (error) {
+      console.error('Terminal initialization error:', error);
+    }
   }, [token]);
 
   return <div ref={terminalRef} className="w-full h-full bg-black" style={{ display: 'flex' }} />;
