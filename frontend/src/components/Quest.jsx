@@ -69,6 +69,30 @@ export default function Quest({ onCompleteClick }) {
     return progress?.status || 'locked';
   };
 
+  const isQuestUnlocked = (quest) => {
+    if (!quest.prerequisites || quest.prerequisites.length === 0) {
+      return true;
+    }
+    const completedQuestIds = userProgress
+      .filter(p => p.status === 'completed')
+      .map(p => p.quest_id);
+    return quest.prerequisites.every(prereqId => completedQuestIds.includes(prereqId));
+  };
+
+  const getMissingPrerequisites = (quest) => {
+    if (!quest.prerequisites || quest.prerequisites.length === 0) {
+      return [];
+    }
+    const completedQuestIds = userProgress
+      .filter(p => p.status === 'completed')
+      .map(p => p.quest_id);
+    const missing = quest.prerequisites.filter(prereqId => !completedQuestIds.includes(prereqId));
+    return missing.map(prereqId => {
+      const prereqQuest = quests.find(q => q.id === prereqId);
+      return prereqQuest ? `M${prereqQuest.order}: ${prereqQuest.title}` : `Quest ${prereqId}`;
+    });
+  };
+
   const getStatusColor = (status) => {
     const colors = {
       completed: 'bg-emerald-900 text-emerald-300 border-emerald-600',
@@ -179,17 +203,36 @@ export default function Quest({ onCompleteClick }) {
 
       {/* Complete Button */}
       <div className="border-t border-gray-700 p-3">
-        <button
-          onClick={handleCompleteClick}
-          disabled={completing}
-          className={`w-full font-bold py-2 px-4 rounded transition ${
-            completing
-              ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
-              : 'bg-emerald-600 hover:bg-emerald-500 text-white'
-          }`}
-        >
-          {completing ? '⏳ Completando...' : '✓ Completar Misión'}
-        </button>
+        {isQuestUnlocked(currentQuest) ? (
+          <button
+            onClick={handleCompleteClick}
+            disabled={completing}
+            className={`w-full font-bold py-2 px-4 rounded transition ${
+              completing
+                ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+                : 'bg-emerald-600 hover:bg-emerald-500 text-white'
+            }`}
+          >
+            {completing ? '⏳ Completando...' : '✓ Completar Misión'}
+          </button>
+        ) : (
+          <div className="space-y-2">
+            <button
+              disabled={true}
+              className="w-full font-bold py-2 px-4 rounded bg-gray-700 text-gray-400 cursor-not-allowed"
+            >
+              🔒 Misión Bloqueada
+            </button>
+            <div className="bg-gray-800 rounded p-2 text-xs text-gray-300">
+              <p className="font-bold text-yellow-400 mb-1">Requisitos previos:</p>
+              <ul className="space-y-1">
+                {getMissingPrerequisites(currentQuest).map((prereq, idx) => (
+                  <li key={idx} className="text-yellow-600">• {prereq}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* World/Quest List - Scrollable */}

@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import authRoutes from './routes/auth.js';
 import lessonRoutes from './routes/lessons.js';
 import questRoutes from './routes/quests.js';
+import achievementRoutes from './routes/achievements.js';
 import { executeCommand } from './services/commandService.js';
 import { createUserSandbox, deleteUserSandbox, getSandboxPath, cleanupUserSandbox } from './services/sandboxService.js';
 import auditLogger from './security/auditLogger.js';
@@ -38,6 +39,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/lessons', lessonRoutes);
 app.use('/api/quests', questRoutes);
+app.use('/api/achievements', achievementRoutes);
 
 // Socket.io middleware para autenticación
 io.use((socket, next) => {

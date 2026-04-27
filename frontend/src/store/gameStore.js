@@ -6,6 +6,8 @@ export const useGameStore = create((set) => ({
   quests: [],
   userProgress: [],
   userStats: { xp: 0, level: 1, coins: 0, xpToNext: 100, progress: 0 },
+  achievements: [],
+  userAchievements: [],
   loading: true,
 
   setCurrentQuestId: (questId) => set({ currentQuestId: questId }),
@@ -13,6 +15,8 @@ export const useGameStore = create((set) => ({
   setQuests: (quests) => set({ quests }),
   setUserProgress: (progress) => set({ userProgress: progress }),
   setUserStats: (stats) => set({ userStats: stats }),
+  setAchievements: (achievements) => set({ achievements }),
+  setUserAchievements: (userAchievements) => set({ userAchievements }),
   setLoading: (loading) => set({ loading }),
 
   fetchQuests: async () => {
@@ -111,7 +115,8 @@ export const useGameStore = create((set) => ({
             coins: state.userStats.coins + data.coinsGained,
             xpToNext: data.xpToNext,
             progress: data.progress || 0
-          }
+          },
+          userAchievements: state.userAchievements
         }));
       }
       return data;
@@ -119,5 +124,45 @@ export const useGameStore = create((set) => ({
       console.error('Error completing quest:', error);
       return null;
     }
+  },
+
+  fetchAchievements: async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/achievements`);
+      const achievements = await response.json();
+      set({ achievements });
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
+    }
+  },
+
+  fetchUserAchievements: async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        set({ userAchievements: [] });
+        return;
+      }
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/achievements/mine`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const userAchievements = await response.json();
+      set({ userAchievements });
+    } catch (error) {
+      console.error('Error fetching user achievements:', error);
+      set({ userAchievements: [] });
+    }
+  },
+
+  checkQuestUnlocked: (quest, userProgress) => {
+    if (!quest.prerequisites || quest.prerequisites.length === 0) {
+      return true;
+    }
+    const completedQuestIds = userProgress
+      .filter(p => p.status === 'completed')
+      .map(p => p.quest_id);
+    return quest.prerequisites.every(prereqId => completedQuestIds.includes(prereqId));
   }
 }));

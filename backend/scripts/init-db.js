@@ -106,12 +106,40 @@ const initializeDatabase = async () => {
     `);
     console.log('✓ Tabla user_progress creada');
 
+    // Crear tabla achievements
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS achievements (
+        id VARCHAR(50) PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        icon VARCHAR(10),
+        xp_bonus INT DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log('✓ Tabla achievements creada');
+
+    // Crear tabla user_achievements
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS user_achievements (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        achievement_id VARCHAR(50) NOT NULL REFERENCES achievements(id),
+        earned_at TIMESTAMP DEFAULT NOW(),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(user_id, achievement_id)
+      );
+    `);
+    console.log('✓ Tabla user_achievements creada');
+
     // Crear índices
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_user_progress_user_id ON user_progress(user_id);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_user_progress_lesson_id ON user_progress(lesson_id);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_user_quest_progress_user_id ON user_quest_progress(user_id);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_user_quest_progress_quest_id ON user_quest_progress(quest_id);`);
     await pool.query(`CREATE INDEX IF NOT EXISTS idx_quests_world ON quests(world);`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_user_achievements_user_id ON user_achievements(user_id);`);
+    await pool.query(`CREATE INDEX IF NOT EXISTS idx_user_achievements_achievement_id ON user_achievements(achievement_id);`);
     console.log('✓ Índices creados');
 
     console.log('\n✅ Base de datos inicializada exitosamente');

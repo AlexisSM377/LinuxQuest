@@ -61,4 +61,24 @@ export default class Progress {
     );
     return result.rows;
   }
+
+  static async checkPrerequisites(userId, prerequisites) {
+    if (!prerequisites || prerequisites.length === 0) {
+      return { isUnlocked: true, missing: [] };
+    }
+
+    const result = await pool.query(
+      `SELECT quest_id FROM user_quest_progress
+       WHERE user_id = $1 AND quest_id = ANY($2) AND status = 'completed'`,
+      [userId, prerequisites]
+    );
+
+    const completedIds = result.rows.map(r => r.quest_id);
+    const missing = prerequisites.filter(id => !completedIds.includes(id));
+
+    return {
+      isUnlocked: missing.length === 0,
+      missing
+    };
+  }
 }

@@ -3,14 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import Terminal from '../components/Terminal';
 import Quest from '../components/Quest';
 import XpNotification from '../components/XpNotification';
+import AchievementsPanel from '../components/AchievementsPanel';
 import { useAuthStore } from '../store/authStore';
 import { useGameStore } from '../store/gameStore';
 
 export default function GamePage() {
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuthStore();
-  const { currentQuestId, userStats, fetchQuests, fetchUserStats, completeQuest } = useGameStore();
+  const { currentQuestId, userStats, achievements, userAchievements, fetchQuests, fetchUserStats, fetchAchievements, fetchUserAchievements, completeQuest } = useGameStore();
   const [notification, setNotification] = useState(null);
+  const [showAchievements, setShowAchievements] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -21,7 +23,9 @@ export default function GamePage() {
   useEffect(() => {
     fetchQuests();
     fetchUserStats();
-  }, [fetchQuests, fetchUserStats]);
+    fetchAchievements();
+    fetchUserAchievements();
+  }, [fetchQuests, fetchUserStats, fetchAchievements, fetchUserAchievements]);
 
   const handleLogout = () => {
     logout();
@@ -33,13 +37,24 @@ export default function GamePage() {
     try {
       const result = await completeQuest(currentQuestId);
       if (result?.success) {
-        setNotification({
+        const notificationData = {
           xpGained: result.xpGained,
           coinsGained: result.coinsGained,
           questTitle: 'Quest Completada',
           leveledUp: result.leveledUp,
           newLevel: result.newLevel
-        });
+        };
+
+        if (result.newAchievements && result.newAchievements.length > 0) {
+          const achievementIds = result.newAchievements;
+          const newAchievementObjects = achievementIds
+            .map(id => achievements.find(a => a.id === id))
+            .filter(Boolean);
+          notificationData.newAchievements = newAchievementObjects;
+        }
+
+        setNotification(notificationData);
+        await fetchUserAchievements();
       } else {
         console.error('Failed to complete quest:', result?.error || 'Unknown error');
       }
@@ -53,7 +68,7 @@ export default function GamePage() {
       <div className="bg-gray-900 border-b border-gray-700 px-4 py-2 flex justify-between items-center">
         <h1 className="text-emerald-400 font-bold text-lg">LinuxQuest</h1>
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           <div className="flex items-center gap-3 bg-gray-800 px-4 py-2 rounded">
             <div className="text-right">
               <div className="text-emerald-400 font-bold text-sm">Nivel {userStats.level}</div>
@@ -67,6 +82,14 @@ export default function GamePage() {
             </div>
             <div className="text-amber-400 font-bold">🪙 {userStats.coins}</div>
           </div>
+
+          <button
+            onClick={() => setShowAchievements(true)}
+            className="px-3 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded text-sm transition font-bold"
+            title="Logros"
+          >
+            🏆 Logros
+          </button>
 
           <button
             onClick={handleLogout}
@@ -89,6 +112,14 @@ export default function GamePage() {
         <XpNotification
           {...notification}
           onClose={() => setNotification(null)}
+        />
+      )}
+
+      {showAchievements && (
+        <AchievementsPanel
+          achievements={achievements}
+          userAchievements={userAchievements}
+          onClose={() => setShowAchievements(false)}
         />
       )}
     </div>

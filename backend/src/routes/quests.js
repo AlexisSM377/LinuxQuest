@@ -4,6 +4,7 @@ import Quest from '../models/Quest.js';
 import Progress from '../models/Progress.js';
 import { verifyToken } from '../middleware/auth.js';
 import levelSystem from '../utils/levelSystem.js';
+import AchievementChecker from '../utils/achievementChecker.js';
 
 const router = express.Router();
 
@@ -65,6 +66,18 @@ router.post('/:id/complete', verifyToken, async (req, res) => {
       return res.status(404).json({ error: 'Quest not found' });
     }
 
+    // Verificar prerequisites
+    if (quest.prerequisites && quest.prerequisites.length > 0) {
+      const { isUnlocked, missing } = await Progress.checkPrerequisites(req.userId, quest.prerequisites);
+      if (!isUnlocked) {
+        return res.status(400).json({
+          error: 'Prerequisites not completed',
+          missing,
+          message: 'Debes completar las misiones previas para desbloquear esta.'
+        });
+      }
+    }
+
     // Verificar si ya fue completada
     let progress = await Progress.findByUserAndQuest(req.userId, questId);
     if (progress && progress.status === 'completed') {
@@ -105,6 +118,24 @@ router.post('/:id/complete', verifyToken, async (req, res) => {
     const progressPercent = levelSystem.getLevelProgress(newXp);
     const xpToNext = levelSystem.getXpToNextLevel(newXp);
 
+    // Check achievements
+    const totalCompletedResult = await pool.query(
+      'SELECT COUNT(*) as count FROM user_quest_progress WHERE user_id = $1 AND status = $2',
+      [req.userId, 'completed']
+    );
+    const totalCompleted = totalCompletedResult.rows[0].count;
+
+    const newAchievements = await AchievementChecker.checkAchievements(req.userId, {
+      questId,
+      level: newLevel,
+      totalQuests: totalCompleted,
+      leveledUp
+    });
+
+    if (newAchievements.length > 0) {
+      await AchievementChecker.saveAchievements(req.userId, newAchievements);
+    }
+
     res.json({
       success: true,
       progress: updated,
@@ -115,7 +146,8 @@ router.post('/:id/complete', verifyToken, async (req, res) => {
       newLevel,
       leveledUp,
       xpToNext,
-      progress: progressPercent
+      progress: progressPercent,
+      newAchievements
     });
   } catch (error) {
     console.error('Error completing quest:', error);
