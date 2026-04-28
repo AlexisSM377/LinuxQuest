@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../utils/api';
+import AuthCard from '../components/auth/AuthCard';
+import PixelInput from '../components/auth/PixelInput';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -11,78 +13,87 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
-      const response = await apiClient.post('/api/auth/login', {
-        email,
-        password
-      });
-
+      const response = await apiClient.post('/api/auth/login', { email, password });
       login(response.user, response.token);
       navigate('/game');
     } catch (err) {
-      setError(err.message || 'Login error');
+      setError(err.message || 'Error al iniciar sesión');
     } finally {
       setLoading(false);
     }
   };
 
+  const footer = (
+    <>
+      ¿Sin cuenta?{' '}
+      <button
+        onClick={() => navigate('/register')}
+        style={{
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          color: 'var(--amber)',
+          fontFamily: 'var(--font-body)',
+          fontSize: 'inherit',
+          textDecoration: 'underline',
+        }}
+      >
+        REGISTRARSE
+      </button>
+    </>
+  );
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-gray-900 to-black px-4">
-      <div className="w-full max-w-sm">
-        <h1 className="text-4xl font-bold text-white text-center mb-8 tracking-widest">Login</h1>
+    <AuthCard
+      title="INICIAR SESIÓN"
+      subtitle="Continúa tu aventura en el terminal"
+      footer={footer}
+    >
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <PixelInput
+          label="EMAIL"
+          type="email"
+          placeholder="aprendiz@linuxquest.dev"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <PixelInput
+          label="CONTRASEÑA"
+          type="password"
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-        <form onSubmit={handleLogin} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
-            required
-          />
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold disabled:opacity-50 transition"
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-
-        <p className="text-gray-400 text-center mt-4">
-          No account?{' '}
-          <button
-            onClick={() => navigate('/register')}
-            className="text-emerald-400 hover:text-emerald-300 font-bold"
-          >
-            Register
-          </button>
-        </p>
+        {error && (
+          <div style={{
+            background: 'var(--blood)',
+            border: '4px solid var(--ink)',
+            padding: '10px 14px',
+            fontFamily: 'var(--font-code)',
+            fontSize: 13,
+            color: 'var(--parchment)',
+          }}>
+            ✗ {error}
+          </div>
+        )}
 
         <button
-          onClick={() => navigate('/')}
-          className="w-full mt-4 px-4 py-2 border border-gray-700 text-gray-400 rounded hover:text-white transition"
+          type="submit"
+          className="btn btn-amber"
+          disabled={loading}
+          style={{ width: '100%', marginTop: 8, opacity: loading ? 0.6 : 1 }}
         >
-          Back to Menu
+          {loading ? 'ACCEDIENDO...' : 'ACCEDER ▶'}
         </button>
-      </div>
-    </div>
+      </form>
+    </AuthCard>
   );
 }

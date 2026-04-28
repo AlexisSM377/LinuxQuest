@@ -1,48 +1,39 @@
 export default function NPCProfile({ npc }) {
   if (!npc) return null;
 
-  const getPersonalityEmoji = (personality) => {
-    const emojis = {
-      patient: '🕉️',
-      passionate: '🔥',
-      organized: '📋',
-      strict: '⚖️',
-      commanding: '📢',
-      aggressive: '⚔️',
-      technical: '🔧',
-      adventurous: '🗺️',
-      mysterious: '🌙',
-      menacing: '😈'
-    };
-    return emojis[personality] || '🎭';
-  };
-
   return (
-    <div className="bg-gray-800 border border-gray-700 rounded-lg p-4 mb-4">
-      <div className="flex items-start gap-3 mb-3">
-        <span className="text-4xl">{npc.avatar}</span>
-        <div className="flex-1">
-          <h3 className="text-purple-400 font-bold text-lg">{npc.name}</h3>
-          <p className="text-gray-400 text-sm">{npc.title}</p>
-          <p className="text-gray-500 text-xs mt-1">{npc.description}</p>
+    <div className="pcard" style={{ background: 'var(--bg-3)', padding: 16 }}>
+      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start', marginBottom: 14 }}>
+        <span style={{ fontSize: 34, lineHeight: 1, flexShrink: 0 }}>{npc.avatar}</span>
+        <div>
+          <div className="tiny up" style={{ color: 'var(--plum)', marginBottom: 4 }}>{npc.title}</div>
+          <div style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 11,
+            color: 'var(--parchment)',
+            textShadow: '2px 2px 0 var(--ink)',
+          }}>
+            {npc.name}
+          </div>
+          {npc.specialty && (
+            <div className="tiny up" style={{ color: 'var(--sky)', marginTop: 4 }}>{npc.specialty}</div>
+          )}
         </div>
-      </div>
-
-      <div className="bg-gray-900 rounded p-3 mb-3">
-        <p className="text-gray-300 text-sm italic">"{npc.greeting}"</p>
-      </div>
-
-      <div className="flex items-center justify-between text-xs">
-        <div className="flex items-center gap-2">
-          <span>{getPersonalityEmoji(npc.personality)}</span>
-          <span className="text-gray-400 capitalize">{npc.personality}</span>
-        </div>
-        {npc.specialty && (
-          <span className="text-emerald-400 font-bold">{npc.specialty}</span>
-        )}
         {npc.isBoss && (
-          <span className="bg-red-600 text-white px-2 py-1 rounded font-bold">BOSS</span>
+          <span className="diff diff-dif" style={{ marginLeft: 'auto', flexShrink: 0 }}>BOSS</span>
         )}
+      </div>
+
+      <div style={{
+        background: 'var(--ink)',
+        border: '3px solid var(--bg-3)',
+        padding: '10px 14px',
+        fontFamily: 'var(--font-code)',
+        fontSize: 13,
+        color: 'var(--parchment-2)',
+        fontStyle: 'italic',
+      }}>
+        "{npc.greeting}"
       </div>
     </div>
   );

@@ -1,102 +1,132 @@
 import { useState } from 'react';
 
+const FILTER_OPTS = [
+  { id: 'all',    label: 'TODOS' },
+  { id: 'earned', label: 'DESBLOQUEADOS' },
+  { id: 'locked', label: 'BLOQUEADOS' },
+];
+
 export default function AchievementsPanel({ achievements, userAchievements, onClose }) {
   const [filter, setFilter] = useState('all');
 
   const earnedIds = userAchievements.map(a => a.id);
   const earnedCount = earnedIds.length;
   const totalCount = achievements.length;
-  const completionPercent = Math.round((earnedCount / totalCount) * 100);
+  const pct = totalCount > 0 ? Math.round((earnedCount / totalCount) * 100) : 0;
 
-  const filteredAchievements = achievements.filter(achievement => {
-    if (filter === 'earned') return earnedIds.includes(achievement.id);
-    if (filter === 'locked') return !earnedIds.includes(achievement.id);
+  const filtered = achievements.filter(a => {
+    if (filter === 'earned') return earnedIds.includes(a.id);
+    if (filter === 'locked') return !earnedIds.includes(a.id);
     return true;
   });
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-900 rounded-lg border border-gray-700 max-w-2xl w-full max-h-96 overflow-hidden flex flex-col shadow-2xl">
+    <div style={{
+      position: 'fixed', inset: 0,
+      background: 'rgba(26, 15, 31, 0.85)',
+      zIndex: 50,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: 16,
+    }}>
+      <div style={{
+        background: 'var(--bg-2)',
+        border: '4px solid var(--ink)',
+        boxShadow: '8px 8px 0 var(--shadow)',
+        width: '100%', maxWidth: 640,
+        maxHeight: '85vh',
+        display: 'flex', flexDirection: 'column',
+        overflow: 'hidden',
+      }}>
+
         {/* Header */}
-        <div className="border-b border-gray-700 p-4 flex justify-between items-center bg-gray-850">
+        <div style={{
+          padding: '16px 20px',
+          borderBottom: '4px solid var(--ink)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          background: 'var(--bg-3)',
+          flexShrink: 0,
+        }}>
           <div>
-            <h2 className="text-emerald-400 font-bold text-xl">🏆 Logros</h2>
-            <p className="text-gray-400 text-sm mt-1">
-              {earnedCount} de {totalCount} completados ({completionPercent}%)
-            </p>
+            <div className="tiny up" style={{ color: 'var(--amber)', marginBottom: 6 }}>▸ GALERÍA DE LOGROS</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 11, color: 'var(--parchment)', textShadow: '2px 2px 0 var(--ink)' }}>
+              {earnedCount} / {totalCount} DESBLOQUEADOS
+            </div>
           </div>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-white text-2xl font-bold"
-          >
-            ✕
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ width: 140 }}>
+              <div className="bar">
+                <i style={{ width: pct + '%', background: 'var(--amber)' }} />
+              </div>
+              <div className="tiny up muted" style={{ marginTop: 4 }}>{pct}%</div>
+            </div>
+            <button
+              onClick={onClose}
+              className="btn btn-ghost"
+              style={{ fontSize: 14, padding: '8px 12px' }}
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="border-b border-gray-700 px-4 pt-3 flex gap-2">
-          <button
-            onClick={() => setFilter('all')}
-            className={`px-3 py-2 text-sm font-bold rounded transition ${
-              filter === 'all'
-                ? 'bg-emerald-600 text-white'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Todos
-          </button>
-          <button
-            onClick={() => setFilter('earned')}
-            className={`px-3 py-2 text-sm font-bold rounded transition ${
-              filter === 'earned'
-                ? 'bg-emerald-600 text-white'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Desbloqueados
-          </button>
-          <button
-            onClick={() => setFilter('locked')}
-            className={`px-3 py-2 text-sm font-bold rounded transition ${
-              filter === 'locked'
-                ? 'bg-emerald-600 text-white'
-                : 'text-gray-400 hover:text-white'
-            }`}
-          >
-            Bloqueados
-          </button>
+        {/* Filter tabs */}
+        <div style={{
+          padding: '10px 16px',
+          borderBottom: '4px solid var(--ink)',
+          display: 'flex', gap: 6,
+          flexShrink: 0,
+          background: 'var(--bg-2)',
+        }}>
+          {FILTER_OPTS.map(o => (
+            <button
+              key={o.id}
+              onClick={() => setFilter(o.id)}
+              className={filter === o.id ? 'btn btn-amber' : 'btn btn-ghost'}
+              style={{ fontSize: 8, padding: '8px 10px' }}
+            >
+              {o.label}
+            </button>
+          ))}
         </div>
 
-        {/* Achievements Grid */}
-        <div className="overflow-y-auto flex-1 p-4">
-          <div className="grid grid-cols-2 gap-3">
-            {filteredAchievements.map(achievement => {
-              const isEarned = earnedIds.includes(achievement.id);
-              const earnedData = userAchievements.find(a => a.id === achievement.id);
+        {/* Grid */}
+        <div style={{ overflowY: 'auto', flex: 1, padding: 14 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
+            {filtered.map(achievement => {
+              const earned = earnedIds.includes(achievement.id);
               return (
                 <div
                   key={achievement.id}
-                  className={`p-3 rounded border transition ${
-                    isEarned
-                      ? 'bg-emerald-900 border-emerald-600'
-                      : 'bg-gray-800 border-gray-700 opacity-60'
-                  }`}
+                  className={earned ? 'pcard' : 'pcard locked'}
+                  style={{
+                    background: earned ? 'var(--bg-2)' : 'var(--bg)',
+                    padding: 12,
+                    display: 'flex', gap: 12, alignItems: 'flex-start',
+                  }}
                 >
-                  <div className="text-3xl mb-2">{achievement.icon}</div>
-                  <h3 className={`font-bold text-sm ${
-                    isEarned ? 'text-emerald-300' : 'text-gray-400'
-                  }`}>
-                    {achievement.title}
-                  </h3>
-                  <p className="text-xs text-gray-400 mt-1">{achievement.description}</p>
-                  {isEarned && earnedData?.earned_at && (
-                    <p className="text-xs text-emerald-500 mt-2">
-                      ✓ Desbloqueado
-                    </p>
-                  )}
-                  {!isEarned && (
-                    <p className="text-xs text-gray-500 mt-2">🔒 Bloqueado</p>
-                  )}
+                  <div style={{
+                    width: 44, height: 44, flexShrink: 0,
+                    background: earned ? 'var(--amber)' : 'var(--bg-3)',
+                    border: '4px solid var(--ink)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 20,
+                  }}>
+                    {achievement.icon}
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{
+                      fontFamily: 'var(--font-display)', fontSize: 9,
+                      color: earned ? 'var(--parchment)' : 'var(--parchment-2)',
+                      marginBottom: 4,
+                      textShadow: earned ? '2px 2px 0 var(--ink)' : 'none',
+                    }}>
+                      {achievement.title}
+                    </div>
+                    <div className="vt muted" style={{ fontSize: 15 }}>{achievement.description}</div>
+                    <div className="tiny up" style={{ marginTop: 4, color: earned ? 'var(--leaf)' : 'var(--parchment-2)', opacity: earned ? 1 : 0.5 }}>
+                      {earned ? '✓ DESBLOQUEADO' : '✕ BLOQUEADO'}
+                    </div>
+                  </div>
                 </div>
               );
             })}

@@ -2,149 +2,194 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useGameStore } from '../store/gameStore';
+import GameNav from '../components/game/GameNav';
+import WorldProgress from '../components/stats/WorldProgress';
+import AchievementBadge from '../components/stats/AchievementBadge';
 import LeaderboardPanel from '../components/LeaderboardPanel';
+import AchievementsPanel from '../components/AchievementsPanel';
+
+const STAT_CELLS = (userStats, totalCompleted, totalQuests, achievementCount) => [
+  { k: 'NIVEL',       v: String(userStats.level).padStart(2, '0'), c: 'var(--amber)' },
+  { k: 'XP TOTAL',    v: userStats.xp?.toLocaleString(),           c: 'var(--leaf)' },
+  { k: 'MISIONES',    v: `${totalCompleted}/${totalQuests}`,        c: 'var(--sky)' },
+  { k: 'MONEDAS',     v: `◈ ${userStats.coins}`,                   c: 'var(--amber)' },
+  { k: 'LOGROS',      v: achievementCount,                         c: 'var(--plum)' },
+];
 
 export default function StatsPage() {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuthStore();
-  const { userStats, userAchievements, quests, userProgress } = useGameStore();
+  const { userStats, achievements, userAchievements, quests, userProgress } = useGameStore();
   const [questsByWorld, setQuestsByWorld] = useState({});
+  const [showAchievements, setShowAchievements] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/');
-    }
+    if (!isAuthenticated) navigate('/');
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    // Group quests by world
     const grouped = {};
-    quests.forEach(quest => {
-      if (!grouped[quest.world]) {
-        grouped[quest.world] = [];
-      }
-      grouped[quest.world].push(quest);
+    quests.forEach(q => {
+      if (!grouped[q.world]) grouped[q.world] = [];
+      grouped[q.world].push(q);
     });
     setQuestsByWorld(grouped);
   }, [quests]);
 
-  const getWorldProgress = (worldId) => {
-    const worldQuests = questsByWorld[worldId] || [];
-    const completed = userProgress.filter(
-      p => p.status === 'completed' &&
-      worldQuests.some(q => q.id === p.quest_id)
-    ).length;
-    return {
-      completed,
-      total: worldQuests.length,
-      percent: worldQuests.length > 0 ? Math.round((completed / worldQuests.length) * 100) : 0
-    };
-  };
-
   const totalCompleted = userProgress.filter(p => p.status === 'completed').length;
   const totalQuests = quests.length;
+  const totalPct = totalQuests > 0 ? Math.round((totalCompleted / totalQuests) * 100) : 0;
+  const earnedIds = userAchievements.map(a => a.id);
+
+  const cells = STAT_CELLS(userStats, totalCompleted, totalQuests, userAchievements.length);
 
   return (
-    <div className="min-h-screen bg-black text-white p-6">
-      {/* Header */}
-      <div className="max-w-6xl mx-auto mb-8">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-emerald-400 font-bold text-3xl">📊 Tus Estadísticas</h1>
-          <button
-            onClick={() => navigate('/game')}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 rounded font-bold transition"
-          >
-            ← Volver al Juego
+    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+      <GameNav onShowAchievements={() => setShowAchievements(true)} />
+
+      {/* Breadcrumb */}
+      <div style={{
+        padding: '12px 24px',
+        borderBottom: '4px solid var(--ink)',
+        background: 'var(--bg-2)',
+        display: 'flex', alignItems: 'center', gap: 12,
+        flexShrink: 0,
+      }}>
+        <button
+          className="btn btn-ghost"
+          onClick={() => navigate('/game')}
+          style={{ fontSize: 9, padding: '8px 12px' }}
+        >
+          ◀ VOLVER AL JUEGO
+        </button>
+        <div style={{ flex: 1 }} />
+        <div className="tiny up" style={{ color: 'var(--amber)' }}>▸ ESTADÍSTICAS</div>
+      </div>
+
+      {/* Player hero */}
+      <div style={{
+        padding: 'clamp(24px, 4vw, 48px)',
+        borderBottom: '4px solid var(--ink)',
+        backgroundImage: 'radial-gradient(circle at 20% 50%, var(--bg-2) 0%, var(--bg) 60%)',
+        display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap',
+      }}>
+        <div style={{
+          width: 100, height: 100, flexShrink: 0,
+          background: 'var(--bg-2)',
+          border: '4px solid var(--ink)',
+          boxShadow: '6px 6px 0 var(--shadow)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 48,
+        }}>
+          ⬡
+        </div>
+        <div style={{ flex: 1, minWidth: 200 }}>
+          <div className="tiny up" style={{ color: 'var(--amber)', marginBottom: 8 }}>▸ APRENDIZ DE KERNEL</div>
+          <h1 style={{ fontSize: 'clamp(24px, 4vw, 44px)', marginBottom: 8 }}>
+            {user?.username?.toUpperCase() || 'JUGADOR'}
+          </h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <div className="bar" style={{ width: 200, flex: 'none' }}>
+              <i style={{ width: totalPct + '%', transition: 'width 0.3s' }} />
+            </div>
+            <span className="tiny up muted">{totalCompleted} DE {totalQuests} MISIONES</span>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button className="btn btn-amber" onClick={() => navigate('/game')}>
+            CONTINUAR ▶
           </button>
-        </div>
-
-        {/* Overall Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-          <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-            <p className="text-gray-400 text-sm mb-1">Nivel</p>
-            <p className="text-emerald-400 font-bold text-3xl">{userStats.level}</p>
-          </div>
-          <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-            <p className="text-gray-400 text-sm mb-1">XP Total</p>
-            <p className="text-blue-400 font-bold text-3xl">{userStats.xp.toLocaleString()}</p>
-          </div>
-          <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-            <p className="text-gray-400 text-sm mb-1">Monedas</p>
-            <p className="text-amber-400 font-bold text-3xl">🪙 {userStats.coins}</p>
-          </div>
-          <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-            <p className="text-gray-400 text-sm mb-1">Quests</p>
-            <p className="text-purple-400 font-bold text-3xl">{totalCompleted}/{totalQuests}</p>
-          </div>
-          <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-            <p className="text-gray-400 text-sm mb-1">Logros</p>
-            <p className="text-orange-400 font-bold text-3xl">🏆 {userAchievements.length}</p>
-          </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700 mb-8">
-          <p className="text-gray-400 text-sm mb-2">Progreso General</p>
-          <div className="w-full bg-gray-900 rounded-full h-6 overflow-hidden border border-gray-700">
-            <div
-              className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-300"
-              style={{ width: `${(totalCompleted / totalQuests) * 100}%` }}
-            />
-          </div>
-          <p className="text-gray-400 text-xs mt-2">{totalCompleted} de {totalQuests} quests completadas</p>
+          <button className="btn btn-ghost" onClick={() => setShowAchievements(true)}>
+            LOGROS
+          </button>
         </div>
       </div>
 
-      {/* Content Grid */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Mundos Progress */}
-        <div className="lg:col-span-1">
-          <h2 className="text-emerald-400 font-bold text-xl mb-4">🗺️ Mundos</h2>
-          <div className="space-y-3">
-            {[1, 2, 3, 4, 5].map(worldId => {
-              const progress = getWorldProgress(worldId);
-              return (
-                <div key={worldId} className="bg-gray-800 rounded-lg p-3 border border-gray-700">
-                  <div className="flex justify-between items-center mb-2">
-                    <p className="font-bold text-emerald-400">Mundo {worldId}</p>
-                    <p className="text-gray-400 text-xs">{progress.completed}/{progress.total}</p>
-                  </div>
-                  <div className="w-full bg-gray-900 rounded-full h-4 overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-blue-500 to-blue-400 transition-all duration-300"
-                      style={{ width: `${progress.percent}%` }}
-                    />
-                  </div>
-                  <p className="text-gray-500 text-xs mt-1">{progress.percent}%</p>
-                </div>
-              );
-            })}
+      {/* Stats strip */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        borderBottom: '4px solid var(--ink)',
+      }}>
+        {cells.map((s, i) => (
+          <div key={i} style={{
+            padding: '20px 24px',
+            borderRight: i < 4 ? '4px solid var(--ink)' : 'none',
+            background: i % 2 ? 'var(--bg-2)' : 'var(--bg)',
+          }}>
+            <div className="tiny up muted">{s.k}</div>
+            <div style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 20,
+              marginTop: 8,
+              color: s.c,
+              textShadow: '3px 3px 0 var(--ink)',
+            }}>
+              {s.v}
+            </div>
           </div>
+        ))}
+      </div>
+
+      {/* Body */}
+      <div style={{
+        padding: 'clamp(20px, 4vw, 40px)',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: 32,
+        alignItems: 'start',
+      }}>
+
+        {/* Mundos */}
+        <div>
+          <h2 style={{ fontSize: 16, marginBottom: 16 }}>PROGRESO POR MUNDO</h2>
+          <WorldProgress questsByWorld={questsByWorld} userProgress={userProgress} />
         </div>
 
-        {/* Achievements */}
-        <div className="lg:col-span-1">
-          <h2 className="text-orange-400 font-bold text-xl mb-4">🏆 Logros Desbloqueados</h2>
-          <div className="space-y-2">
-            {userAchievements.length === 0 ? (
-              <p className="text-gray-400 text-sm">No hay logros desbloqueados aún</p>
+        {/* Logros recientes */}
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <h2 style={{ fontSize: 16 }}>LOGROS</h2>
+            <button
+              className="btn btn-ghost"
+              style={{ fontSize: 8, padding: '6px 10px' }}
+              onClick={() => setShowAchievements(true)}
+            >
+              VER TODOS →
+            </button>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {achievements.length === 0 ? (
+              <div className="pcard" style={{ background: 'var(--bg-2)', padding: 14 }}>
+                <div className="tiny up muted">SIN LOGROS AÚN</div>
+              </div>
             ) : (
-              userAchievements.map(achievement => (
-                <div key={achievement.id} className="bg-gray-800 rounded p-2 border border-gray-700">
-                  <p className="font-bold text-purple-400 text-sm">{achievement.title}</p>
-                  <p className="text-gray-500 text-xs">{achievement.icon}</p>
-                </div>
+              achievements.slice(0, 5).map(a => (
+                <AchievementBadge
+                  key={a.id}
+                  achievement={a}
+                  earned={earnedIds.includes(a.id)}
+                  earnedAt={userAchievements.find(ua => ua.id === a.id)?.earned_at}
+                />
               ))
             )}
           </div>
         </div>
 
         {/* Leaderboard */}
-        <div className="lg:col-span-1">
-          <h2 className="text-yellow-400 font-bold text-xl mb-4">🏅 Top Jugadores</h2>
+        <div>
+          <h2 style={{ fontSize: 16, marginBottom: 16 }}>CLASIFICACIÓN</h2>
           <LeaderboardPanel userId={user?.id} />
         </div>
       </div>
+
+      {showAchievements && (
+        <AchievementsPanel
+          achievements={achievements}
+          userAchievements={userAchievements}
+          onClose={() => setShowAchievements(false)}
+        />
+      )}
     </div>
   );
 }

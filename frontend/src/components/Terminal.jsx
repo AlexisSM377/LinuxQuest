@@ -21,13 +21,33 @@ export default function Terminal({ questId = null }) {
 
     const initTerminal = async () => {
       try {
-        // Create terminal
         term = new XTerm({
           cursorBlink: true,
           theme: {
-            background: '#1a1a1a',
-            foreground: '#00ff00'
-          }
+            background: '#050a08',
+            foreground: '#5fff7f',
+            cursor: '#5fff7f',
+            selectionBackground: '#3fcc5f44',
+            black: '#1a0f1f',
+            brightBlack: '#4a2f54',
+            red: '#e85d4d',
+            brightRed: '#ff7f7f',
+            green: '#7fb069',
+            brightGreen: '#5fff7f',
+            yellow: '#f5a623',
+            brightYellow: '#ffd58a',
+            blue: '#5fb3d4',
+            brightBlue: '#5fffdf',
+            magenta: '#8b5a96',
+            brightMagenta: '#cba6f7',
+            cyan: '#5fb3d4',
+            brightCyan: '#5fffdf',
+            white: '#f4e4c1',
+            brightWhite: '#ffffff',
+          },
+          fontFamily: '"JetBrains Mono", "Courier New", monospace',
+          fontSize: 13,
+          lineHeight: 1.55,
         });
 
         fitAddon = new FitAddon();
@@ -38,42 +58,32 @@ export default function Terminal({ questId = null }) {
           termInstanceRef.current = term;
         }
 
-        // Wait a tick then fit
         await new Promise(resolve => setTimeout(resolve, 100));
 
         if (mounted && fitAddon && termInstanceRef.current) {
-          try {
-            fitAddon.fit();
-          } catch (err) {
-            console.warn('FitAddon fit failed (terminal might not be ready)', err.message);
-          }
+          try { fitAddon.fit(); } catch {}
         }
 
-        // Setup input handling
         if (mounted && term) {
           term.onData((data) => {
             if (data === '\r') {
               const command = commandBuffer.current.trim();
               commandBuffer.current = '';
-
               if (command.length > 0) {
                 term.write('\r\n');
-                console.log('Enviando comando:', command, 'questId:', questId);
                 socketRef.current?.emit('command', command, questId, (response) => {
                   if (!term) return;
-                  console.log('Respuesta recibida:', response);
                   if (response?.error) {
                     term.write(`\x1b[91m${response.error}\x1b[0m\r\n`);
                   } else if (response?.output) {
-                    const output = response.output.replace(/\n/g, '\r\n');
-                    term.write(`${output}\r\n`);
+                    term.write(`${response.output.replace(/\n/g, '\r\n')}\r\n`);
                   } else {
                     term.write('(sin salida)\r\n');
                   }
-                  term.write('$ ');
+                  term.write('\x1b[94m$\x1b[0m ');
                 });
               } else {
-                term.write('$ ');
+                term.write('\x1b[94m$\x1b[0m ');
               }
             } else if (data === '' || data === '\b') {
               if (commandBuffer.current.length > 0) {
@@ -87,44 +97,33 @@ export default function Terminal({ questId = null }) {
           });
         }
 
-        // Setup socket
         if (mounted) {
           const authToken = token || localStorage.getItem('token');
           socketRef.current = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
-            auth: { token: authToken }
+            auth: { token: authToken },
           });
 
           socketRef.current.on('connect', () => {
             if (term) {
-              term.write('Conectado al servidor\r\n');
-              term.write('Welcome to LinuxQuest Terminal\r\nType "help" for available commands\r\n\r\n$ ');
+              term.write('\x1b[92m● CONECTADO AL SERVIDOR\x1b[0m\r\n');
+              term.write('\x1b[90mLinuxQuest Terminal v1.0 — escribe "help" para ayuda\x1b[0m\r\n\r\n');
+              term.write('\x1b[94m$\x1b[0m ');
             }
           });
 
           socketRef.current.on('connect_error', (error) => {
             if (term) {
-              term.write(`\r\nError de conexión: ${error.message}\r\n$ `);
+              term.write(`\x1b[91m✗ Error de conexión: ${error.message}\x1b[0m\r\n`);
+              term.write('\x1b[94m$\x1b[0m ');
             }
           });
         }
 
-        // Setup resize
         const handleResize = () => {
-          if (fitAddon && term) {
-            try {
-              fitAddon.fit();
-            } catch (error) {
-              console.warn('Resize fit failed:', error.message);
-            }
-          }
+          if (fitAddon && term) try { fitAddon.fit(); } catch {}
         };
-
         window.addEventListener('resize', handleResize);
-
-        // Cleanup
-        return () => {
-          window.removeEventListener('resize', handleResize);
-        };
+        return () => window.removeEventListener('resize', handleResize);
       } catch (error) {
         console.error('Terminal initialization error:', error);
       }
@@ -134,18 +133,30 @@ export default function Terminal({ questId = null }) {
 
     return () => {
       mounted = false;
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-      }
-      if (termInstanceRef.current) {
-        try {
-          termInstanceRef.current.dispose();
-        } catch (e) {
-          console.warn('Terminal dispose error:', e.message);
-        }
-      }
+      socketRef.current?.disconnect();
+      try { termInstanceRef.current?.dispose(); } catch {}
     };
   }, [token, questId]);
 
-  return <div ref={terminalRef} className="w-full h-full bg-black" />;
+  return (
+    <div className="term" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div className="term-bar">
+        <div className="term-dots">
+          <span className="term-dot"></span>
+          <span className="term-dot y"></span>
+          <span className="term-dot g"></span>
+        </div>
+        <span style={{ marginLeft: 8 }}>
+          SANDBOX — {questId ? `quest/${String(questId).padStart(3, '0')}` : 'libre'}
+        </span>
+        <div style={{ flex: 1 }} />
+        <span style={{ color: 'var(--leaf)' }}>● EN VIVO</span>
+      </div>
+
+      <div
+        ref={terminalRef}
+        style={{ flex: 1, padding: '8px 4px', minHeight: 0 }}
+      />
+    </div>
+  );
 }
