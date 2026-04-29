@@ -1,6 +1,6 @@
-# Roadmap LinuxQuest - 13 Semanas (COMPLETADAS) ✅
+# Roadmap LinuxQuest - 14 Semanas (COMPLETADAS) ✅
 
-**Status: 🟢 PRODUCTION READY - All 13 weeks completed**
+**Status: 🟢 PRODUCTION READY (HARDENED) - All 14 weeks completed**
 
 ## Semana 1: Setup ✅
 - [x] Instalar Claude Code, Git, Node
@@ -146,9 +146,9 @@
 ---
 
 ## Progreso General
-**Completadas:** Semanas 1-13 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs, Combat, Leaderboard, Security, Pixel Art Design System)
-**Próxima:** Semana 14 (Localización / Deploy final)
-**Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL
+**Completadas:** Semanas 1-14 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs, Combat, Leaderboard, Security, Pixel Art Design System, Sandbox Hardening + Mocks)
+**Próxima:** Semana 15 (Localización / Pulido final)
+**Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL (Neon)
 
 ## Contenido Seeded - 95 Quests Distribuidas
 ```
@@ -222,7 +222,75 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
 - [x] AchievementsPanel: modal pixel con filter tabs
 - [x] Fix hover en navbar
 
-## Semana 14+ (opcional): Localización
+## Semana 14: Sandbox Hardening + Mocks Educativos ✅ (2026-04-29)
+
+### Database & Conexión
+- [x] Backend local conectado a Neon PostgreSQL
+- [x] test-db-connection.js para verificar conectividad
+- [x] BD inicializada y seeded en producción
+
+### Frontend - UX y Error Handling
+- [x] Sistema de toast notifications (success/error/warning/info)
+- [x] Loading states por operación específica
+- [x] Timeout 15s + retry automático (1 intento)
+- [x] Logging estructurado de errores HTTP (Network + Console)
+- [x] Mensajes de error con código HTTP y detalles del backend
+
+### Backend - Error Handling
+- [x] Middleware errorHandler.js (requestLogger, notFoundHandler, errorHandler)
+- [x] Respuestas JSON consistentes con method/path/timestamp
+- [x] Stack traces en development
+- [x] Fix Express 5 compatibility (path-to-regexp v8)
+
+### CORS Flexible
+- [x] Acepta localhost (5173, 3000, 4173)
+- [x] Acepta FRONTEND_URL configurada en Fly.io
+- [x] Acepta cualquier *.vercel.app (preview deploys)
+- [x] Logs de orígenes bloqueados
+
+### Dockerfile Production-Ready
+- [x] 21 paquetes Alpine para los 71 comandos de las misiones
+- [x] Usuario non-root (sandbox UID 1001)
+- [x] tini como PID 1 (manejo de señales)
+- [x] Permisos restrictivos en archivos sensibles
+
+### 14 Mocks Educativos (backend/sandbox-bin/)
+- [x] Sin soporte en container: journalctl, auditctl, ausearch, semanage,
+      iptables (híbrido), lsusb, dmesg (híbrido)
+- [x] Administrativos peligrosos: sudo, su, useradd, usermod, groupadd,
+      passwd, visudo
+- [x] Todos con sanitización de inputs (tr -cd permitidos)
+
+### Hardening de Seguridad (Defensa en Profundidad)
+- [x] securityConfig.js reorganizado:
+  - FORBIDDEN_COMMANDS: solo daño irrecuperable
+  - GLOBAL_DANGEROUS_PATTERNS: 20+ patrones nuevos
+  - DANGEROUS_COMMAND_ARGS: validación por comando
+  - MAX_COMMAND_LENGTH/MAX_ARG_LENGTH
+- [x] commandService.js con capas adicionales:
+  - Capa 0: longitud + caracteres de control
+  - Capa 2A: blacklist hardcoded
+  - Capa 2C: argumentos peligrosos
+- [x] Entorno limpio en execAsync (sin filtrar backend env)
+- [x] killSignal SIGKILL para timeouts efectivos
+- [x] GLOBAL_ALLOWED_COMMANDS expandido de 25 a 73 entradas
+- [x] 0 conflictos verificados entre misiones y blacklist
+
+### Ataques Bloqueados (verificados)
+- ✅ sudo rm -rf /
+- ✅ Lectura /etc/shadow
+- ✅ Fork bombs
+- ✅ Inyección con `;`, `&`, `|`, backticks
+- ✅ LD_PRELOAD attacks
+- ✅ chmod 777 sistema
+- ✅ find -exec rm
+- ✅ curl file:// para leer archivos
+- ✅ Container escape via /proc
+- ✅ Acceso a docker.sock
+- ✅ Comandos con null bytes
+- ✅ Comandos excesivamente largos
+
+## Semana 15+ (opcional): Localización
 - [ ] Traducir UI frontend al español (PRIORIDAD ALTA)
   - [ ] Componentes React: textos, placeholders, botones, etiquetas
   - [ ] Mensajes de error y validación

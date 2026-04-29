@@ -368,8 +368,105 @@ All tables: CREATED
 - `frontend/src/components/stats/AchievementBadge.jsx`
 - `frontend/src/components/stats/WorldProgress.jsx`
 
+### Semana 14: Sandbox Hardening + Mocks Educativos ✅ (COMPLETED 2026-04-29)
+
+**Database & Conexión:**
+- [x] Backend local conectado a Neon PostgreSQL (.env actualizado)
+- [x] Script `backend/test-db-connection.js` para verificar conectividad
+- [x] BD inicializada con 95 quests + 12 achievements
+
+**Frontend - Error Handling y UX:**
+- [x] Sistema de toast notifications (toastStore.js + Toast.jsx)
+  - 4 tipos: success, error, warning, info — auto-dismiss + click para cerrar
+  - Estilo pixel-art consistente, animación slide-in
+- [x] Loading states por operación (gameStore.loadingStates)
+- [x] Timeout 15s + retry automático (1 intento) en apiFetch
+- [x] Logging estructurado en console (collapsible groups, color-coded por status)
+- [x] LeaderboardPanel migrado a apiFetch con manejo de errores
+
+**Backend - Error Handling:**
+- [x] Middleware `backend/src/middleware/errorHandler.js`:
+  - `requestLogger`, `notFoundHandler`, `errorHandler` global
+- [x] Respuestas JSON consistentes: { error, code, method, path, timestamp }
+- [x] Fix Express 5: middleware con `startsWith('/api/')` (en lugar de `/api/*`)
+
+**CORS Flexible:**
+- [x] Acepta localhost (5173, 3000, 4173)
+- [x] Acepta `FRONTEND_URL` configurada en Fly.io
+- [x] Acepta cualquier `*.vercel.app` (preview deploys incluidos)
+- [x] Logs de orígenes bloqueados para debugging
+- [x] Socket.io con misma lógica de CORS
+
+**Dockerfile - 21 paquetes Alpine para 71 comandos:**
+- [x] Reales: bash, coreutils, findutils, grep, sed, gawk, procps, util-linux,
+  iproute2, net-tools, iputils, bind-tools, iptables, openssh-client,
+  curl, less, gzip, tar, acl, shadow, sudo, mandoc, man-pages, usbutils
+- [x] Helpers: su-exec, tini
+
+**14 Mocks Educativos en `backend/sandbox-bin/`:**
+- [x] Sin soporte en container (7): journalctl, auditctl, ausearch,
+  semanage, iptables (híbrido), lsusb, dmesg (híbrido)
+- [x] Comandos administrativos peligrosos (7): sudo, su, useradd,
+  usermod, groupadd, passwd, visudo
+- [x] Todos sanitizan inputs: `printf '%s' | tr -cd 'permitidos' | head -c N`
+
+**Allowlist Global Expandida:**
+- [x] `GLOBAL_ALLOWED_COMMANDS`: 25 → 73 entradas
+- [x] 0 conflictos entre misiones y blacklist (verificado automáticamente)
+
+**Hardening de Seguridad (Defensa en Profundidad):**
+- [x] Usuario non-root: `sandbox` (UID 1001) ejecuta Node
+- [x] `tini` como PID 1 (manejo correcto de señales, previene zombies)
+- [x] Permisos restrictivos: `/etc/shadow` 600, sandboxes 700
+- [x] `securityConfig.js` reorganizado:
+  - `FORBIDDEN_COMMANDS`: solo daño irrecuperable (docker, mount, dd, mkfs, etc.)
+  - `GLOBAL_DANGEROUS_PATTERNS`: 20+ patrones (fork bombs, escapes /proc, etc.)
+  - `DANGEROUS_COMMAND_ARGS`: validación específica por comando
+  - `MAX_COMMAND_LENGTH: 1000`, `MAX_ARG_LENGTH: 256`
+- [x] `commandService.js` con nuevas capas:
+  - Capa 0: longitud máxima + bloqueo de caracteres de control
+  - Capa 2A: blacklist hardcoded (FORBIDDEN_COMMANDS) antes de allowlist
+  - Capa 2C: validación de argumentos peligrosos por comando
+- [x] Entorno limpio en `execAsync`: solo PATH/HOME/USER/LANG (no filtra backend env)
+- [x] `killSignal: 'SIGKILL'` para timeouts efectivos
+
+### Ataques Bloqueados (Verificación)
+| Ataque | Bloqueado por |
+|--------|---------------|
+| `sudo rm -rf /` | mock + DANGEROUS_PATTERNS |
+| `cat /etc/shadow` | DANGEROUS_COMMAND_ARGS + permisos 600 |
+| Fork bomb | regex GLOBAL_DANGEROUS_PATTERNS |
+| `cmd1; rm -rf /` | regex `/[;&|`]/` |
+| `LD_PRELOAD=...` | env limpio + regex |
+| `chmod 777 /etc` | DANGEROUS_COMMAND_ARGS |
+| `find / -exec rm` | DANGEROUS_COMMAND_ARGS |
+| `curl file:///etc/passwd` | DANGEROUS_COMMAND_ARGS |
+| Escape vía /proc/self/exe | FORBIDDEN_PATHS + non-root |
+| Acceso a docker.sock | regex GLOBAL_DANGEROUS_PATTERNS |
+| Comando con null bytes | filtro `\x00-\x1F` en capa 0 |
+| Comando >1000 chars | MAX_COMMAND_LENGTH |
+
+### Archivos Nuevos (Semana 14)
+- `backend/test-db-connection.js`
+- `backend/.gitignore`
+- `backend/Dockerfile` (rewrite completo)
+- `backend/src/middleware/errorHandler.js`
+- `backend/sandbox-bin/` (14 scripts mock)
+- `frontend/src/store/toastStore.js`
+- `frontend/src/components/Toast.jsx`
+
+### Archivos Modificados (Semana 14)
+- `backend/.env` (DATABASE_URL → Neon)
+- `backend/src/server.js` (CORS flex, error middleware, fix Express 5)
+- `backend/src/services/commandService.js` (capas 0, 2A, 2C, env limpio)
+- `backend/src/security/securityConfig.js` (FORBIDDEN reorganizado, args validation)
+- `frontend/src/utils/api.js` (timeout, retry, logging HTTP detallado)
+- `frontend/src/store/gameStore.js` (loading states, toasts en errores)
+- `frontend/src/components/LeaderboardPanel.jsx` (apiFetch + toast errores)
+- `frontend/src/App.jsx` (ToastContainer global)
+
 ## Last Updated
-2026-04-28 - Semana 13 COMPLETADA (Pixel Art Design System) ✅
-**PROJECT STATUS: 🟢 PRODUCTION READY**
-**DEPLOYMENT: Ready for Vercel**
-**SECURITY: HARDENED & INHACKEABLE**
+2026-04-29 - Semana 14 COMPLETADA (Sandbox Hardening + Mocks Educativos) ✅
+**PROJECT STATUS: 🟢 PRODUCTION READY (HARDENED)**
+**DEPLOYMENT: Frontend desplegado en Vercel, Backend listo para Fly.io redeploy**
+**SECURITY: 10+ CAPAS DE DEFENSA EN PROFUNDIDAD**
