@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { apiFetch } from '../utils/api';
+import { useToastStore } from '../store/toastStore';
 
 const RANK_COLORS = ['var(--amber)', 'var(--parchment-2)', 'var(--blood)'];
 const RANK_LABELS = ['01', '02', '03'];
@@ -20,9 +22,12 @@ export default function LeaderboardPanel({ userId }) {
       const endpoint = tab === 'global'
         ? `${import.meta.env.VITE_API_URL}/api/leaderboard/top?limit=10`
         : `${import.meta.env.VITE_API_URL}/api/leaderboard/world/${tab}`;
-      const res = await fetch(endpoint);
+      const res = await apiFetch(endpoint);
+      if (!res.ok) throw new Error('No se pudo cargar el ranking');
       setPlayers(await res.json());
-    } catch {
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error);
+      useToastStore.getState().error(error.message || 'Error al cargar ranking');
       setPlayers([]);
     } finally {
       setLoading(false);
@@ -31,9 +36,12 @@ export default function LeaderboardPanel({ userId }) {
 
   const fetchPlayerStats = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/leaderboard/player/${userId}`);
+      const res = await apiFetch(`${import.meta.env.VITE_API_URL}/api/leaderboard/player/${userId}`);
+      if (!res.ok) return;
       setPlayerStats(await res.json());
-    } catch {}
+    } catch (error) {
+      console.error('Error fetching player stats:', error);
+    }
   };
 
   const tabs = [

@@ -1,6 +1,39 @@
 import { create } from 'zustand';
+import { apiFetch } from '../utils/api';
+import { useToastStore } from './toastStore';
 
-export const useGameStore = create((set) => ({
+const API_URL = import.meta.env.VITE_API_URL;
+
+const initialLoadingStates = {
+  quests: false,
+  userProgress: false,
+  userStats: false,
+  achievements: false,
+  userAchievements: false,
+  npcs: false,
+  enemies: false,
+  completingQuest: false
+};
+
+const showError = (msg) => {
+  try { useToastStore.getState().error(msg); } catch {}
+};
+
+const showSuccess = (msg) => {
+  try { useToastStore.getState().success(msg); } catch {}
+};
+
+async function extractError(response, fallback) {
+  try {
+    const body = await response.json();
+    const msg = body.error || fallback;
+    return `[${response.status}] ${msg}`;
+  } catch {
+    return `[${response.status}] ${fallback}`;
+  }
+}
+
+export const useGameStore = create((set, get) => ({
   currentQuestId: null,
   currentQuest: null,
   quests: [],
@@ -11,6 +44,7 @@ export const useGameStore = create((set) => ({
   npcs: [],
   enemies: [],
   loading: true,
+  loadingStates: { ...initialLoadingStates },
 
   setCurrentQuestId: (questId) => set({ currentQuestId: questId }),
   setCurrentQuest: (quest) => set({ currentQuest: quest }),
@@ -23,78 +57,116 @@ export const useGameStore = create((set) => ({
   setEnemies: (enemies) => set({ enemies }),
   setLoading: (loading) => set({ loading }),
 
+  _setLoadingState: (key, value) => set(state => ({
+    loadingStates: { ...state.loadingStates, [key]: value }
+  })),
+
   fetchQuests: async () => {
+    const setLoading = get()._setLoadingState;
     try {
+      setLoading('quests', true);
       set({ loading: true });
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/quests`);
+      const response = await apiFetch(`${API_URL}/api/quests`);
+      if (!response.ok) {
+        showError(await extractError(response, 'Error al cargar misiones'));
+        return;
+      }
       const quests = await response.json();
       set({ quests });
     } catch (error) {
       console.error('Error fetching quests:', error);
+      showError(error.message || 'Error al cargar misiones');
     } finally {
+      setLoading('quests', false);
       set({ loading: false });
     }
   },
 
   fetchQuestsByWorld: async (worldId) => {
+    const setLoading = get()._setLoadingState;
     try {
+      setLoading('quests', true);
       set({ loading: true });
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/quests/world/${worldId}`);
+      const response = await apiFetch(`${API_URL}/api/quests/world/${worldId}`);
+      if (!response.ok) {
+        showError(await extractError(response, 'Error al cargar misiones del mundo'));
+        return;
+      }
       const quests = await response.json();
       set({ quests });
     } catch (error) {
       console.error('Error fetching quests by world:', error);
+      showError(error.message || 'Error al cargar misiones del mundo');
     } finally {
+      setLoading('quests', false);
       set({ loading: false });
     }
   },
 
   fetchUserProgress: async () => {
+    const setLoading = get()._setLoadingState;
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         set({ userProgress: [] });
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/quests/user/progress`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      setLoading('userProgress', true);
+      const response = await apiFetch(`${API_URL}/api/quests/user/progress`, {
+        headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (!response.ok) {
+        showError(await extractError(response, 'Error al cargar progreso'));
+        set({ userProgress: [] });
+        return;
+      }
       const data = await response.json();
       set({ userProgress: data.progress || [] });
     } catch (error) {
       console.error('Error fetching user progress:', error);
+      showError(error.message || 'Error al cargar progreso');
       set({ userProgress: [] });
+    } finally {
+      setLoading('userProgress', false);
     }
   },
 
   fetchUserStats: async () => {
+    const setLoading = get()._setLoadingState;
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         set({ userStats: { xp: 0, level: 1, coins: 0, xpToNext: 100, progress: 0 } });
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/quests/user/stats`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      setLoading('userStats', true);
+      const response = await apiFetch(`${API_URL}/api/quests/user/stats`, {
+        headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (!response.ok) {
+        showError(await extractError(response, 'Error al cargar estadísticas'));
+        set({ userStats: { xp: 0, level: 1, coins: 0, xpToNext: 100, progress: 0 } });
+        return;
+      }
       const stats = await response.json();
       set({ userStats: stats });
     } catch (error) {
       console.error('Error fetching user stats:', error);
+      showError(error.message || 'Error al cargar estadísticas');
       set({ userStats: { xp: 0, level: 1, coins: 0, xpToNext: 100, progress: 0 } });
+    } finally {
+      setLoading('userStats', false);
     }
   },
 
   completeQuest: async (questId) => {
+    const setLoading = get()._setLoadingState;
     try {
       const token = localStorage.getItem('token');
       if (!token) return null;
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/quests/${questId}/complete`, {
+      setLoading('completingQuest', true);
+      const response = await apiFetch(`${API_URL}/api/quests/${questId}/complete`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -103,7 +175,7 @@ export const useGameStore = create((set) => ({
       });
 
       if (!response.ok) {
-        console.error('Failed to complete quest:', response.status);
+        showError(await extractError(response, 'Error al completar misión'));
         return null;
       }
 
@@ -122,41 +194,62 @@ export const useGameStore = create((set) => ({
           },
           userAchievements: state.userAchievements
         }));
+        showSuccess(`Misión completada (+${data.xpGained || 0} XP)`);
       }
       return data;
     } catch (error) {
       console.error('Error completing quest:', error);
+      showError(error.message || 'Error al completar misión');
       return null;
+    } finally {
+      setLoading('completingQuest', false);
     }
   },
 
   fetchAchievements: async () => {
+    const setLoading = get()._setLoadingState;
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/achievements`);
+      setLoading('achievements', true);
+      const response = await apiFetch(`${API_URL}/api/achievements`);
+      if (!response.ok) {
+        showError(await extractError(response, 'Error al cargar logros'));
+        return;
+      }
       const achievements = await response.json();
       set({ achievements });
     } catch (error) {
       console.error('Error fetching achievements:', error);
+      showError(error.message || 'Error al cargar logros');
+    } finally {
+      setLoading('achievements', false);
     }
   },
 
   fetchUserAchievements: async () => {
+    const setLoading = get()._setLoadingState;
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         set({ userAchievements: [] });
         return;
       }
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/achievements/mine`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      setLoading('userAchievements', true);
+      const response = await apiFetch(`${API_URL}/api/achievements/mine`, {
+        headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (!response.ok) {
+        showError(await extractError(response, 'Error al cargar tus logros'));
+        set({ userAchievements: [] });
+        return;
+      }
       const userAchievements = await response.json();
       set({ userAchievements });
     } catch (error) {
       console.error('Error fetching user achievements:', error);
+      showError(error.message || 'Error al cargar tus logros');
       set({ userAchievements: [] });
+    } finally {
+      setLoading('userAchievements', false);
     }
   },
 
@@ -171,22 +264,40 @@ export const useGameStore = create((set) => ({
   },
 
   fetchNPCs: async () => {
+    const setLoading = get()._setLoadingState;
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/npcs`);
+      setLoading('npcs', true);
+      const response = await apiFetch(`${API_URL}/api/npcs`);
+      if (!response.ok) {
+        showError(await extractError(response, 'Error al cargar NPCs'));
+        return;
+      }
       const npcs = await response.json();
       set({ npcs });
     } catch (error) {
       console.error('Error fetching NPCs:', error);
+      showError(error.message || 'Error al cargar NPCs');
+    } finally {
+      setLoading('npcs', false);
     }
   },
 
   fetchEnemies: async () => {
+    const setLoading = get()._setLoadingState;
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/enemies`);
+      setLoading('enemies', true);
+      const response = await apiFetch(`${API_URL}/api/enemies`);
+      if (!response.ok) {
+        showError(await extractError(response, 'Error al cargar enemigos'));
+        return;
+      }
       const enemies = await response.json();
       set({ enemies });
     } catch (error) {
       console.error('Error fetching enemies:', error);
+      showError(error.message || 'Error al cargar enemigos');
+    } finally {
+      setLoading('enemies', false);
     }
   }
 }));

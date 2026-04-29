@@ -4,10 +4,12 @@ import GamePage from './pages/GamePage'
 import StatsPage from './pages/StatsPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import ToastContainer from './components/Toast'
 
 function App() {
   return (
     <Router>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<MenuPage />} />
         <Route path="/login" element={<LoginPage />} />
