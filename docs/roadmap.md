@@ -1,6 +1,6 @@
-# Roadmap LinuxQuest - 12 Semanas (COMPLETADAS) ✅
+# Roadmap LinuxQuest - 13 Semanas (COMPLETADAS) ✅
 
-**Status: 🟢 PRODUCTION READY - All 12 weeks completed**
+**Status: 🟢 PRODUCTION READY - All 13 weeks completed**
 
 ## Semana 1: Setup ✅
 - [x] Instalar Claude Code, Git, Node
@@ -146,8 +146,8 @@
 ---
 
 ## Progreso General
-**Completadas:** Semanas 1-11 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs, Combat, Leaderboard)
-**Próxima:** Semana 12 (Deploy en producción)
+**Completadas:** Semanas 1-13 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs, Combat, Leaderboard, Security, Pixel Art Design System)
+**Próxima:** Semana 14 (Localización / Deploy final)
 **Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL
 
 ## Contenido Seeded - 95 Quests Distribuidas
@@ -184,7 +184,7 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
   └─ Proyectos: cron, background jobs, logging
 ```
 
-## Cambios Recientes (2026-04-27)
+## Cambios Recientes (2026-04-28)
 - ✅ Semana 7 COMPLETADA: XP system con 20 niveles + nivel-up notifications
 - ✅ Semana 8 COMPLETADA: Quest unlock system + 12 achievements
 - ✅ Semana 9 COMPLETADA: NPC system + Quest card redesign
@@ -195,6 +195,10 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
   - /api/leaderboard endpoints (top jugadores, world rankings, player stats)
   - Integración en GamePage (botón Stats)
   - Medals para ranking (🥇 🥈 🥉)
+- ✅ Semana 13 COMPLETADA: Pixel Art Design System (20 archivos, +1862 líneas netas)
+  - index.css: 459 líneas, 4 temas, variables CSS, clases de componentes
+  - Nuevos: AuthCard, PixelInput, GameNav, AchievementBadge, WorldProgress
+  - Rediseño total: Menu, Login, Register, GamePage, StatsPage, AchievementsPanel
 - ✅ Semana 12 COMPLETADA: Security Hardening + Documentación
   - 8 capas de seguridad implementadas y documentadas
   - README.md, STATUS.md, roadmap.md en español
@@ -205,10 +209,22 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
 - ✅ Database: Tablas quests + user_quest_progress pobladas
 - ✅ Socket.io: Terminal ↔ Backend validando comandos por quest
 
-## Semana 13: Localización (PENDIENTE)
+## Semana 13: Pixel Art Design System ✅
+- [x] Sistema de diseño global con CSS variables y 4 temas
+- [x] Clases reutilizables: btn, pcard, term, chip, bar, diff, tile
+- [x] Fuentes pixel: Press Start 2P + VT323
+- [x] Menu: hero section, terminal animado, stats bar, feature cards
+- [x] AuthCard + PixelInput (componentes de auth)
+- [x] GameNav component
+- [x] WorldProgress + AchievementBadge (componentes de stats)
+- [x] Rediseño completo: Quest, QuestCard, NPCProfile, Terminal
+- [x] GamePage, StatsPage, LoginPage, RegisterPage, MenuPage actualizados
+- [x] AchievementsPanel: modal pixel con filter tabs
+- [x] Fix hover en navbar
+
+## Semana 14+ (opcional): Localización
 - [ ] Traducir UI frontend al español (PRIORIDAD ALTA)
   - [ ] Componentes React: textos, placeholders, botones, etiquetas
   - [ ] Mensajes de error y validación
   - [ ] Notificaciones del sistema
   - [ ] Tooltips e hints
-  - [ ] Toda la interfaz visible al usuario debe estar en español
