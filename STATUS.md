@@ -1,4 +1,4 @@
-# LinuxQuest - Status (2026-04-27) - 🟢 PRODUCTION READY
+# LinuxQuest - Status (2026-04-28) - 🟢 PRODUCTION READY
 
 ## ✅ WEEKS 1-6 COMPLETED
 
@@ -55,6 +55,14 @@
 - Zustand game store ✅
 - Routing setup ✅
 - Dynamic API URL configuration ✅
+- **Pixel Art Design System** (index.css, 4 themes, CSS vars) ✅
+- **AuthCard + PixelInput** components ✅
+- **GameNav** component ✅
+- **AchievementBadge + WorldProgress** stat components ✅
+- Menu redesign: hero, animated terminal, stats bar, feature cards ✅
+- GamePage: pixel Quest panel + Terminal wrapper ✅
+- StatsPage: WorldProgress bars + LeaderboardPanel redesign ✅
+- AchievementsPanel: pixel modal con filter tabs ✅
 
 ## 🔐 Security (COMPLETED - 8 LAYERS)
 - [x] Sandbox Validator - Path traversal, injection, sensitive files
@@ -339,8 +347,29 @@ All tables: CREATED
 - [ ] Características comunitarias (foros, chat)
 - [ ] Badges de certificación
 
+### Semana 13: Pixel Art Design System ✅ (COMPLETED 2026-04-28)
+- [x] Sistema de diseño global (index.css - 459 líneas, 4 temas)
+- [x] CSS variables: colores, fuentes, radios, sombras pixel
+- [x] Clases de componentes: btn, pcard, term, chip, bar, diff, tile
+- [x] Fuentes pixel: Press Start 2P, VT323
+- [x] Menu: hero section, terminal animado, stats bar, feature cards
+- [x] Auth: componentes AuthCard + PixelInput (Login + Register)
+- [x] GamePage: GameNav, Quest panel pixel, Terminal con pixel wrapper
+- [x] StatsPage: WorldProgress bars, AchievementBadge, LeaderboardPanel redesign
+- [x] AchievementsPanel: modal pixel con filter tabs
+- [x] QuestCard, NPCProfile, Quest: full pixel redesign
+- [x] Fix navbar button hover (color explícito, button reset)
+- [x] 20 archivos modificados, +1862 líneas netas
+
+### Archivos Nuevos (Semana 13)
+- `frontend/src/components/auth/AuthCard.jsx`
+- `frontend/src/components/auth/PixelInput.jsx`
+- `frontend/src/components/game/GameNav.jsx`
+- `frontend/src/components/stats/AchievementBadge.jsx`
+- `frontend/src/components/stats/WorldProgress.jsx`
+
 ## Last Updated
-2026-04-27 - Semanas 1-12 COMPLETADAS ✅
+2026-04-28 - Semana 13 COMPLETADA (Pixel Art Design System) ✅
 **PROJECT STATUS: 🟢 PRODUCTION READY**
 **DEPLOYMENT: Ready for Vercel**
 **SECURITY: HARDENED & INHACKEABLE**
