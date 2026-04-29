@@ -7,33 +7,12 @@ export default function MenuPage() {
   const { isAuthenticated } = useAuthStore();
 
   const handleNewGame = () => {
-    if (!isAuthenticated) {
-      navigate('/login');
-    } else {
-      navigate('/game');
-    }
+    navigate(isAuthenticated ? '/game' : '/register');
   };
 
   const handleContinue = () => {
-    if (isAuthenticated) {
-      navigate('/game');
-    }
+    if (isAuthenticated) navigate('/game');
   };
 
-  const handleSettings = () => {
-    navigate('/settings');
-  };
-
-  const handleExit = () => {
-    window.close();
-  };
-
-  return (
-    <Menu
-      onNewGame={handleNewGame}
-      onContinue={handleContinue}
-      onSettings={handleSettings}
-      onExit={handleExit}
-    />
-  );
+  return <Menu onNewGame={handleNewGame} onContinue={handleContinue} />;
 }

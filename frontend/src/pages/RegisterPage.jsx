@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../utils/api';
+import AuthCard from '../components/auth/AuthCard';
+import PixelInput from '../components/auth/PixelInput';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -13,103 +15,107 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError('Las contraseñas no coinciden');
       return;
     }
-
     setLoading(true);
-
     try {
-      const response = await apiClient.post('/api/auth/register', {
-        email,
-        username,
-        password
-      });
-
+      const response = await apiClient.post('/api/auth/register', { email, username, password });
       register(response.user, response.token);
       navigate('/game');
     } catch (err) {
-      setError(err.message || 'Register error');
+      setError(err.message || 'Error al registrarse');
     } finally {
       setLoading(false);
     }
   };
 
+  const footer = (
+    <>
+      ¿Ya tienes cuenta?{' '}
+      <button
+        onClick={() => navigate('/login')}
+        style={{
+          background: 'none',
+          border: 'none',
+          cursor: 'pointer',
+          color: 'var(--amber)',
+          fontFamily: 'var(--font-body)',
+          fontSize: 'inherit',
+          textDecoration: 'underline',
+        }}
+      >
+        INICIAR SESIÓN
+      </button>
+    </>
+  );
+
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-b from-gray-900 to-black px-4">
-      <div className="w-full max-w-sm">
-        <h1 className="text-4xl font-bold text-white text-center mb-8 tracking-widest">Register</h1>
+    <AuthCard
+      title="CREAR CUENTA"
+      subtitle="Únete y empieza tu viaje al terminal"
+      footer={footer}
+    >
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <PixelInput
+          label="EMAIL"
+          type="email"
+          placeholder="aprendiz@linuxquest.dev"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <PixelInput
+          label="USUARIO"
+          type="text"
+          placeholder="aprendiz_de_kernel"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+        <PixelInput
+          label="CONTRASEÑA"
+          type="password"
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <PixelInput
+          label="CONFIRMAR CONTRASEÑA"
+          type="password"
+          placeholder="••••••••"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+        />
 
-        <form onSubmit={handleRegister} className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
-            required
-          />
-
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
-            required
-          />
-
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
-            required
-          />
-
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded font-bold disabled:opacity-50 transition"
-          >
-            {loading ? 'Registering...' : 'Register'}
-          </button>
-        </form>
-
-        <p className="text-gray-400 text-center mt-4">
-          Already have account?{' '}
-          <button
-            onClick={() => navigate('/login')}
-            className="text-emerald-400 hover:text-emerald-300 font-bold"
-          >
-            Login
-          </button>
-        </p>
+        {error && (
+          <div style={{
+            background: 'var(--blood)',
+            border: '4px solid var(--ink)',
+            padding: '10px 14px',
+            fontFamily: 'var(--font-code)',
+            fontSize: 13,
+            color: 'var(--parchment)',
+          }}>
+            ✗ {error}
+          </div>
+        )}
 
         <button
-          onClick={() => navigate('/')}
-          className="w-full mt-4 px-4 py-2 border border-gray-700 text-gray-400 rounded hover:text-white transition"
+          type="submit"
+          className="btn btn-leaf"
+          disabled={loading}
+          style={{ width: '100%', marginTop: 8, opacity: loading ? 0.6 : 1 }}
         >
-          Back to Menu
+          {loading ? 'CREANDO CUENTA...' : 'CREAR CUENTA ▶'}
         </button>
-      </div>
-    </div>
+      </form>
+    </AuthCard>
   );
 }
