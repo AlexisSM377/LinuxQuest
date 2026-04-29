@@ -22,10 +22,31 @@ dotenv.config();
 
 const app = express();
 const server = createServer(app);
+
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:4173',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+const isOriginAllowed = (origin) => {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+  if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) return true;
+  if (/^https:\/\/[a-z0-9-]+-[a-z0-9-]+\.vercel\.app$/i.test(origin)) return true;
+  return false;
+};
+
 const io = new Server(server, {
   cors: {
-    origin: '*',
-    methods: ['GET', 'POST']
+    origin: (origin, callback) => {
+      if (isOriginAllowed(origin)) return callback(null, true);
+      console.warn(`[CORS Socket.io] Origen bloqueado: ${origin}`);
+      callback(new Error('CORS: origen no permitido'));
+    },
+    methods: ['GET', 'POST'],
+    credentials: true
   }
 });
 
@@ -61,9 +82,13 @@ app.use(helmet({
   xssFilter: true
 }));
 
-// CORS - Strict policy
+// CORS - permite localhost + FRONTEND_URL + cualquier preview de Vercel
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (isOriginAllowed(origin)) return callback(null, true);
+    console.warn(`[CORS] Origen bloqueado: ${origin}`);
+    callback(new Error(`CORS: origen no permitido (${origin})`));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -107,7 +132,10 @@ app.use('/api/npcs', npcRoutes);
 app.use('/api/enemies', enemyRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 
-app.use('/api/*', notFoundHandler);
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api/')) return notFoundHandler(req, res, next);
+  next();
+});
 app.use(errorHandler);
 
 // Socket.io middleware para autenticación
