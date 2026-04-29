@@ -1,0 +1,49 @@
+#!/bin/bash
+# Mock de ausearch - sanitiza inputs
+set -u
+
+sanitize() {
+  printf '%s' "${1:-}" | tr -cd 'a-zA-Z0-9_-' | head -c 32
+}
+
+NOW=$(date '+%s')
+TIME1=$(date -d '5 minutes ago' '+%s')
+TIME2=$(date -d '10 minutes ago' '+%s')
+
+if [[ "${1:-}" == "-m" || "${1:-}" == "--message" ]]; then
+  TYPE=$(sanitize "${2:-}")
+  TYPE="${TYPE:-USER_LOGIN}"
+  cat <<EOF
+----
+time->$(date -d '5 minutes ago')
+type=${TYPE} msg=audit(${TIME1}.123:456): pid=2345 uid=1000 auid=1000 ses=2 msg='op=login id=1000 exe="/usr/bin/login" hostname=sandbox res=success'
+----
+time->$(date -d '10 minutes ago')
+type=${TYPE} msg=audit(${TIME2}.456:789): pid=2346 uid=0 auid=1000 ses=2 msg='op=PAM:authentication acct="root" exe="/usr/bin/su" res=success'
+
+[NOTA: Salida simulada - sandbox sin auditd real]
+EOF
+  exit 0
+fi
+
+if [[ "${1:-}" == "-ua" || "${1:-}" == "--user-account" ]]; then
+  USER=$(sanitize "${2:-}")
+  USER="${USER:-1000}"
+  cat <<EOF
+----
+time->$(date -d '5 minutes ago')
+type=USER_LOGIN msg=audit(${TIME1}.123:456): pid=2345 uid=${USER} res=success
+EOF
+  exit 0
+fi
+
+cat <<'EOF'
+usage: ausearch [options]
+    -m <type>             Search by message type
+    -ua <user>            Search by user
+    -ts <time>            Start time
+    -te <time>            End time
+    -i                    Interpret numeric values
+
+[NOTA: Salida simulada - sandbox sin auditd real]
+EOF

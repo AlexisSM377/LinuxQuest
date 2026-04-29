@@ -1,0 +1,26 @@
+#!/bin/bash
+# Mock de groupadd - solo simula
+
+GROUP=""
+GID=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -g) GID=$(printf '%s' "$2" | tr -cd '0-9' | head -c 6); shift 2 ;;
+    -*) shift ;;
+    *) GROUP=$(printf '%s' "$1" | tr -cd 'a-zA-Z0-9_-' | head -c 32); shift ;;
+  esac
+done
+
+if [[ -z "$GROUP" ]]; then
+  echo "groupadd: missing operand"
+  exit 1
+fi
+
+cat <<EOF
+[Modo educativo] Grupo simulado creado: $GROUP
+${GID:+  GID asignado: $GID}
+
+[NOTA: Operación simulada - no se crearon grupos reales]
+EOF
+exit 0

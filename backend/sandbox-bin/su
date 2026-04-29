@@ -1,0 +1,16 @@
+#!/bin/bash
+# Mock de su - bloqueado por seguridad
+
+USER_REQ="${1:-root}"
+USER_REQ_SAFE=$(printf '%s' "$USER_REQ" | tr -cd 'a-zA-Z0-9_-' | head -c 32)
+
+cat <<EOF
+[Modo educativo] su está bloqueado en este sandbox por seguridad.
+
+Sintaxis: su [opciones] [usuario]
+Intento de cambio a usuario: ${USER_REQ_SAFE:-root}
+
+En un sistema real, su te permitiría cambiar de usuario tras autenticarte.
+Para este ejercicio, se simula la operación sin cambios reales.
+EOF
+exit 0

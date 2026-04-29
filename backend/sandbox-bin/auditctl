@@ -1,0 +1,50 @@
+#!/bin/bash
+# Mock de auditctl - sanitiza inputs
+set -u
+
+sanitize_path() {
+  printf '%s' "${1:-}" | tr -cd 'a-zA-Z0-9_/.-' | head -c 128
+}
+
+if [[ "${1:-}" == "-l" ]]; then
+  echo "No rules"
+  exit 0
+fi
+
+if [[ "${1:-}" == "-s" ]]; then
+  cat <<'EOF'
+enabled 1
+failure 1
+pid 0
+rate_limit 0
+backlog_limit 8192
+lost 0
+backlog 0
+backlog_wait_time 60000
+backlog_wait_time_actual 0
+loginuid_immutable 0 unlocked
+EOF
+  exit 0
+fi
+
+if [[ "${1:-}" == "-w" ]]; then
+  WATCH=$(sanitize_path "${2:-}")
+  echo "auditctl: Rule added (simulado): watch on ${WATCH:-/path}"
+  exit 0
+fi
+
+if [[ "${1:-}" == "-D" ]]; then
+  echo "No rules to delete"
+  exit 0
+fi
+
+cat <<'EOF'
+usage: auditctl [options]
+    -l                                List all rules
+    -s                                Get status
+    -w <path>                         Insert watch at <path>
+    -D                                Delete all rules
+    -a <list>,<action>                Append rule to end of <list>
+
+[NOTA: Salida simulada - este sandbox no tiene auditd real]
+EOF

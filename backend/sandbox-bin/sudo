@@ -1,0 +1,40 @@
+#!/bin/bash
+# Mock de sudo - bloqueado por seguridad, salida educativa
+
+if [[ "$1" == "-l" || "$1" == "--list" ]]; then
+  cat <<'EOF'
+Matching Defaults entries for student on sandbox:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin
+
+User student may run the following commands on sandbox:
+    (ALL : ALL) ALL
+    (ALL) NOPASSWD: /usr/bin/apt update
+
+[NOTA: Salida simulada - sudo está bloqueado en este sandbox por seguridad]
+EOF
+  exit 0
+fi
+
+if [[ "$1" == "-V" || "$1" == "--version" ]]; then
+  cat <<'EOF'
+Sudo version 1.9.x
+Sudoers policy plugin version 1.9.x
+Sudoers file grammar version 50
+
+[NOTA: Salida simulada]
+EOF
+  exit 0
+fi
+
+cat <<EOF
+[Modo educativo] sudo está bloqueado en este sandbox para protección.
+
+Sintaxis correcta: sudo <comando>
+Ejemplo: sudo apt install nginx
+
+En un sistema real, sudo te permitiría ejecutar comandos con privilegios de root
+después de autenticarte. Aquí se simula su comportamiento sin riesgos.
+
+Comando que intentaste: sudo $*
+EOF
+exit 0

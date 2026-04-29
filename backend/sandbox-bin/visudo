@@ -1,0 +1,20 @@
+#!/bin/bash
+# Mock de visudo - bloqueado por seguridad (no permitimos editor)
+
+if [[ "$1" == "-c" || "$1" == "--check" ]]; then
+  echo "/etc/sudoers: parsed OK"
+  echo "/etc/sudoers.d/README: parsed OK"
+  exit 0
+fi
+
+cat <<'EOF'
+[Modo educativo] visudo está bloqueado en este sandbox.
+
+visudo es un editor seguro para /etc/sudoers que valida la sintaxis
+antes de guardar. En este entorno educativo no se permite editar
+archivos del sistema.
+
+Sintaxis: visudo [-c] [-f archivo]
+  -c    Verificar sintaxis sin editar
+EOF
+exit 0

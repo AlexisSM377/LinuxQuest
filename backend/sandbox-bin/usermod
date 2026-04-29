@@ -1,0 +1,42 @@
+#!/bin/bash
+# Mock de usermod - solo simula, no modifica usuarios reales
+
+USERNAME=""
+ACTIONS=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -aG|-G)
+      GROUPS=$(printf '%s' "$2" | tr -cd 'a-zA-Z0-9_,-' | head -c 64)
+      ACTIONS+=("Agregar a grupos: $GROUPS")
+      shift 2
+      ;;
+    -d)
+      HOME=$(printf '%s' "$2" | tr -cd 'a-zA-Z0-9_/.-' | head -c 64)
+      ACTIONS+=("Cambiar home: $HOME")
+      shift 2
+      ;;
+    -s)
+      SHELL=$(printf '%s' "$2" | tr -cd 'a-zA-Z0-9_/.-' | head -c 64)
+      ACTIONS+=("Cambiar shell: $SHELL")
+      shift 2
+      ;;
+    -L) ACTIONS+=("Bloquear cuenta"); shift ;;
+    -U) ACTIONS+=("Desbloquear cuenta"); shift ;;
+    -*) shift ;;
+    *) USERNAME=$(printf '%s' "$1" | tr -cd 'a-zA-Z0-9_-' | head -c 32); shift ;;
+  esac
+done
+
+if [[ -z "$USERNAME" ]]; then
+  echo "usermod: missing operand"
+  exit 1
+fi
+
+echo "[Modo educativo] Modificación simulada para usuario: $USERNAME"
+for action in "${ACTIONS[@]}"; do
+  echo "  - $action"
+done
+echo ""
+echo "[NOTA: Operación simulada - no se modificaron usuarios reales]"
+exit 0

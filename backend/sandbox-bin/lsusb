@@ -1,0 +1,35 @@
+#!/bin/bash
+# Mock de lsusb — el sandbox no tiene USB físico
+
+if [[ "$1" == "-v" || "$1" == "--verbose" ]]; then
+  cat <<'EOF'
+
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass            9 Hub
+  bDeviceSubClass         0
+  bDeviceProtocol         0
+  bMaxPacketSize0        64
+  idVendor           0x1d6b Linux Foundation
+  idProduct          0x0002 2.0 root hub
+  bcdDevice            5.04
+  iManufacturer           3 Linux 5.4.0 ehci_hcd
+
+[NOTA: Salida simulada - el container no tiene USB físico]
+EOF
+  exit 0
+fi
+
+cat <<'EOF'
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
+Bus 001 Device 003: ID 0bda:5689 Realtek Semiconductor Corp. Webcam
+Bus 001 Device 004: ID 046d:c52b Logitech, Inc. Unifying Receiver
+Bus 001 Device 005: ID 0781:5567 SanDisk Corp. Cruzer Blade
+
+[NOTA: Salida simulada - el container no tiene USB físico]
+EOF
