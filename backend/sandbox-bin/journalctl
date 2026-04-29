@@ -1,0 +1,63 @@
+#!/bin/bash
+# Mock de journalctl para entornos sin systemd
+# Inputs sanitizados para prevenir inyección
+
+set -u
+
+sanitize() {
+  printf '%s' "${1:-}" | tr -cd 'a-zA-Z0-9_.-' | head -c 64
+}
+
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  cat <<'EOF'
+journalctl [OPTIONS...] [MATCHES...]
+
+Query the journal.
+
+Options:
+  --system              Show the system journal
+  --user                Show the user journal
+  -u --unit=UNIT        Show logs from the specified unit
+  -f --follow           Follow the journal
+  -n --lines=INTEGER    Number of journal entries to show
+  -p --priority=RANGE   Show entries with the specified priority
+  --since=DATE          Show entries newer than the specified date
+  --until=DATE          Show entries older than the specified date
+EOF
+  exit 0
+fi
+
+if [[ "${1:-}" == "-u" || "${1:-}" == "--unit" || "${1:-}" == "--unit="* ]]; then
+  RAW="${2:-${1#--unit=}}"
+  UNIT=$(sanitize "$RAW")
+  UNIT="${UNIT:-myservice}"
+  cat <<EOF
+-- Logs begin at $(date -d '2 hours ago' '+%a %Y-%m-%d %H:%M:%S UTC') --
+$(date -d '1 hour ago' '+%b %d %H:%M:%S') sandbox systemd[1]: Started ${UNIT}.
+$(date -d '50 minutes ago' '+%b %d %H:%M:%S') sandbox ${UNIT}[1234]: Service initialized successfully
+$(date -d '30 minutes ago' '+%b %d %H:%M:%S') sandbox ${UNIT}[1234]: Listening on port 8080
+$(date -d '10 minutes ago' '+%b %d %H:%M:%S') sandbox ${UNIT}[1234]: Health check OK
+EOF
+  exit 0
+fi
+
+if [[ "${1:-}" == "-n" || "${1:-}" == "--lines" || "${1:-}" == "--lines="* ]]; then
+  RAW="${2:-${1#--lines=}}"
+  N=$(printf '%s' "$RAW" | tr -cd '0-9' | head -c 4)
+  N="${N:-10}"
+  if [[ "$N" -gt 200 ]]; then N=200; fi
+  for i in $(seq 1 "$N"); do
+    echo "$(date -d "$((i * 2)) minutes ago" '+%b %d %H:%M:%S') sandbox kernel: log entry #$i — sample log message"
+  done
+  exit 0
+fi
+
+cat <<EOF
+-- Logs begin at $(date -d '1 day ago' '+%a %Y-%m-%d %H:%M:%S UTC') --
+$(date -d '2 hours ago' '+%b %d %H:%M:%S') sandbox systemd[1]: System startup complete
+$(date -d '1 hour ago' '+%b %d %H:%M:%S') sandbox kernel: linuxquest sandbox initialized
+$(date -d '30 minutes ago' '+%b %d %H:%M:%S') sandbox sshd[856]: Accepted login from user 'student'
+$(date -d '10 minutes ago' '+%b %d %H:%M:%S') sandbox cron[200]: (root) CMD (/usr/sbin/anacron -s)
+
+[NOTA: Salida simulada - este sandbox no usa systemd real]
+EOF

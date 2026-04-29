@@ -1,0 +1,62 @@
+#!/bin/bash
+# Mock de semanage para entornos sin SELinux
+
+if [[ "$1" == "fcontext" && "$2" == "-l" ]]; then
+  cat <<'EOF'
+SELinux fcontext                                       type               Context
+/                                                      directory          system_u:object_r:root_t:s0
+/.*                                                    all files          system_u:object_r:default_t:s0
+/[^/]+                                                 regular file       system_u:object_r:etc_runtime_t:s0
+/bin(/.*)?                                             all files          system_u:object_r:bin_t:s0
+/etc(/.*)?                                             all files          system_u:object_r:etc_t:s0
+/home(/.*)?                                            all files          system_u:object_r:home_root_t:s0
+/usr(/.*)?                                             all files          system_u:object_r:usr_t:s0
+/var(/.*)?                                             all files          system_u:object_r:var_t:s0
+/var/log(/.*)?                                         all files          system_u:object_r:var_log_t:s0
+
+[NOTA: Salida simulada - este sandbox no tiene SELinux real]
+EOF
+  exit 0
+fi
+
+if [[ "$1" == "port" && "$2" == "-l" ]]; then
+  cat <<'EOF'
+SELinux Port Type              Proto    Port Number
+http_port_t                    tcp      80, 443, 8080
+ssh_port_t                     tcp      22
+smtp_port_t                    tcp      25
+dns_port_t                     udp      53
+
+[NOTA: Salida simulada - sandbox sin SELinux]
+EOF
+  exit 0
+fi
+
+if [[ "$1" == "user" && "$2" == "-l" ]]; then
+  cat <<'EOF'
+                Labeling   MLS/       MLS/                          SELinux User
+SELinux User    Prefix     MCS Level  MCS Range                     SELinux Roles
+
+guest_u         user       s0         s0                            guest_r
+root            user       s0         s0-s0:c0.c1023                staff_r sysadm_r system_r unconfined_r
+staff_u         user       s0         s0-s0:c0.c1023                staff_r sysadm_r system_r unconfined_r
+sysadm_u        user       s0         s0-s0:c0.c1023                sysadm_r
+unconfined_u    user       s0         s0-s0:c0.c1023                system_r unconfined_r
+user_u          user       s0         s0                            user_r
+
+[NOTA: Salida simulada - sandbox sin SELinux]
+EOF
+  exit 0
+fi
+
+cat <<'EOF'
+usage: semanage <command> [options]
+Commands:
+    fcontext  - File context management
+    port      - Network port management
+    user      - SELinux user management
+    login     - Login mapping management
+    boolean   - SELinux boolean management
+
+[NOTA: Salida simulada - este sandbox no tiene SELinux]
+EOF

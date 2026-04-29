@@ -5,6 +5,7 @@ import SandboxValidator from '../security/sandboxValidator.js';
 import auditLogger from '../security/auditLogger.js';
 import SECURITY_CONFIG, {
   isGloballyAllowedCommand,
+  validateCommandArgs,
   getAllowedCommandsForMission,
   getTimeoutForMission
 } from '../security/securityConfig.js';
@@ -12,31 +13,100 @@ import SECURITY_CONFIG, {
 const execAsync = promisify(exec);
 
 const GLOBAL_ALLOWED_COMMANDS = {
+  // Builtins / básicos
   help: 'Muestra comandos disponibles',
-  ls: 'Lista archivos',
+  bash: 'Shell Bash',
+  cd: 'Cambia de directorio',
   pwd: 'Directorio actual',
   echo: 'Imprime texto',
-  cat: 'Muestra contenido de archivo',
-  whoami: 'Usuario actual',
   date: 'Fecha y hora',
+
+  // Archivos y directorios
+  ls: 'Lista archivos',
+  cat: 'Muestra contenido de archivo',
   mkdir: 'Crea un directorio',
   touch: 'Crea un archivo vacío',
   rm: 'Elimina archivo o directorio',
+  cp: 'Copia archivo',
+  mv: 'Mueve o renombra',
+  ln: 'Crea enlaces',
+  chmod: 'Cambia permisos',
+  chown: 'Cambia propietario',
+  getfacl: 'Lee ACLs',
+  setfacl: 'Modifica ACLs',
+
+  // Búsqueda y procesamiento de texto
   find: 'Busca archivos',
   grep: 'Busca texto en archivos',
+  sed: 'Editor de flujo de texto',
+  awk: 'Procesador de patrones',
+  cut: 'Extrae columnas',
+  sort: 'Ordena líneas',
+  uniq: 'Filtra duplicados',
   wc: 'Cuenta líneas, palabras, caracteres',
   head: 'Muestra primeras líneas',
   tail: 'Muestra últimas líneas',
-  sort: 'Ordena líneas',
+  tee: 'Lee de stdin y escribe a stdout/archivo',
+  less: 'Visor de archivos paginado',
+
+  // Compresión / archivado
+  gzip: 'Compresión gzip',
+  tar: 'Archivado tar',
+
+  // Información del sistema
   uname: 'Información del sistema',
-  cd: 'Cambia de directorio',
-  cp: 'Copia archivo',
-  mv: 'Mueve o renombra',
-  chmod: 'Cambia permisos',
-  chown: 'Cambia propietario',
+  whoami: 'Usuario actual',
+  id: 'IDs de usuario y grupo',
+  who: 'Usuarios conectados',
+  w: 'Quién está y qué hace',
+  uptime: 'Tiempo de arranque del sistema',
+  df: 'Uso de disco por sistema de archivos',
+  du: 'Uso de espacio por archivo/directorio',
+  free: 'Uso de memoria',
+  lsblk: 'Lista dispositivos de bloque',
+  lscpu: 'Información de CPU',
+  lsusb: 'Lista dispositivos USB',
+  dmesg: 'Mensajes del kernel',
+
+  // Procesos
   ps: 'Procesos en ejecución',
+  top: 'Monitor de procesos',
   kill: 'Termina un proceso',
-  man: 'Manual de comandos'
+
+  // Red
+  ip: 'Configuración de red',
+  ss: 'Estado de sockets',
+  netstat: 'Estado de la red',
+  route: 'Tabla de rutas',
+  ping: 'Prueba de conectividad',
+  curl: 'Cliente HTTP',
+  dig: 'Consulta DNS',
+  host: 'Consulta DNS',
+  nslookup: 'Consulta DNS',
+  iptables: 'Firewall',
+
+  // Usuarios y permisos
+  useradd: 'Crea un usuario',
+  usermod: 'Modifica un usuario',
+  groupadd: 'Crea un grupo',
+  passwd: 'Cambia contraseña',
+  su: 'Cambia de usuario',
+  sudo: 'Ejecuta como otro usuario',
+  visudo: 'Edita configuración de sudo',
+
+  // SSH
+  ssh: 'Cliente SSH',
+  'ssh-keygen': 'Genera claves SSH',
+
+  // Documentación
+  man: 'Manual de comandos',
+  apropos: 'Busca en el manual',
+
+  // Auditoría y seguridad
+  auditctl: 'Control del subsistema de auditoría',
+  ausearch: 'Búsqueda en logs de auditoría',
+  journalctl: 'Logs del sistema (systemd)',
+  semanage: 'Gestión de SELinux'
 };
 
 const sanitizeOutput = (output, maxLines = 500) => {
@@ -66,6 +136,21 @@ export const executeCommand = async (command, userSandboxDir, questId = null, us
       return { error: 'Comando vacío', output: '' };
     }
 
+    // CAPA 0: Limitar longitud antes de cualquier procesamiento
+    if (trimmedCmd.length > SECURITY_CONFIG.COMMAND_LIMITS.MAX_COMMAND_LENGTH) {
+      return { error: 'Comando excede longitud máxima permitida', output: '' };
+    }
+
+    // Bloquear caracteres de control / null bytes
+    if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(trimmedCmd)) {
+      if (userId) {
+        auditLogger.logSecurityViolation(userId, questId, 'CONTROL_CHARS_DETECTED', {
+          command: trimmedCmd.replace(/[\x00-\x1F]/g, '?')
+        });
+      }
+      return { error: 'Comando contiene caracteres no permitidos', output: '' };
+    }
+
     const cmdName = trimmedCmd.split(/\s+/)[0];
 
     // ========== CAPA 1: Auditoría Inicial ==========
@@ -73,8 +158,19 @@ export const executeCommand = async (command, userSandboxDir, questId = null, us
       auditLogger.logCommandAttempt(userId, questId, trimmedCmd, { status: 'ATTEMPT' });
     }
 
-    // ========== CAPA 2: Validación Global ==========
-    // Verificar que comando está globalmente permitido
+    // ========== CAPA 2A: Blacklist Global Hardcoded ==========
+    if (!isGloballyAllowedCommand(trimmedCmd)) {
+      const error = `Comando bloqueado por seguridad: ${cmdName}`;
+      if (userId) {
+        auditLogger.logSecurityViolation(userId, questId, 'HARDCODED_FORBIDDEN_COMMAND', {
+          command: cmdName,
+          reason: 'Command in FORBIDDEN_COMMANDS blacklist'
+        });
+      }
+      return { error, output: '' };
+    }
+
+    // ========== CAPA 2B: Allowlist Global ==========
     if (!GLOBAL_ALLOWED_COMMANDS[cmdName]) {
       const error = `Comando no permitido: ${cmdName}. Usa 'help' para ver disponibles.`;
       if (userId) {
@@ -84,6 +180,18 @@ export const executeCommand = async (command, userSandboxDir, questId = null, us
         });
       }
       return { error, output: '' };
+    }
+
+    // ========== CAPA 2C: Validar argumentos peligrosos ==========
+    const argsValidation = validateCommandArgs(trimmedCmd);
+    if (!argsValidation.safe) {
+      if (userId) {
+        auditLogger.logSecurityViolation(userId, questId, 'DANGEROUS_ARGUMENTS', {
+          command: trimmedCmd,
+          reason: argsValidation.reason
+        });
+      }
+      return { error: argsValidation.reason, output: '' };
     }
 
     // ========== CAPA 3: Validación Global de Patrones Peligrosos ==========
@@ -183,11 +291,26 @@ export const executeCommand = async (command, userSandboxDir, questId = null, us
 
     try {
       const execStartTime = Date.now();
+      // Entorno limpio: sin variables heredadas que puedan filtrar info del backend
+      const cleanEnv = {
+        PATH: '/usr/local/bin:/usr/bin:/bin',
+        HOME: userSandboxDir,
+        USER: 'sandbox',
+        SHELL: '/bin/bash',
+        TERM: 'xterm-256color',
+        LANG: 'C.UTF-8',
+        LC_ALL: 'C.UTF-8',
+        PWD: userSandboxDir
+      };
+
       const result = await execAsync(trimmedCmd, {
         cwd: userSandboxDir,
         timeout: timeoutMs,
         maxBuffer: SECURITY_CONFIG.COMMAND_LIMITS.MAX_OUTPUT_SIZE,
-        shell: '/bin/bash'
+        shell: '/bin/bash',
+        env: cleanEnv,
+        killSignal: 'SIGKILL',
+        windowsHide: true
       });
       executionTime = Date.now() - execStartTime;
       stdout = result.stdout || '';

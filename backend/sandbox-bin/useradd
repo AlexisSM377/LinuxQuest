@@ -1,0 +1,34 @@
+#!/bin/bash
+# Mock de useradd - solo simula, no crea usuarios reales
+
+USERNAME=""
+HOME_DIR=""
+SHELL=""
+GROUP=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -m) shift ;;
+    -d) HOME_DIR=$(printf '%s' "$2" | tr -cd 'a-zA-Z0-9_/.-' | head -c 64); shift 2 ;;
+    -s) SHELL=$(printf '%s' "$2" | tr -cd 'a-zA-Z0-9_/.-' | head -c 64); shift 2 ;;
+    -g|-G) GROUP=$(printf '%s' "$2" | tr -cd 'a-zA-Z0-9_-' | head -c 32); shift 2 ;;
+    -*) shift ;;
+    *) USERNAME=$(printf '%s' "$1" | tr -cd 'a-zA-Z0-9_-' | head -c 32); shift ;;
+  esac
+done
+
+if [[ -z "$USERNAME" ]]; then
+  echo "useradd: missing operand"
+  echo "Try 'useradd --help' for more information."
+  exit 1
+fi
+
+cat <<EOF
+[Modo educativo] Usuario simulado creado: $USERNAME
+${HOME_DIR:+  Home directory: $HOME_DIR}
+${SHELL:+  Shell: $SHELL}
+${GROUP:+  Grupo: $GROUP}
+
+[NOTA: Esta operación es simulada - no se crearon usuarios reales en el sistema]
+EOF
+exit 0

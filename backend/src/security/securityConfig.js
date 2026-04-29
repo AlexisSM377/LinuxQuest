@@ -9,8 +9,10 @@ export const SECURITY_CONFIG = {
     MAX_EXECUTION_TIME: 30000, // 30 segundos
     MAX_OUTPUT_SIZE: 5 * 1024 * 1024, // 5MB
     MAX_OUTPUT_LINES: 10000,
-    MAX_MEMORY_MB: 256, // Máximo de memoria que puede usar un comando
-    MAX_CPU_PERCENT: 50, // Máximo de CPU
+    MAX_MEMORY_MB: 256,
+    MAX_CPU_PERCENT: 50,
+    MAX_COMMAND_LENGTH: 1000, // No comandos gigantes
+    MAX_ARG_LENGTH: 256, // Cada argumento limitado
   },
 
   // Límites por usuario
@@ -27,170 +29,190 @@ export const SECURITY_CONFIG = {
     '/etc/shadow',
     '/etc/sudoers',
     '/etc/sudoers.d',
+    '/etc/ssh',
+    '/etc/ssl',
     '/root',
     '/.ssh',
     '/.docker',
-    '/var/log',
     '/var/run',
-    '/proc',
-    '/sys',
-    '/dev',
+    '/proc/self/environ',
+    '/proc/self/maps',
+    '/proc/kcore',
+    '/sys/kernel',
+    '/sys/firmware',
+    '/dev/mem',
+    '/dev/kmem',
+    '/dev/sda',
+    '/dev/nvme',
     '/boot',
-    '/bin',
-    '/sbin',
-    '/usr/bin',
-    '/usr/sbin',
-    '/lib',
-    '/lib64',
   ],
 
-  // Comandos completamente prohibidos (nunca pueden ejecutarse)
+  // Comandos COMPLETAMENTE prohibidos - capacidad de daño irrecuperable
+  // Estos NO tienen mocks, simplemente se rechazan
   FORBIDDEN_COMMANDS: [
-    'sudo',
-    'su',
     'docker',
+    'docker-compose',
+    'kubectl',
     'mount',
     'umount',
     'modprobe',
     'insmod',
     'rmmod',
+    'kmod',
     'shutdown',
     'reboot',
     'halt',
     'poweroff',
+    'init',
     'systemctl',
-    'systemd',
+    'service',
     'dd',
     'mkfs',
     'fsck',
     'parted',
     'fdisk',
+    'cfdisk',
+    'sfdisk',
     'chroot',
     'pivot_root',
-    'iptables',
-    'ip6tables',
+    'unshare',
+    'nsenter',
+    'capsh',
+    'setcap',
+    'getcap',
     'nc',
     'ncat',
     'socat',
     'telnet',
-    'ssh',
     'scp',
     'sftp',
+    'rsync',
+    'wget',
+    'eval',
+    'exec',
+    'source',
+    '.',
+    'fork',
+  ],
+
+  // Patrones peligrosos que siempre se bloquean (regex)
+  GLOBAL_DANGEROUS_PATTERNS: [
+    // Inyección de comandos via shell metacharacters
+    /[;&|`]/,
+
+    // Sustitución de comandos
+    /\$\(/,
+    /`[^`]*`/,
+
+    // Redirecciones a archivos del sistema
+    />\s*\/etc/i,
+    />\s*\/boot/i,
+    />\s*\/sys/i,
+    />\s*\/proc/i,
+    />\s*\/var\/log/i,
+    />\s*\/dev/i,
+    />\s*\/bin/i,
+    />\s*\/sbin/i,
+    />\s*\/usr/i,
+    />\s*\/lib/i,
+    />\s*\/root/i,
+
+    // Operaciones rm peligrosas (con / al inicio o wildcards globales)
+    /rm\s+.*-[rRfF].*\s+\/(?!tmp\/linuxquest)/i,
+    /rm\s+.*\/\s*$/,
+    /rm\s+.*\*/,
+
+    // Acceso a archivos sensibles
+    /\/etc\/shadow/i,
+    /\/etc\/sudoers/i,
+    /\/etc\/ssh\/ssh_host/i,
+    /\/proc\/self\/environ/i,
+    /\/proc\/kcore/i,
+    /\/dev\/mem/i,
+    /\/dev\/kmem/i,
+    /\/dev\/sd[a-z]/i,
+
+    // chmod peligroso (777 o setuid global)
+    /chmod\s+[0-9]?[67]7[0-9]{1,2}\s+\//,
+    /chmod\s+\+s\s+\//,
+    /chmod\s+u\+s\s+\//,
+
+    // Fork bombs y bucles infinitos obvios
+    /:\(\)\s*\{\s*:\|:&\s*\}/,
+    /while\s+(true|:|1)/i,
+    /for\s+\(\(\s*;;\s*\)\)/i,
+
+    // Variables de entorno peligrosas
+    /LD_PRELOAD\s*=/i,
+    /LD_LIBRARY_PATH\s*=/i,
+    /PATH\s*=\s*[^a-zA-Z]/i,
+
+    // Tuberías a comandos peligrosos (estos comandos están bloqueados, doble defensa)
+    /\|\s*(nc|ncat|socat|telnet|wget)\b/i,
+
+    // Acceso al socket de Docker
+    /\/var\/run\/docker\.sock/i,
+
+    // Escapes via /proc
+    /\/proc\/[0-9]+\/(root|cwd|exe|fd)/i,
+
+    // Ejecución de binarios desde directorios escribibles
+    /\/tmp\/[^\s]*\.(sh|bin|elf|out|exe)/i,
   ],
 
   // Comandos permitidos por defecto (si no se especifica en la misión)
   DEFAULT_ALLOWED_COMMANDS: [
-    'help',
-    'pwd',
-    'ls',
-    'cd',
-    'echo',
-    'cat',
-    'touch',
-    'mkdir',
-    'rm',
-    'mv',
-    'cp',
-    'find',
-    'grep',
-    'sed',
-    'awk',
-    'sort',
-    'uniq',
-    'wc',
-    'head',
-    'tail',
-    'tr',
-    'cut',
-    'paste',
-    'comm',
-    'diff',
-    'patch',
-    'file',
-    'stat',
-    'whoami',
-    'uname',
-    'date',
-    'uptime',
-    'hostname',
-    'env',
-    'printenv',
-    'history',
-    'clear',
-    'man',
-    'whatis',
-    'apropos',
-    'less',
-    'more',
-    'tac',
-    'base64',
-    'md5sum',
-    'sha256sum',
-    'crc32',
+    'help', 'pwd', 'ls', 'cd', 'echo', 'cat', 'touch', 'mkdir', 'rm', 'mv', 'cp',
+    'find', 'grep', 'sed', 'awk', 'sort', 'uniq', 'wc', 'head', 'tail', 'tr',
+    'cut', 'paste', 'comm', 'diff', 'file', 'stat', 'whoami', 'uname', 'date',
+    'uptime', 'hostname', 'env', 'printenv', 'history', 'clear', 'man',
+    'apropos', 'less', 'more', 'tac', 'base64', 'md5sum', 'sha256sum',
   ],
 
-  // Patrones peligrosos que siempre se bloquean
-  GLOBAL_DANGEROUS_PATTERNS: [
-    // Shell metacharacters en contextos específicos
-    /[`;|&]\s*(rm|dd|mkfs|shutdown|reboot|poweroff|chmod|chown)/i,
-
-    // Redirecciones peligrosas
-    />\s*\/etc|>\s*\/boot|>\s*\/sys|>\s*\/proc|>\s*\/var\/log/i,
-
-    // Operaciones recursivas peligrosas
-    /rm\s+(-r|-f|-rf|--recursive|--force)[\s\*\/]/i,
-
-    // Cambios de permisos globales
-    /chmod\s+[0-9]*7[0-9]{2,}/,
-
-    // Acceso a shadow/passwd
-    /cat|grep|sed|awk.*\/etc\/(passwd|shadow)/i,
-
-    // Ejecución de shell arbitraria
-    /\$\(.*\)|`.*`|eval\(|exec\(|bash\s+(-i|-l|<)/i,
-
-    // Tuberías a comandos peligrosos
-    /\|\s*(nc|ncat|socat|telnet|ssh|docker|curl)/i,
-
-    // Variables de entorno peligrosas
-    /LD_PRELOAD|LD_LIBRARY_PATH|PATH.*=.*(:|\/tmp|\.)/i,
-  ],
+  // Argumentos peligrosos por comando (defensa profunda)
+  DANGEROUS_COMMAND_ARGS: {
+    rm: [/-[rRfF]+.*\//, /--no-preserve-root/i, /\/\s*$/],
+    chmod: [/777/, /666/, /\+s/, /u\+s/, /g\+s/],
+    chown: [/root/i, /\s+0:0/, /-R.*\//],
+    find: [/-exec/i, /-delete/i, /-execdir/i],
+    cp: [/\/etc\//i, /\/sys\//i, /\/proc\//i],
+    mv: [/\/etc\//i, /\/sys\//i, /\/proc\//i],
+    ln: [/\/etc\//i, /\/sys\//i, /\/proc\//i],
+    cat: [/\/etc\/shadow/i, /\/etc\/sudoers/i, /\/proc\/[0-9]+\/mem/i],
+    head: [/\/etc\/shadow/i, /\/etc\/sudoers/i],
+    tail: [/\/etc\/shadow/i, /\/etc\/sudoers/i],
+    grep: [/\/etc\/shadow/i, /\/etc\/sudoers/i, /-r.*\/etc/i],
+    sed: [/-i.*\/etc\//i, /-i.*\/sys\//i],
+    awk: [/system\(/i, /getline.*\|/i],
+    curl: [/file:\/\//i, /-o\s+\/etc/i, /-o\s+\/bin/i, /\bgopher:\/\//i, /\bdict:\/\//i, /\bldap:\/\//i],
+    ssh: [/-o\s*ProxyCommand/i, /-o\s*LocalCommand/i],
+  },
 
   // Configuración por misión (sobrescribe defaults)
   MISSION_OVERRIDES: {
-    // Misiones pueden restringir aún más si es necesario
-    // Ejemplo: misión que enseña solo pwd
-    1: {
-      allowedCommands: ['uname', 'help'],
-      maxExecutionTime: 10000,
-    },
-    2: {
-      allowedCommands: ['cat', 'help'],
-      maxExecutionTime: 10000,
-    },
+    1: { allowedCommands: ['uname', 'help'], maxExecutionTime: 10000 },
+    2: { allowedCommands: ['cat', 'help'], maxExecutionTime: 10000 },
   },
 
   // Comportamiento ante violaciones
   VIOLATION_BEHAVIOR: {
-    SOFT_BLOCK: 'soft_block', // Bloquea pero permite intentos
-    HARD_BLOCK: 'hard_block', // Bloquea y registra crítico
-    WARN_ONLY: 'warn_only', // Solo advierte
+    SOFT_BLOCK: 'soft_block',
+    HARD_BLOCK: 'hard_block',
+    WARN_ONLY: 'warn_only',
   },
 
-  // Niveles de auditoría
   AUDIT_LEVELS: {
     OFF: 0,
     CRITICAL_ONLY: 1,
     VIOLATIONS_ONLY: 2,
-    COMPREHENSIVE: 3, // Registra todo
+    COMPREHENSIVE: 3,
   },
 
-  // Nivel de auditoría actual
-  CURRENT_AUDIT_LEVEL: 3, // COMPREHENSIVE
+  CURRENT_AUDIT_LEVEL: 3,
 };
 
 /**
- * Valida si un comando está permitido globalmente
+ * Valida si un comando está globalmente permitido (no en blacklist)
  */
 export const isGloballyAllowedCommand = (command) => {
   const baseCmd = command.trim().split(/\s+/)[0];
@@ -200,6 +222,43 @@ export const isGloballyAllowedCommand = (command) => {
   }
 
   return true;
+};
+
+/**
+ * Verifica si los argumentos de un comando contienen patrones peligrosos
+ * Devuelve { safe: bool, reason: string }
+ */
+export const validateCommandArgs = (command) => {
+  const parts = command.trim().split(/\s+/);
+  const baseCmd = parts[0];
+  const args = parts.slice(1).join(' ');
+
+  // Validar longitud total
+  if (command.length > SECURITY_CONFIG.COMMAND_LIMITS.MAX_COMMAND_LENGTH) {
+    return { safe: false, reason: 'Comando excede longitud máxima' };
+  }
+
+  // Validar longitud de cada argumento
+  for (const arg of parts.slice(1)) {
+    if (arg.length > SECURITY_CONFIG.COMMAND_LIMITS.MAX_ARG_LENGTH) {
+      return { safe: false, reason: 'Argumento demasiado largo' };
+    }
+  }
+
+  // Validar contra patrones específicos del comando
+  const dangerousPatterns = SECURITY_CONFIG.DANGEROUS_COMMAND_ARGS[baseCmd];
+  if (dangerousPatterns) {
+    for (const pattern of dangerousPatterns) {
+      if (pattern.test(args)) {
+        return {
+          safe: false,
+          reason: `Argumento bloqueado para ${baseCmd}: posible operación peligrosa`
+        };
+      }
+    }
+  }
+
+  return { safe: true };
 };
 
 /**

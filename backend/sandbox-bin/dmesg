@@ -1,0 +1,32 @@
+#!/bin/bash
+# Wrapper de dmesg — usa el real si funciona, si no muestra logs simulados
+
+if [[ -x /bin/dmesg.real ]]; then
+  OUTPUT=$(/bin/dmesg.real "$@" 2>&1)
+  if [[ $? -eq 0 && -n "$OUTPUT" ]]; then
+    echo "$OUTPUT"
+    exit 0
+  fi
+fi
+
+# Fallback: salida simulada de un kernel típico
+cat <<'EOF'
+[    0.000000] Linux version 5.10.0-sandbox (linuxquest@build) (gcc 10.2.1) #1 SMP
+[    0.000000] Command line: BOOT_IMAGE=/vmlinuz root=/dev/sda1 ro quiet
+[    0.000000] x86/fpu: Supporting XSAVE feature 0x001: 'x87 floating point registers'
+[    0.001000] BIOS-provided physical RAM map:
+[    0.001500] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[    0.002000] Memory: 524288K/524288K available
+[    0.005000] CPU: Intel(R) Xeon(R) CPU @ 2.30GHz
+[    0.010000] ACPI: Core revision 20200925
+[    0.050000] PCI: PCI BIOS revision 2.10
+[    0.100000] usbcore: registered new interface driver usbfs
+[    0.150000] Loading iSCSI transport class v2.0-870.
+[    0.200000] random: get_random_bytes called from start_kernel
+[    0.500000] tcp_listen_portaddr_hash hash table entries: 256
+[    1.000000] EXT4-fs (sda1): mounted filesystem with ordered data mode
+[    2.500000] systemd[1]: Started LinuxQuest Sandbox
+[    3.000000] eth0: link is up, 1000 Mbps full duplex
+
+[NOTA: Salida simulada - el container no permite ver el ring buffer real del kernel]
+EOF
