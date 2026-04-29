@@ -16,6 +16,7 @@ import leaderboardRoutes from './routes/leaderboard.js';
 import { executeCommand } from './services/commandService.js';
 import { createUserSandbox, deleteUserSandbox, getSandboxPath, cleanupUserSandbox } from './services/sandboxService.js';
 import auditLogger from './security/auditLogger.js';
+import { errorHandler, notFoundHandler, requestLogger } from './middleware/errorHandler.js';
 
 dotenv.config();
 
@@ -92,6 +93,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(requestLogger);
+
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Backend running', timestamp: new Date() });
 });
@@ -103,6 +106,9 @@ app.use('/api/achievements', achievementRoutes);
 app.use('/api/npcs', npcRoutes);
 app.use('/api/enemies', enemyRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+
+app.use('/api/*', notFoundHandler);
+app.use(errorHandler);
 
 // Socket.io middleware para autenticación
 io.use((socket, next) => {
