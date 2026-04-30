@@ -31,6 +31,8 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 const isOriginAllowed = (origin) => {
+  // Permitir null origin para health checks y server-to-server
+  // Navegadores siempre envían Origin en requests cross-origin
   if (!origin) return true;
   if (allowedOrigins.includes(origin)) return true;
   if (/^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(origin)) return true;
@@ -47,7 +49,10 @@ const io = new Server(server, {
     },
     methods: ['GET', 'POST'],
     credentials: true
-  }
+  },
+  pingInterval: 25000,
+  pingTimeout: 10000,
+  maxHttpBufferSize: 1e6,
 });
 
 const PORT = process.env.PORT || 3000;
@@ -205,6 +210,8 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log(`Usuario ${socket.userId} desconectado`);
     const sessionDuration = Date.now() - sessionStartTime;
+
+    userCommandCounts.delete(socket.userId);
 
     try {
       deleteUserSandbox(socket.userId);

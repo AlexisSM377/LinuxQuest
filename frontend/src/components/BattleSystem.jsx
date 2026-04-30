@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
-export default function BattleSystem({ enemy, onVictory, onDefeat }) {
+export default function BattleSystem({ enemy, onVictory, onDefeat, battleRef }) {
   const [enemyHp, setEnemyHp] = useState(enemy?.hp || 100);
   const [playerHp, setPlayerHp] = useState(100);
   const [maxEnemyHp] = useState(enemy?.hp || 100);
@@ -11,184 +11,175 @@ export default function BattleSystem({ enemy, onVictory, onDefeat }) {
   ]);
   const [battleActive, setBattleActive] = useState(true);
   const [animation, setAnimation] = useState(null);
+  const battleActiveRef = useRef(true);
+  const victoryTimeoutRef = useRef(null);
+  const defeatTimeoutRef = useRef(null);
 
-  const addLog = (type, message) => {
-    setBattleLog(prev => [...prev, { type, message }]);
-  };
-
-  const getDifficultyColor = (difficulty) => {
-    const colors = {
-      1: 'text-green-400',
-      2: 'text-blue-400',
-      3: 'text-yellow-400',
-      4: 'text-orange-400',
-      5: 'text-red-600 font-bold'
+  // Cleanup timeouts on unmount
+  useEffect(() => {
+    return () => {
+      if (victoryTimeoutRef.current) clearTimeout(victoryTimeoutRef.current);
+      if (defeatTimeoutRef.current) clearTimeout(defeatTimeoutRef.current);
     };
-    return colors[difficulty] || 'text-gray-400';
-  };
+  }, []);
 
-  const handleCorrectCommand = () => {
-    if (!battleActive) return;
+  const addLog = useCallback((type, message) => {
+    setBattleLog(prev => [...prev, { type, message }]);
+  }, []);
 
-    const damage = Math.floor(Math.random() * 30) + 20; // 20-50 daño
-    const newEnemyHp = Math.max(0, enemyHp - damage);
+  const handleCorrectCommand = useCallback(() => {
+    if (!battleActiveRef.current) return;
+
+    const damage = Math.floor(Math.random() * 30) + 20;
 
     setAnimation('player-attack');
     setTimeout(() => setAnimation(null), 600);
-
     addLog('success', `¡Golpe crítico! -${damage} HP al enemigo`);
-    setEnemyHp(newEnemyHp);
 
-    if (newEnemyHp <= 0) {
-      setBattleActive(false);
-      addLog('victory', `¡${enemy?.name} ha sido derrotado!`);
-      addLog('victory', enemy?.defeatMessage || '¡VICTORIA!');
-      setTimeout(() => onVictory?.(), 1500);
-    } else {
-      // Contraataque del enemigo
-      setTimeout(() => {
-        const counterDamage = Math.floor(Math.random() * 20) + 10; // 10-30 daño
-        setPlayerHp(prev => Math.max(0, prev - counterDamage));
-        addLog('enemy', `${enemy?.name} te golpea! -${counterDamage} HP`);
+    setEnemyHp(prev => {
+      const newHp = Math.max(0, prev - damage);
+      if (newHp <= 0) {
+        battleActiveRef.current = false;
+        setBattleActive(false);
+        addLog('victory', `¡${enemy?.name} ha sido derrotado!`);
+        addLog('victory', enemy?.defeatMessage || '¡VICTORIA!');
+        victoryTimeoutRef.current = setTimeout(() => onVictory?.(), 1500);
+      } else {
+        setTimeout(() => {
+          if (!battleActiveRef.current) return;
+          const counterDamage = Math.floor(Math.random() * 20) + 10;
+          setPlayerHp(p => {
+            const hp = Math.max(0, p - counterDamage);
+            if (hp <= 0) {
+              battleActiveRef.current = false;
+              setBattleActive(false);
+              addLog('defeat', 'Has sido derrotado...');
+              defeatTimeoutRef.current = setTimeout(() => onDefeat?.(), 1500);
+            }
+            return hp;
+          });
+          addLog('enemy', `${enemy?.name} te golpea! -${counterDamage} HP`);
+        }, 800);
+      }
+      return newHp;
+    });
+  }, [enemy, addLog, onVictory, onDefeat]);
 
-        if (playerHp - counterDamage <= 0) {
-          setBattleActive(false);
-          addLog('defeat', 'Has sido derrotado...');
-          setTimeout(() => onDefeat?.(), 1500);
-        }
-      }, 800);
-    }
-  };
+  const handleIncorrectCommand = useCallback(() => {
+    if (!battleActiveRef.current) return;
 
-  const handleIncorrectCommand = () => {
-    if (!battleActive) return;
-
-    const damage = Math.floor(Math.random() * 15) + 5; // 5-20 daño
+    const damage = Math.floor(Math.random() * 15) + 5;
     setAnimation('player-hurt');
     setTimeout(() => setAnimation(null), 600);
 
     addLog('error', `Comando rechazado. ${enemy?.name} te ataca! -${damage} HP`);
-    setPlayerHp(prev => Math.max(0, prev - damage));
-
-    if (playerHp - damage <= 0) {
-      setBattleActive(false);
-      addLog('defeat', 'Has sido derrotado...');
-      setTimeout(() => onDefeat?.(), 1500);
-    }
-  };
+    setPlayerHp(prev => {
+      const newHp = Math.max(0, prev - damage);
+      if (newHp <= 0) {
+        battleActiveRef.current = false;
+        setBattleActive(false);
+        addLog('defeat', 'Has sido derrotado...');
+        defeatTimeoutRef.current = setTimeout(() => onDefeat?.(), 1500);
+      }
+      return newHp;
+    });
+  }, [enemy, addLog, onDefeat]);
 
   useEffect(() => {
-    handleCorrectCommand();
-  }, []);
+    if (battleRef) {
+      battleRef.current = { handleCorrectCommand, handleIncorrectCommand };
+    }
+    return () => {
+      if (battleRef) battleRef.current = null;
+    };
+  }, [battleRef, handleCorrectCommand, handleIncorrectCommand]);
+
+  const enemyHpPercent = Math.max(0, (enemyHp / maxEnemyHp) * 100);
+  const playerHpPercent = Math.max(0, (playerHp / maxPlayerHp) * 100);
 
   return (
-    <div className="bg-gray-900 border-2 border-red-600 rounded-lg p-4 mb-4">
-      {/* Enemy */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="text-center flex-1">
-          <div className={`text-6xl mb-2 ${animation === 'enemy-hurt' ? 'animate-bounce' : ''}`}>
+    <div className="pcard" style={{ background: 'var(--bg-3)', padding: 16, borderColor: 'var(--blood)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+        <div style={{ textAlign: 'center', flex: 1 }}>
+          <div style={{
+            fontSize: 48, marginBottom: 8,
+            transform: animation === 'enemy-hurt' ? 'translateX(4px)' : 'none',
+            transition: 'transform 0.15s',
+          }}>
             {enemy?.avatar}
           </div>
-          <h3 className={`font-bold text-lg ${getDifficultyColor(enemy?.difficulty)}`}>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 11, color: 'var(--blood)', marginBottom: 4 }}>
             {enemy?.name}
           </h3>
-          <p className="text-gray-400 text-sm">{enemy?.description}</p>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--parchment-2)' }}>
+            {enemy?.description}
+          </p>
         </div>
 
-        {/* VS */}
-        <div className="text-2xl font-bold text-red-500 mx-4">⚔️</div>
+        <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, color: 'var(--blood)', margin: '0 12px' }}>
+          ⚔
+        </div>
 
-        {/* Player */}
-        <div className="text-center flex-1">
-          <div className={`text-6xl mb-2 ${animation === 'player-hurt' ? 'animate-bounce' : 'animate-pulse' }`}>
+        <div style={{ textAlign: 'center', flex: 1 }}>
+          <div style={{
+            fontSize: 48, marginBottom: 8,
+            transform: animation === 'player-hurt' ? 'translateX(-4px)' : 'none',
+            transition: 'transform 0.15s',
+          }}>
             🧙
           </div>
-          <h3 className="font-bold text-lg text-blue-400">Explorador</h3>
-          <p className="text-gray-400 text-sm">¡Tú!</p>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontSize: 11, color: 'var(--sky)', marginBottom: 4 }}>
+            Explorador
+          </h3>
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--parchment-2)' }}>¡Tú!</p>
         </div>
       </div>
 
-      {/* Health Bars */}
-      <div className="space-y-3 mb-4">
-        {/* Enemy HP */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
         <div>
-          <div className="flex justify-between text-sm mb-1">
-            <span className={getDifficultyColor(enemy?.difficulty)}>
-              {enemy?.name} HP
-            </span>
-            <span className="text-gray-400">{Math.max(0, enemyHp)}/{maxEnemyHp}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: 8, color: 'var(--blood)' }}>{enemy?.name} HP</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: 8, color: 'var(--parchment-2)' }}>{Math.max(0, enemyHp)}/{maxEnemyHp}</span>
           </div>
-          <div className="w-full bg-gray-800 rounded h-6 border border-red-600 overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-red-600 to-red-500 transition-all duration-300"
-              style={{ width: `${Math.max(0, (enemyHp / maxEnemyHp) * 100)}%` }}
-            />
+          <div className="bar" style={{ height: 14 }}>
+            <div style={{ height: '100%', width: `${enemyHpPercent}%`, background: 'var(--blood)', transition: 'width 0.3s', backgroundImage: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.15) 0 4px, transparent 4px 8px)' }} />
           </div>
         </div>
-
-        {/* Player HP */}
         <div>
-          <div className="flex justify-between text-sm mb-1">
-            <span className="text-blue-400">Tu HP</span>
-            <span className="text-gray-400">{Math.max(0, playerHp)}/{maxPlayerHp}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: 8, color: 'var(--sky)' }}>Tu HP</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontSize: 8, color: 'var(--parchment-2)' }}>{Math.max(0, playerHp)}/{maxPlayerHp}</span>
           </div>
-          <div className="w-full bg-gray-800 rounded h-6 border border-blue-600 overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-blue-600 to-blue-500 transition-all duration-300"
-              style={{ width: `${Math.max(0, (playerHp / maxPlayerHp) * 100)}%` }}
-            />
+          <div className="bar" style={{ height: 14 }}>
+            <div style={{ height: '100%', width: `${playerHpPercent}%`, background: 'var(--sky)', transition: 'width 0.3s', backgroundImage: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.15) 0 4px, transparent 4px 8px)' }} />
           </div>
         </div>
       </div>
 
-      {/* Battle Log */}
-      <div className="bg-black rounded p-3 h-32 overflow-y-auto mb-3 border border-gray-700">
-        <div className="space-y-1 text-xs font-mono">
-          {battleLog.map((log, idx) => (
-            <p
-              key={idx}
-              className={
-                log.type === 'success' ? 'text-emerald-400' :
-                log.type === 'error' ? 'text-red-400' :
-                log.type === 'enemy' ? 'text-orange-400' :
-                log.type === 'victory' ? 'text-yellow-400 font-bold' :
-                log.type === 'defeat' ? 'text-red-600 font-bold' :
-                'text-gray-400'
-              }
-            >
-              {log.message}
-            </p>
-          ))}
-        </div>
+      <div style={{ background: 'var(--ink)', padding: 10, height: 120, overflowY: 'auto', marginBottom: 12, border: '3px solid var(--bg)' }}>
+        {battleLog.map((log, idx) => (
+          <p key={idx} style={{
+            fontFamily: 'var(--font-code)', fontSize: 11, marginBottom: 3,
+            color: log.type === 'success' ? 'var(--leaf)' : log.type === 'error' ? 'var(--blood)' : log.type === 'enemy' ? 'var(--amber)' : log.type === 'victory' ? 'var(--amber)' : log.type === 'defeat' ? 'var(--blood)' : 'var(--parchment-2)',
+            fontWeight: log.type === 'victory' || log.type === 'defeat' ? 'bold' : 'normal',
+          }}>
+            {log.message}
+          </p>
+        ))}
       </div>
 
-      {/* Status */}
-      <div className="text-center">
+      <div style={{ textAlign: 'center' }}>
         {!battleActive && playerHp > 0 && (
-          <div className="p-3 bg-emerald-900 border border-emerald-600 rounded">
-            <p className="text-emerald-300 font-bold">¡VICTORIA!</p>
-          </div>
+          <div style={{ padding: 10, background: 'var(--leaf)', color: 'var(--ink)', fontFamily: 'var(--font-display)', fontSize: 11 }}>¡VICTORIA!</div>
         )}
         {!battleActive && playerHp <= 0 && (
-          <div className="p-3 bg-red-900 border border-red-600 rounded">
-            <p className="text-red-300 font-bold">Derrota - Intenta de nuevo</p>
-          </div>
+          <div style={{ padding: 10, background: 'var(--blood)', color: 'var(--parchment)', fontFamily: 'var(--font-display)', fontSize: 11 }}>DERROTA — Intenta de nuevo</div>
         )}
         {battleActive && (
-          <p className="text-gray-400 text-sm">
+          <p style={{ fontFamily: 'var(--font-body)', fontSize: 16, color: 'var(--parchment-2)' }}>
             Ejecuta los comandos correctos para ganar la batalla
           </p>
         )}
-      </div>
-
-      {/* Hidden functions for Terminal to call */}
-      <div style={{ display: 'none' }}>
-        <button
-          ref={el => window.handleBattleCorrect = () => handleCorrectCommand()}
-        />
-        <button
-          ref={el => window.handleBattleIncorrect = () => handleIncorrectCommand()}
-        />
       </div>
     </div>
   );

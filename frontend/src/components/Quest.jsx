@@ -4,16 +4,7 @@ import { useAuthStore } from '../store/authStore';
 import QuestCard from './QuestCard';
 import NPCProfile from './NPCProfile';
 import BattleSystem from './BattleSystem';
-
-const DIFF_MAP = {
-  1: { label: 'FÁCIL',   cls: 'diff-fac' },
-  2: { label: 'MEDIO',   cls: 'diff-med' },
-  3: { label: 'DIFÍCIL', cls: 'diff-dif' },
-  4: { label: 'MUY DIF', cls: 'diff-dif' },
-  5: { label: 'LEGEND',  cls: 'diff-dif' },
-};
-
-const WORLD_COLORS = ['var(--amber)', 'var(--leaf)', 'var(--sky)', 'var(--plum)', 'var(--blood)'];
+import { DIFF_MAP, WORLD_COLORS } from '../config/gameConfig';
 
 function SectionLabel({ color, children }) {
   return (
@@ -125,7 +116,7 @@ function QuestInfo({ quest }) {
   );
 }
 
-export default function Quest({ onCompleteClick }) {
+export default function Quest({ onCompleteClick, battleRef }) {
   const {
     currentQuestId, currentQuest, quests, loading, npcs, enemies,
     setCurrentQuest, setCurrentQuestId, userProgress, fetchUserProgress, fetchNPCs,
@@ -170,8 +161,10 @@ export default function Quest({ onCompleteClick }) {
   };
 
   const getNPC = (npcName) => npcs.find(n => n.name === npcName);
+
+  const BOSS_QUEST_IDS = [15, 35, 50, 70, 90];
   const getBossEnemy = () => {
-    if (!currentQuest || currentQuest.difficulty < 4) return null;
+    if (!currentQuest || !BOSS_QUEST_IDS.includes(currentQuest.id)) return null;
     return enemies.find(e => e.world === currentQuest.world && e.isBoss);
   };
 
@@ -234,12 +227,13 @@ export default function Quest({ onCompleteClick }) {
         <QuestInfo quest={questWithNPC || currentQuest} />
 
         {/* Boss battle */}
-        {getBossEnemy() && currentQuest.difficulty >= 4 && (
+        {getBossEnemy() && (
           <div style={{ marginTop: 16, borderTop: '4px solid var(--ink)', paddingTop: 16 }}>
             <BattleSystem
               enemy={getBossEnemy()}
               onVictory={() => onCompleteClick?.()}
               onDefeat={() => {}}
+              battleRef={battleRef}
             />
           </div>
         )}

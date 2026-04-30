@@ -1,4 +1,4 @@
-import { appendFileSync, mkdirSync } from 'fs';
+import { appendFileSync, mkdirSync, statSync, renameSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { tmpdir } from 'os';
 
@@ -8,6 +8,8 @@ import { tmpdir } from 'os';
  */
 
 const AUDIT_DIR = join(tmpdir(), 'linuxquest-audit');
+const MAX_LOG_SIZE = 5 * 1024 * 1024; // 5MB por archivo de log
+const MAX_ROTATED_FILES = 3; // mantener max 3 archivos rotados por tipo
 const THREAT_LEVEL = {
   INFO: 'INFO',
   WARNING: 'WARNING',
@@ -117,9 +119,8 @@ class AuditLogger {
       /docker/i,
       /mount/i,
       /modprobe|insmod/i,
-      /\|\s*(nc|ncat|telnet)/i, // tuberías a comandos de red
-      />\s*\/dev\/(sda|sdb)/i, // redirección a discos
-      /fork|exec|bash|sh/i, // ejecución de shells
+      /\|\s*(nc|ncat|telnet)/i,
+      />\s*\/dev\/(sda|sdb)/i,
     ];
 
     for (const pattern of suspiciousPatterns) {
@@ -132,11 +133,46 @@ class AuditLogger {
   }
 
   /**
+   * Rota el log si excede el tamaño máximo y limpia archivos viejos
+   */
+  rotateLogIfNeeded(logFile) {
+    try {
+      const stat = statSync(logFile);
+      if (stat.size > MAX_LOG_SIZE) {
+        const rotated = logFile.replace('.log', `.${Date.now()}.log`);
+        renameSync(logFile, rotated);
+        this.cleanupOldRotatedFiles(logFile);
+      }
+    } catch {
+      // archivo no existe aún, ok
+    }
+  }
+
+  /**
+   * Elimina archivos rotados antiguos, manteniendo solo MAX_ROTATED_FILES
+   */
+  cleanupOldRotatedFiles(baseLogFile) {
+    try {
+      const baseName = baseLogFile.split('/').pop().replace('.log', '');
+      const files = readdirSync(AUDIT_DIR)
+        .filter(f => f.startsWith(baseName + '.') && f.endsWith('.log'))
+        .sort()
+        .reverse();
+      for (const file of files.slice(MAX_ROTATED_FILES)) {
+        unlinkSync(join(AUDIT_DIR, file));
+      }
+    } catch {
+      // ignore cleanup errors
+    }
+  }
+
+  /**
    * Escribe entrada de log
    */
   writeLog(logType, entry) {
     try {
       const logFile = join(AUDIT_DIR, `${logType}.log`);
+      this.rotateLogIfNeeded(logFile);
       const logLine = JSON.stringify(entry) + '\n';
       appendFileSync(logFile, logLine, 'utf8');
     } catch (error) {

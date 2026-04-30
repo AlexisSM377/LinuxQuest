@@ -1,0 +1,41 @@
+#!/bin/sh
+# Mock educativo de nano - Editor de texto fácil
+# Muestra información educativa sobre nano y sale
+
+cat << 'EOF'
+╔══════════════════════════════════════════════════╗
+║              nano - Editor de Texto              ║
+║         El editor más fácil de Linux             ║
+╚══════════════════════════════════════════════════╝
+
+ATAJOS DE TECLADO (Ctrl+letra):
+  Ctrl+O   - Guardar archivo (Write Out)
+  Ctrl+X   - Salir del editor
+  Ctrl+K   - Cortar línea
+  Ctrl+U   - Pegar línea
+  Ctrl+W   - Buscar texto
+  Ctrl+\   - Buscar y reemplazar
+  Ctrl+J   - Justificar párrafo
+  Ctrl+T   - Ortografía (si disponible)
+
+USO BÁSICO:
+  nano archivo.txt    # Abrir archivo
+  # Escribir texto directamente (modo inserción por defecto)
+  Ctrl+O              # Guardar
+  Ctrl+X              # Salir
+
+VENTAJAS SOBRE vi:
+  - No tiene modos (siempre estás escribiendo)
+  - Los atajos se muestran abajo
+  - Más intuitivo para principiantes
+
+DIFERENCIAS:
+  vi: modal, rápido, potente, curva de aprendizaje alta
+  nano: no modal, simple,ideal para empezar
+
+EJEMPLO:
+  nano notas.txt
+  # Escribir: "Hola Linux"
+  # Ctrl+O → Enter para guardar
+  # Ctrl+X para salir
+EOF

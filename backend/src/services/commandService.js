@@ -15,7 +15,6 @@ const execAsync = promisify(exec);
 const GLOBAL_ALLOWED_COMMANDS = {
   // Builtins / básicos
   help: 'Muestra comandos disponibles',
-  bash: 'Shell Bash',
   cd: 'Cambia de directorio',
   pwd: 'Directorio actual',
   echo: 'Imprime texto',
@@ -98,15 +97,51 @@ const GLOBAL_ALLOWED_COMMANDS = {
   ssh: 'Cliente SSH',
   'ssh-keygen': 'Genera claves SSH',
 
+  // Búsqueda y detección
+  which: 'Ubica comandos en PATH',
+  seq: 'Genera secuencia de números',
+
   // Documentación
   man: 'Manual de comandos',
   apropos: 'Busca en el manual',
+
+  // Criptografía
+  gpg: 'Cifrado y firmas GPG',
 
   // Auditoría y seguridad
   auditctl: 'Control del subsistema de auditoría',
   ausearch: 'Búsqueda en logs de auditoría',
   journalctl: 'Logs del sistema (systemd)',
-  semanage: 'Gestión de SELinux'
+  semanage: 'Gestión de SELinux',
+
+  // Comandos LPI adicionales
+  chgrp: 'Cambia grupo propietario',
+  userdel: 'Elimina un usuario',
+  chage: 'Cambia aging de contraseña',
+  locate: 'Busca archivos en base de datos',
+  updatedb: 'Actualiza base de datos de locate',
+  mtr: 'Diagnóstico de red (traceroute mejorado)',
+  lsof: 'Lista archivos abiertos',
+  groups: 'Muestra grupos de un usuario',
+  gpasswd: 'Administra grupos',
+  newgrp: 'Cambia grupo efectivo',
+  last: 'Historial de logins',
+  lastlog: 'Último login por usuario',
+  cal: 'Calendario',
+  file: 'Tipo de archivo',
+  stat: 'Stats de archivo',
+  tac: 'Cat inverso',
+  rev: 'Invierte líneas',
+  nl: 'Numera líneas',
+  od: 'Dump octal',
+  strings: 'Imprime strings imprimibles',
+  base64: 'Codifica/decodifica base64',
+  md5sum: 'Hash MD5',
+  sha256sum: 'Hash SHA256',
+  vi: 'Editor de texto vi (mock)',
+  vim: 'Editor de texto vim (mock)',
+  nano: 'Editor de texto nano (mock)',
+  htop: 'Monitor de procesos mejorado (mock)',
 };
 
 const sanitizeOutput = (output, maxLines = 500) => {
@@ -151,7 +186,10 @@ export const executeCommand = async (command, userSandboxDir, questId = null, us
       return { error: 'Comando contiene caracteres no permitidos', output: '' };
     }
 
-    const cmdName = trimmedCmd.split(/\s+/)[0];
+    // Extraer TODOS los comandos de un pipe (ls | grep | wc → ['ls', 'grep', 'wc'])
+    const pipeSegments = trimmedCmd.split(/\s*\|\s*/);
+    const allCmdNames = pipeSegments.map(seg => seg.trim().split(/\s+/)[0]).filter(Boolean);
+    const cmdName = allCmdNames[0];
 
     // ========== CAPA 1: Auditoría Inicial ==========
     if (userId) {
@@ -159,27 +197,31 @@ export const executeCommand = async (command, userSandboxDir, questId = null, us
     }
 
     // ========== CAPA 2A: Blacklist Global Hardcoded ==========
-    if (!isGloballyAllowedCommand(trimmedCmd)) {
-      const error = `Comando bloqueado por seguridad: ${cmdName}`;
-      if (userId) {
-        auditLogger.logSecurityViolation(userId, questId, 'HARDCODED_FORBIDDEN_COMMAND', {
-          command: cmdName,
-          reason: 'Command in FORBIDDEN_COMMANDS blacklist'
-        });
+    for (const cmd of allCmdNames) {
+      if (!isGloballyAllowedCommand(cmd)) {
+        const error = `Comando bloqueado por seguridad: ${cmd}`;
+        if (userId) {
+          auditLogger.logSecurityViolation(userId, questId, 'HARDCODED_FORBIDDEN_COMMAND', {
+            command: cmd,
+            reason: 'Command in FORBIDDEN_COMMANDS blacklist'
+          });
+        }
+        return { error, output: '' };
       }
-      return { error, output: '' };
     }
 
     // ========== CAPA 2B: Allowlist Global ==========
-    if (!GLOBAL_ALLOWED_COMMANDS[cmdName]) {
-      const error = `Comando no permitido: ${cmdName}. Usa 'help' para ver disponibles.`;
-      if (userId) {
-        auditLogger.logSecurityViolation(userId, questId, 'FORBIDDEN_COMMAND', {
-          command: cmdName,
-          reason: 'Command not in global allowlist'
-        });
+    for (const cmd of allCmdNames) {
+      if (!GLOBAL_ALLOWED_COMMANDS[cmd]) {
+        const error = `Comando no permitido: ${cmd}. Usa 'help' para ver disponibles.`;
+        if (userId) {
+          auditLogger.logSecurityViolation(userId, questId, 'FORBIDDEN_COMMAND', {
+            command: cmd,
+            reason: 'Command not in global allowlist'
+          });
+        }
+        return { error, output: '' };
       }
-      return { error, output: '' };
     }
 
     // ========== CAPA 2C: Validar argumentos peligrosos ==========
@@ -239,16 +281,18 @@ export const executeCommand = async (command, userSandboxDir, questId = null, us
         allowedCommands = questConfig.allowedCommands || allowedCommands;
         timeoutMs = questConfig.timeout || timeoutMs;
 
-        // Validar que comando está permitido en esta misión
-        if (!allowedCommands.includes(cmdName)) {
-          const error = `Para esta misión solo puedes usar: ${allowedCommands.join(', ')}`;
-          if (userId) {
-            auditLogger.logSecurityViolation(userId, questId, 'COMMAND_NOT_ALLOWED_FOR_QUEST', {
-              command: cmdName,
-              allowedCommands
-            });
+        // Validar que TODOS los comandos del pipe estén permitidos en esta misión
+        for (const cmd of allCmdNames) {
+          if (!allowedCommands.includes(cmd)) {
+            const error = `Para esta misión solo puedes usar: ${allowedCommands.join(', ')}`;
+            if (userId) {
+              auditLogger.logSecurityViolation(userId, questId, 'COMMAND_NOT_ALLOWED_FOR_QUEST', {
+                command: cmd,
+                allowedCommands
+              });
+            }
+            return { error, output: '' };
           }
-          return { error, output: '' };
         }
 
         // Validar contra patrones específicos de la misión
@@ -334,8 +378,14 @@ export const executeCommand = async (command, userSandboxDir, questId = null, us
         return { error: 'Comando no encontrado', output: '' };
       }
 
-      // Para stderr normal (no es error crítico)
-      stderr = execError.stderr || execError.message || 'Error ejecutando comando';
+      // grep exit code 1 = no matches (no es un error real)
+      if (allCmdNames.includes('grep') && execError.code === 1) {
+        stdout = execError.stdout || '';
+        stderr = '';
+      } else {
+        // Para stderr normal (no es error crítico)
+        stderr = execError.stderr || execError.message || 'Error ejecutando comando';
+      }
     }
 
     // ========== CAPA 7: Validar Límites de Output ==========
@@ -374,8 +424,8 @@ export const executeCommand = async (command, userSandboxDir, questId = null, us
     }
 
     // ========== RESPUESTA ==========
-    if (stderr && cmdName !== 'grep') {
-      return { error: stderr, output: '' };
+    if (stderr) {
+      return { error: stderr, output: sanitized || '' };
     }
 
     return { output: sanitized, error: '' };

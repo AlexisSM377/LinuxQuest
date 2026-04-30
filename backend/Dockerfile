@@ -36,7 +36,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 COPY . .
 
@@ -56,7 +56,10 @@ RUN cp /app/sandbox-bin/* /usr/local/bin/ && \
               /usr/local/bin/usermod \
               /usr/local/bin/groupadd \
               /usr/local/bin/passwd \
-              /usr/local/bin/visudo
+              /usr/local/bin/visudo \
+              /usr/local/bin/vi \
+              /usr/local/bin/nano \
+              /usr/local/bin/htop
 
 # Crear usuario sandbox sin privilegios para ejecutar Node
 RUN addgroup -S linuxquest -g 1001 && \

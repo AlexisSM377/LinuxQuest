@@ -1,712 +1,598 @@
-// Comandos permitidos POR MISIÓN basado en LPI Linux Essentials
-// Esto asegura que estudiantes solo usen lo que necesitan aprender
+// Comandos permitidos POR MISIÓN - Alineado con seed-quests.js
+// Cada quest tiene sus comandos, flags y restricciones específicas
 
 export const QUEST_COMMANDS_MAP = {
-  // MUNDO 1: CASTILLO DE LINUX (Tema 1 - Community & History)
+  // ==========================================
+  // MUNDO 1: CASTILLO DE LINUX (IDs 1-15)
+  // ==========================================
   1: {
-    world: 1,
-    title: 'El Despertar del Iniciado',
+    world: 1, title: 'El Despertar del Iniciado',
     allowedCommands: ['uname', 'help'],
+    allowedFlags: ['-a', '-r', '-s', '-n', '-v'],
     dangerousPatterns: []
   },
   2: {
-    world: 1,
-    title: 'Identificando el Reino',
+    world: 1, title: 'Identificando el Reino',
     allowedCommands: ['cat', 'help'],
     restrictedPaths: ['/etc/os-release'],
     dangerousPatterns: []
   },
   3: {
-    world: 1,
-    title: 'El Pergamino de las Familias',
-    allowedCommands: ['pwd', 'help'],
+    world: 1, title: 'El Pergamino de las Familias',
+    allowedCommands: ['cat', 'help'],
+    restrictedPaths: ['/etc/os-release'],
     dangerousPatterns: []
   },
-
-  // MUNDO 2: CAMINOS PERDIDOS (Tema 2 - Finding Way)
   4: {
-    world: 2,
-    title: 'El Primer Paso del Caminante',
-    allowedCommands: ['pwd', 'help'],
+    world: 1, title: 'El Estandarte del León',
+    allowedCommands: ['which', 'help'],
     dangerousPatterns: []
   },
   5: {
-    world: 2,
-    title: 'El Mapa del Hogar',
-    allowedCommands: ['cd', 'pwd', 'help'],
-    allowedPaths: ['~', '/home'],
+    world: 1, title: 'Los Tesoros de Office',
+    allowedCommands: ['which', 'help'],
     dangerousPatterns: []
   },
   6: {
-    world: 2,
-    title: 'Inspecciona el Reino',
-    allowedCommands: ['ls', 'help'],
+    world: 1, title: 'El Camino del Servidor',
+    allowedCommands: ['which', 'help'],
     dangerousPatterns: []
   },
   7: {
-    world: 2,
-    title: 'Los Secretos Ocultos',
+    world: 1, title: 'El Pacto de la Libertad',
     allowedCommands: ['ls', 'help'],
-    allowedFlags: ['-a', '-la', '-lah'],
     dangerousPatterns: []
   },
   8: {
-    world: 2,
-    title: 'La Vista Detallada',
-    allowedCommands: ['ls', 'help'],
-    allowedFlags: ['-l', '-la', '-lah'],
+    world: 1, title: 'Las Diez Licencias',
+    allowedCommands: ['ls', 'cat', 'help'],
     dangerousPatterns: []
   },
   9: {
-    world: 2,
-    title: 'Los Tamaños Humanos',
+    world: 1, title: 'Los Embajadores Libres',
+    allowedCommands: ['grep', 'help'],
+    allowedFlags: ['-r', '-i'],
+    dangerousPatterns: []
+  },
+  10: {
+    world: 1, title: 'El Escritorio Místico',
+    allowedCommands: ['echo', 'help'],
+    dangerousPatterns: []
+  },
+  11: {
+    world: 1, title: 'La Nube Mágica',
+    allowedCommands: ['curl', 'help'],
+    allowedFlags: ['-s', '-I'],
+    timeout: 10000,
+    dangerousPatterns: [/curl.*localhost.*:3000/]
+  },
+  12: {
+    world: 1, title: 'Los Sistemas Embebidos',
+    allowedCommands: ['uname', 'help'],
+    allowedFlags: ['-m'],
+    dangerousPatterns: []
+  },
+  13: {
+    world: 1, title: 'El Desafío del Encriptado',
+    allowedCommands: ['gpg', 'help'],
+    allowedFlags: ['--version'],
+    dangerousPatterns: []
+  },
+  14: {
+    world: 1, title: 'El Guardián de la Privacidad',
+    allowedCommands: ['curl', 'help'],
+    allowedFlags: ['-I', '-s'],
+    timeout: 10000,
+    dangerousPatterns: []
+  },
+  15: {
+    world: 1, title: 'Boss: Guardián del Conocimiento Libre',
+    allowedCommands: ['uname', 'cat', 'curl', 'ls', 'which', 'help'],
+    dangerousPatterns: []
+  },
+
+  // ==========================================
+  // MUNDO 2: CAMINOS PERDIDOS (IDs 16-35)
+  // ==========================================
+  16: {
+    world: 2, title: 'El Primer Paso del Caminante',
+    allowedCommands: ['pwd', 'echo', 'help'],
+    dangerousPatterns: []
+  },
+  17: {
+    world: 2, title: 'El Eco del Cambio',
+    allowedCommands: ['echo', 'help'],
+    dangerousPatterns: []
+  },
+  18: {
+    world: 2, title: 'Listando los Tesoros',
+    allowedCommands: ['ls', 'help'],
+    dangerousPatterns: []
+  },
+  19: {
+    world: 2, title: 'Los Secretos Ocultos',
+    allowedCommands: ['ls', 'help'],
+    allowedFlags: ['-a', '-la'],
+    dangerousPatterns: []
+  },
+  20: {
+    world: 2, title: 'La Vista Detallada',
+    allowedCommands: ['ls', 'help'],
+    allowedFlags: ['-l', '-la'],
+    dangerousPatterns: []
+  },
+  21: {
+    world: 2, title: 'Los Tamaños Humanos',
     allowedCommands: ['ls', 'help'],
     allowedFlags: ['-lh', '-lah'],
     dangerousPatterns: []
   },
-  10: {
-    world: 2,
-    title: 'El Salto del Conejo',
+  22: {
+    world: 2, title: 'El Salto del Conejo',
     allowedCommands: ['cd', 'pwd', 'help'],
-    allowedPaths: ['..', '../..'],
+    allowedPaths: ['..', '../..', '~'],
     dangerousPatterns: []
   },
-  11: {
-    world: 2,
-    title: 'El Sendero Absoluto',
+  23: {
+    world: 2, title: 'El Sendero Absoluto',
     allowedCommands: ['cd', 'pwd', 'help'],
     allowedPaths: ['/tmp', '/'],
     dangerousPatterns: []
   },
-  12: {
-    world: 2,
-    title: 'Crear el Refugio',
+  24: {
+    world: 2, title: 'Crear el Refugio',
     allowedCommands: ['mkdir', 'ls', 'help'],
-    restrictedCommands: ['mkdir -p'],
-    dangerousPatterns: [/rm\s+-/, /rmdir/, /^cd\s+\//],
+    dangerousPatterns: [/rm\s+-/, /rmdir/],
     sandboxOnly: true
   },
-  13: {
-    world: 2,
-    title: 'El Pergamino en Blanco',
+  25: {
+    world: 2, title: 'El Pergamino en Blanco',
     allowedCommands: ['touch', 'ls', 'help'],
-    dangerousPatterns: [/rm\s+/, /rmdir/],
+    dangerousPatterns: [/rm\s+/],
     sandboxOnly: true
   },
-  14: {
-    world: 2,
-    title: 'La Ruta Perfecta',
+  26: {
+    world: 2, title: 'La Ruta Perfecta',
     allowedCommands: ['mkdir', 'ls', 'help'],
     allowedFlags: ['-p'],
     dangerousPatterns: [/rm\s+-/],
     sandboxOnly: true
   },
-  15: {
-    world: 2,
-    title: 'El Espejo de los Pergaminos',
-    allowedCommands: ['cp', 'ls', 'help'],
-    allowedFlags: ['-i', '-p'],
+  27: {
+    world: 2, title: 'El Espejo de los Pergaminos',
+    allowedCommands: ['cp', 'touch', 'ls', 'help'],
+    allowedFlags: ['-i', '-p', '-r'],
     dangerousPatterns: [/rm\s+/],
     sandboxOnly: true
   },
-  16: {
-    world: 2,
-    title: 'El Ritual de Renombrar',
-    allowedCommands: ['mv', 'ls', 'help'],
+  28: {
+    world: 2, title: 'El Ritual de Renombrar',
+    allowedCommands: ['mv', 'touch', 'ls', 'help'],
     allowedFlags: ['-i'],
     dangerousPatterns: [/rm\s+/],
     sandboxOnly: true
   },
-  17: {
-    world: 2,
-    title: 'La Eliminación del Mal',
-    allowedCommands: ['rm', 'ls', 'help'],
+  29: {
+    world: 2, title: 'La Eliminación del Mal',
+    allowedCommands: ['rm', 'touch', 'ls', 'help'],
     allowedFlags: ['-i'],
     dangerousPatterns: [/rm\s+-r/, /rm\s+-f/, /rm\s+-rf/],
     sandboxOnly: true,
     warningMessage: 'Comando destructivo. Se ejecutará en sandbox.'
   },
-  18: {
-    world: 2,
-    title: 'El Manual del Sabio',
+  30: {
+    world: 2, title: 'El Manual del Sabio',
     allowedCommands: ['man', 'help'],
     dangerousPatterns: []
   },
-  19: {
-    world: 2,
-    title: 'La Búsqueda de Conocimiento',
+  31: {
+    world: 2, title: 'La Búsqueda de Conocimiento',
     allowedCommands: ['apropos', 'man', 'help'],
     dangerousPatterns: []
   },
-  20: {
-    world: 2,
-    title: 'La Variable Mística',
+  32: {
+    world: 2, title: 'La Variable Mística',
     allowedCommands: ['echo', 'help'],
     dangerousPatterns: []
   },
-  21: {
-    world: 2,
-    title: 'El Glob del Caos',
+  33: {
+    world: 2, title: 'Archivos Ocultos: El Punto',
     allowedCommands: ['ls', 'help'],
+    allowedFlags: ['-a', '-la'],
+    dangerousPatterns: []
+  },
+  34: {
+    world: 2, title: 'El Glob del Caos',
+    allowedCommands: ['ls', 'touch', 'help'],
     allowedGlobbing: true,
     dangerousPatterns: []
   },
+  35: {
+    world: 2, title: 'Boss: Maestro de Caminos',
+    allowedCommands: ['pwd', 'ls', 'cd', 'mkdir', 'touch', 'cat', 'cp', 'mv', 'rm', 'help'],
+    dangerousPatterns: []
+  },
 
-  // MUNDO 3: TORRES ANTIGUAS DEL PODER (Tema 3 - Power of CLI)
-  22: {
-    world: 3,
-    title: 'El Primer Pergamino Comprimido',
-    allowedCommands: ['tar', 'help'],
-    allowedFlags: ['-cvf', '-czvf', '-cjvf'],
-    dangerousPatterns: [],
-    sandboxOnly: true
+  // ==========================================
+  // MUNDO 3: TORRES ANTIGUAS DEL PODER (IDs 36-50)
+  // ==========================================
+  36: {
+    world: 3, title: 'El Poder de Grep',
+    allowedCommands: ['grep', 'echo', 'help'],
+    allowedFlags: ['-i', '-n', '-c', '-v'],
+    dangerousPatterns: []
   },
-  23: {
-    world: 3,
-    title: 'La Liberación del Pergamino',
-    allowedCommands: ['tar', 'ls', 'help'],
-    allowedFlags: ['-xvf', '-xzvf', '-xjvf'],
-    dangerousPatterns: [],
-    sandboxOnly: true
-  },
-  24: {
-    world: 3,
-    title: 'El Hechizo de la Compresión Doble',
-    allowedCommands: ['tar', 'gzip', 'ls', 'help'],
-    allowedFlags: ['-czvf', '-z'],
-    dangerousPatterns: [],
-    sandboxOnly: true
-  },
-  25: {
-    world: 3,
-    title: 'La Tubería Mística',
-    allowedCommands: ['ls', 'grep', 'help'],
+  37: {
+    world: 3, title: 'Tuberías: El Flujo de Datos',
+    allowedCommands: ['ls', 'grep', 'echo', 'help'],
     allowedPipes: true,
-    dangerousPatterns: [/\|\s*rm/, /\|\s*dd/, /\|\s*mkfs/],
-    maxPipeDepth: 2
+    dangerousPatterns: [/\|\s*rm/, /\|\s*dd/],
+    maxPipeDepth: 3
   },
-  26: {
-    world: 3,
-    title: 'La Redirección al Infinito',
-    allowedCommands: ['ls', 'echo', 'help'],
+  38: {
+    world: 3, title: 'La Redirección al Infinito',
+    allowedCommands: ['echo', 'ls', 'help'],
     allowedRedirection: ['>', '>>'],
-    dangerousPatterns: [/>\s*\/dev\/sda/, />\s*\/etc/],
+    dangerousPatterns: [/>\s*\/etc/, />\s*\/dev/],
     sandboxOnly: true
   },
-  27: {
-    world: 3,
-    title: 'La Bestia del Append',
-    allowedCommands: ['echo', 'help'],
-    allowedRedirection: ['>>'],
-    dangerousPatterns: [],
-    sandboxOnly: true
-  },
-  28: {
-    world: 3,
-    title: 'Los Espejos del Tee',
+  39: {
+    world: 3, title: 'Los Espejos del Tee',
     allowedCommands: ['ls', 'tee', 'help'],
     allowedPipes: true,
     dangerousPatterns: [],
     sandboxOnly: true
   },
-  29: {
-    world: 3,
-    title: 'El Cazador de Patrones',
-    allowedCommands: ['grep', 'cat', 'help'],
+  40: {
+    world: 3, title: 'El Cazador de Patrones',
+    allowedCommands: ['grep', 'echo', 'help'],
     allowedFlags: ['-i', '-n', '-c', '-v', '-r'],
     maxRegexComplexity: 3,
     dangerousPatterns: []
   },
-  30: {
-    world: 3,
-    title: 'Las Mil Búsquedas',
-    allowedCommands: ['grep', 'find', 'help'],
-    allowedFlags: ['-r', '-i', '-n'],
-    dangerousPatterns: [/find\s+\/\s+/, /find.*-delete/],
-    maxSearchScope: '.'
+  41: {
+    world: 3, title: 'Las Mil Búsquedas',
+    allowedCommands: ['grep', 'echo', 'help'],
+    allowedFlags: ['-r', '-i', '-n', '-l'],
+    dangerousPatterns: [/grep\s+-r\s+\/etc/]
   },
-  31: {
-    world: 3,
-    title: 'El Conjuro Insensible',
-    allowedCommands: ['grep', 'help'],
+  42: {
+    world: 3, title: 'El Conjuro Insensible',
+    allowedCommands: ['grep', 'echo', 'help'],
     allowedFlags: ['-i', '-n'],
     dangerousPatterns: []
   },
-  32: {
-    world: 3,
-    title: 'La Inversión Sagrada',
-    allowedCommands: ['grep', 'help'],
+  43: {
+    world: 3, title: 'La Inversión Sagrada',
+    allowedCommands: ['grep', 'echo', 'help'],
     allowedFlags: ['-v', '-n'],
     dangerousPatterns: []
   },
-  33: {
-    world: 3,
-    title: 'Las Cabezas del Pergamino',
-    allowedCommands: ['head', 'cat', 'help'],
-    allowedFlags: ['-n'],
+  44: {
+    world: 3, title: 'Las Cabezas y Colas',
+    allowedCommands: ['head', 'tail', 'echo', 'seq', 'help'],
+    allowedFlags: ['-n', '-f'],
     dangerousPatterns: []
   },
-  34: {
-    world: 3,
-    title: 'Las Colas Persistentes',
-    allowedCommands: ['tail', 'help'],
-    allowedFlags: ['-n', '-f'],
-    dangerousPatterns: [],
-    timeout: 5000
-  },
-  35: {
-    world: 3,
-    title: 'El Ordenador Místico',
-    allowedCommands: ['sort', 'help'],
+  45: {
+    world: 3, title: 'El Ordenador Místico',
+    allowedCommands: ['sort', 'echo', 'help'],
     allowedFlags: ['-n', '-r', '-u'],
     dangerousPatterns: []
   },
-  36: {
-    world: 3,
-    title: 'Los Únicos Sobrevivientes',
-    allowedCommands: ['sort', 'uniq', 'help'],
+  46: {
+    world: 3, title: 'Los Únicos Sobrevivientes',
+    allowedCommands: ['sort', 'uniq', 'echo', 'help'],
     allowedPipes: true,
     allowedFlags: ['-c', '-u'],
     dangerousPatterns: []
   },
-  37: {
-    world: 3,
-    title: 'El Cuchillo Cortador',
-    allowedCommands: ['cut', 'cat', 'help'],
+  47: {
+    world: 3, title: 'El Cuchillo Cortador',
+    allowedCommands: ['cut', 'echo', 'help'],
     allowedFlags: ['-d', '-f', '-c'],
     dangerousPatterns: []
   },
-  38: {
-    world: 3,
-    title: 'El Hechizo Sed',
-    allowedCommands: ['sed', 'cat', 'help'],
-    allowedFlags: ['-i', '-n', 'e'],
-    maxSedComplexity: 2,
-    dangerousPatterns: [/sed.*[^\\]\/.*\/.*\/$/],
+  48: {
+    world: 3, title: 'El Hechizo Sed',
+    allowedCommands: ['sed', 'echo', 'help'],
+    allowedFlags: ['-i', '-n', '-e'],
+    maxSedComplexity: 3,
     sandboxOnly: true
   },
-  39: {
-    world: 3,
-    title: 'El Buscador Awk',
-    allowedCommands: ['awk', 'help'],
+  49: {
+    world: 3, title: 'El Buscador Awk',
+    allowedCommands: ['awk', 'echo', 'help'],
     allowedFlags: ['-F'],
-    maxAwkComplexity: 2,
-    dangerousPatterns: [],
+    maxAwkComplexity: 3,
     sandboxOnly: true
   },
-  40: {
-    world: 3,
-    title: 'Tu Primer Script Mágico',
-    allowedCommands: ['echo', 'chmod', 'help', 'bash'],
-    allowedFlags: ['+x'],
-    sandboxOnly: true,
-    scriptMode: true
+  50: {
+    world: 3, title: 'Boss: Maestro del Flujo',
+    allowedCommands: ['grep', 'sed', 'awk', 'sort', 'uniq', 'cut', 'head', 'tail', 'echo', 'help'],
+    dangerousPatterns: []
   },
 
-  // MUNDO 4: NÚCLEO DEL REINO (Tema 4 - OS & Hardware)
-  41: {
-    world: 4,
-    title: 'El Conocedor del Núcleo',
+  // ==========================================
+  // MUNDO 4: NÚCLEO DEL REINO (IDs 51-70)
+  // ==========================================
+  51: {
+    world: 4, title: '¿Quién Soy?',
+    allowedCommands: ['whoami', 'help'],
+    dangerousPatterns: []
+  },
+  52: {
+    world: 4, title: 'Mi Sistema',
     allowedCommands: ['uname', 'help'],
-    allowedFlags: ['-r', '-a'],
+    allowedFlags: ['-a', '-r', '-s'],
     dangerousPatterns: []
   },
-  42: {
-    world: 4,
-    title: 'El Inspector de CPU',
-    allowedCommands: ['lscpu', 'help'],
+  53: {
+    world: 4, title: 'Hora del Sistema',
+    allowedCommands: ['date', 'help'],
     dangerousPatterns: []
   },
-  43: {
-    world: 4,
-    title: 'La Memoria del Reino',
-    allowedCommands: ['free', 'help'],
-    allowedFlags: ['-h', '-m', '-g'],
-    dangerousPatterns: []
-  },
-  44: {
-    world: 4,
-    title: 'Los Discos Eternos',
-    allowedCommands: ['lsblk', 'help'],
-    dangerousPatterns: []
-  },
-  45: {
-    world: 4,
-    title: 'El Espacio Disponible',
-    allowedCommands: ['df', 'du', 'help'],
-    allowedFlags: ['-h', '-s'],
-    dangerousPatterns: []
-  },
-  46: {
-    world: 4,
-    title: 'Los Ríos USB',
-    allowedCommands: ['lsusb', 'help'],
-    dangerousPatterns: []
-  },
-  47: {
-    world: 4,
-    title: 'Los Procesos Vivos',
+  54: {
+    world: 4, title: 'Procesos en Ejecución',
     allowedCommands: ['ps', 'help'],
     allowedFlags: ['aux', 'ef', '-u'],
     dangerousPatterns: []
   },
-  48: {
-    world: 4,
-    title: 'El Top del Reino',
+  55: {
+    world: 4, title: 'Top: Monitor en Tiempo Real',
     allowedCommands: ['top', 'help'],
+    allowedFlags: ['-b', '-n'],
     timeout: 5000,
     dangerousPatterns: []
   },
-  49: {
-    world: 4,
-    title: 'El Verdugo de Procesos',
+  56: {
+    world: 4, title: 'El Verdugo de Procesos',
     allowedCommands: ['kill', 'ps', 'help'],
-    allowedFlags: ['-9'],
+    allowedFlags: ['-9', '-15'],
     dangerousPatterns: [/kill\s+-9\s+1/, /kill\s+-9\s+0/],
-    warningMessage: 'Comando delicado. Solo en procesos específicos.'
+    warningMessage: 'Comando delicado.'
   },
-  50: {
-    world: 4,
-    title: 'El Diario del Reino',
-    allowedCommands: ['journalctl', 'help'],
-    allowedFlags: ['-n', '-f', '-u'],
-    timeout: 5000,
+  57: {
+    world: 4, title: 'Espacio en Disco',
+    allowedCommands: ['df', 'help'],
+    allowedFlags: ['-h', '-T'],
     dangerousPatterns: []
   },
-  51: {
-    world: 4,
-    title: 'El Mensaje del Kernel',
-    allowedCommands: ['dmesg', 'tail', 'help'],
-    allowedPipes: true,
-    allowedFlags: ['-n'],
+  58: {
+    world: 4, title: 'Du: Tamaño de Directorios',
+    allowedCommands: ['du', 'help'],
+    allowedFlags: ['-sh', '-s', '-h'],
     dangerousPatterns: []
   },
-  52: {
-    world: 4,
-    title: 'El Tiempo en el Reino',
+  59: {
+    world: 4, title: 'Free: Memoria RAM',
+    allowedCommands: ['free', 'help'],
+    allowedFlags: ['-h', '-m', '-g'],
+    dangerousPatterns: []
+  },
+  60: {
+    world: 4, title: 'Uptime: Tiempo del Sistema',
     allowedCommands: ['uptime', 'help'],
     dangerousPatterns: []
   },
-  53: {
-    world: 4,
-    title: 'El Camino de Red',
+  61: {
+    world: 4, title: 'El Camino de Red',
     allowedCommands: ['ip', 'help'],
     allowedSubcommands: ['addr', 'address', 'a'],
     dangerousPatterns: [/ip\s+addr\s+add/, /ip\s+addr\s+del/]
   },
-  54: {
-    world: 4,
-    title: 'Las Rutas del Mensajero',
-    allowedCommands: ['ip', 'route', 'help'],
+  62: {
+    world: 4, title: 'Las Rutas del Mensajero',
+    allowedCommands: ['ip', 'help'],
     allowedSubcommands: ['route', 'r'],
     dangerousPatterns: [/ip\s+route\s+add/, /ip\s+route\s+del/]
   },
-  55: {
-    world: 4,
-    title: 'El Eco del Cielo',
+  63: {
+    world: 4, title: 'El Eco del Cielo',
     allowedCommands: ['ping', 'help'],
     allowedFlags: ['-c', '-i', '-W'],
     maxPingCount: 10,
     timeout: 10000,
     dangerousPatterns: []
   },
-  56: {
-    world: 4,
-    title: 'El DNS Mágico',
+  64: {
+    world: 4, title: 'El DNS Mágico',
     allowedCommands: ['host', 'dig', 'nslookup', 'help'],
     dangerousPatterns: []
   },
-  57: {
-    world: 4,
-    title: 'Los Puertos del Castillo',
+  65: {
+    world: 4, title: 'Los Puertos del Castillo',
     allowedCommands: ['ss', 'netstat', 'help'],
-    allowedFlags: ['-tuln', '-t', '-u'],
+    allowedFlags: ['-tuln', '-t', '-u', '-l'],
     dangerousPatterns: []
   },
-  58: {
-    world: 4,
-    title: 'La Conexión SSH',
+  66: {
+    world: 4, title: 'La Conexión SSH',
     allowedCommands: ['ssh-keygen', 'help'],
-    allowedFlags: ['-t', '-b', '-f'],
+    allowedFlags: ['-t', '-b', '-f', '-N'],
     sandboxOnly: true,
     warningMessage: 'Generará claves en sandbox.'
   },
-  59: {
-    world: 4,
-    title: 'El Mensajero curl',
-    allowedCommands: ['curl', 'help'],
-    allowedFlags: ['-X', '-H', '-d', '-o'],
-    allowedMethods: ['GET', 'POST', 'PUT', 'DELETE'],
-    dangerousPatterns: [/curl.*localhost.*:3000/],
-    timeout: 10000
-  },
-
-  // MUNDO 5: BÓVEDAS SECRETAS (Tema 5 - Security & Permissions)
-  60: {
-    world: 5,
-    title: 'Tu Identidad en el Reino',
-    allowedCommands: ['whoami', 'help'],
-    dangerousPatterns: []
-  },
-  61: {
-    world: 5,
-    title: 'Los Detalles del Ser',
-    allowedCommands: ['id', 'help'],
-    dangerousPatterns: []
-  },
-  62: {
-    world: 5,
-    title: 'Los Ojos del Castillo',
-    allowedCommands: ['who', 'help'],
-    dangerousPatterns: []
-  },
-  63: {
-    world: 5,
-    title: 'El Trabajo del Pueblo',
-    allowedCommands: ['w', 'help'],
-    dangerousPatterns: []
-  },
-  64: {
-    world: 5,
-    title: 'El Libro de los Usuarios',
-    allowedCommands: ['cat', 'grep', 'help'],
-    restrictedPaths: ['/etc/passwd'],
-    dangerousPatterns: [/cat\s+\/etc\/shadow/]
-  },
-  65: {
-    world: 5,
-    title: 'Crear un Aliado',
-    allowedCommands: ['sudo', 'useradd', 'help'],
-    allowedFlags: ['-m', '-s'],
-    requiresSudo: true,
-    sandboxOnly: true
-  },
-  66: {
-    world: 5,
-    title: 'La Llave del Aliado',
-    allowedCommands: ['sudo', 'passwd', 'help'],
-    requiresSudo: true,
-    sandboxOnly: true,
-    warningMessage: 'Cambiará contraseña. Solo en sandbox.'
-  },
   67: {
-    world: 5,
-    title: 'El Grupo Sagrado',
-    allowedCommands: ['sudo', 'groupadd', 'help'],
-    requiresSudo: true,
-    sandboxOnly: true
+    world: 4, title: 'El Mensajero curl',
+    allowedCommands: ['curl', 'help'],
+    allowedFlags: ['-s', '-I', '-X', '-O'],
+    timeout: 10000,
+    dangerousPatterns: [/curl.*localhost.*:3000/]
   },
   68: {
-    world: 5,
-    title: 'Unirse al Hermandad',
-    allowedCommands: ['sudo', 'usermod', 'help'],
-    allowedFlags: ['-aG'],
-    requiresSudo: true,
-    sandboxOnly: true
+    world: 4, title: 'Los Ríos USB',
+    allowedCommands: ['lsusb', 'help'],
+    dangerousPatterns: []
   },
   69: {
-    world: 5,
-    title: 'El Banquero del Reino',
-    allowedCommands: ['cat', 'help'],
-    restrictedPaths: ['/etc/group'],
+    world: 4, title: 'El Mensaje del Kernel',
+    allowedCommands: ['dmesg', 'tail', 'grep', 'help'],
+    allowedFlags: ['-T', '-n'],
     dangerousPatterns: []
   },
   70: {
-    world: 5,
-    title: 'Los Permisos Sagrados',
-    allowedCommands: ['ls', 'help'],
-    allowedFlags: ['-la', '-l', '-lah'],
+    world: 4, title: 'Boss: Señor del Núcleo',
+    allowedCommands: ['whoami', 'uname', 'date', 'ps', 'df', 'free', 'uptime', 'ip', 'ping', 'host', 'ss', 'curl', 'lsusb', 'dmesg', 'top', 'du', 'kill', 'ssh-keygen', 'help'],
     dangerousPatterns: []
   },
+
+  // ==========================================
+  // MUNDO 5: BÓVEDAS SECRETAS (IDs 71-90)
+  // ==========================================
   71: {
-    world: 5,
-    title: 'El Cambio de Permisos Numérico',
-    allowedCommands: ['chmod', 'ls', 'help'],
-    allowedFlags: ['+x', '-x', '755', '644', '700'],
+    world: 5, title: 'Tu Identidad en el Reino',
+    allowedCommands: ['whoami', 'help'],
+    dangerousPatterns: []
+  },
+  72: {
+    world: 5, title: 'Los Detalles del Ser',
+    allowedCommands: ['id', 'help'],
+    dangerousPatterns: []
+  },
+  73: {
+    world: 5, title: 'Los Ojos del Castillo',
+    allowedCommands: ['who', 'help'],
+    dangerousPatterns: []
+  },
+  74: {
+    world: 5, title: 'El Libro de los Usuarios',
+    allowedCommands: ['cat', 'help'],
+    restrictedPaths: ['/etc/passwd'],
+    dangerousPatterns: [/cat\s+\/etc\/shadow/]
+  },
+  75: {
+    world: 5, title: 'Los Permisos Sagrados',
+    allowedCommands: ['ls', 'help'],
+    allowedFlags: ['-la', '-l', '-ld'],
+    dangerousPatterns: []
+  },
+  76: {
+    world: 5, title: 'El Cambio de Permisos Numérico',
+    allowedCommands: ['chmod', 'ls', 'touch', 'help'],
+    allowedFlags: ['755', '644', '700', '600', '777'],
     sandboxOnly: true,
     warningMessage: 'Modifica permisos. Solo en sandbox.'
   },
-  72: {
-    world: 5,
-    title: 'El Cambio Simbólico',
-    allowedCommands: ['chmod', 'ls', 'help'],
-    allowedFlags: ['o-rwx', 'u+x', 'g-w'],
+  77: {
+    world: 5, title: 'El Cambio Simbólico',
+    allowedCommands: ['chmod', 'ls', 'touch', 'help'],
+    allowedFlags: ['u+x', 'g-w', 'o=r', 'a+r', '-w'],
     sandboxOnly: true
   },
-  73: {
-    world: 5,
-    title: 'La Propiedad Cambiada',
-    allowedCommands: ['sudo', 'chown', 'help'],
+  78: {
+    world: 5, title: 'La Propiedad Cambiada',
+    allowedCommands: ['chown', 'ls', 'touch', 'help'],
     allowedFlags: ['-R'],
-    requiresSudo: true,
     sandboxOnly: true
   },
-  74: {
-    world: 5,
-    title: 'El SUID Mágico',
-    allowedCommands: ['sudo', 'chmod', 'help'],
-    allowedFlags: ['u+s'],
-    requiresSudo: true,
+  79: {
+    world: 5, title: 'El SUID Mágico',
+    allowedCommands: ['chmod', 'ls', 'touch', 'help'],
+    allowedFlags: ['u+s', 'g+s'],
     sandboxOnly: true,
     warningMessage: 'SUID es peligroso. Usar con cuidado.'
   },
-  75: {
-    world: 5,
-    title: 'El Pegajoso de /tmp',
+  80: {
+    world: 5, title: 'El Pegajoso de /tmp',
     allowedCommands: ['ls', 'help'],
     allowedFlags: ['-ld'],
     restrictedPaths: ['/tmp'],
     dangerousPatterns: []
   },
-  76: {
-    world: 5,
-    title: 'El Enlace Duro',
-    allowedCommands: ['ln', 'ls', 'help'],
-    sandboxOnly: true
-  },
-  77: {
-    world: 5,
-    title: 'El Enlace Suave',
-    allowedCommands: ['ln', 'ls', 'help'],
-    allowedFlags: ['-s'],
-    sandboxOnly: true
-  },
-  78: {
-    world: 5,
-    title: 'El Cambio de Identidad',
-    allowedCommands: ['su', 'help'],
-    allowedFlags: ['-', '-i'],
-    warningMessage: 'Su es peligroso. Mejor usa sudo.'
-  },
-  79: {
-    world: 5,
-    title: 'Passwd: Cambiar Contraseña',
-    allowedCommands: ['passwd', 'help'],
-    dangerousPatterns: [/passwd\s+\/etc/],
-    sandboxOnly: true
-  },
-  80: {
-    world: 5,
-    title: 'Useradd: Crear Usuarios',
-    allowedCommands: ['useradd', 'help'],
-    dangerousPatterns: [/useradd\s+(-u\s+0|-g\s+0)/],
-    sandboxOnly: true
-  },
   81: {
-    world: 5,
-    title: 'Groupadd: Crear Grupos',
-    allowedCommands: ['groupadd', 'help'],
-    dangerousPatterns: [],
+    world: 5, title: 'El Enlace Duro',
+    allowedCommands: ['ln', 'echo', 'ls', 'cat', 'help'],
     sandboxOnly: true
   },
   82: {
-    world: 5,
-    title: 'Usermod: Modificar Usuarios',
-    allowedCommands: ['usermod', 'help'],
-    dangerousPatterns: [/usermod.*-u\s+0/],
+    world: 5, title: 'El Enlace Suave',
+    allowedCommands: ['ln', 'echo', 'ls', 'help'],
+    allowedFlags: ['-s'],
     sandboxOnly: true
   },
   83: {
-    world: 5,
-    title: 'Visudo: Configurar Sudo',
-    allowedCommands: ['visudo', 'help'],
-    dangerousPatterns: [],
-    sandboxOnly: true,
-    warningMessage: 'visudo es crítico para seguridad.'
+    world: 5, title: 'El Grupo Sagrado',
+    allowedCommands: ['cat', 'help'],
+    restrictedPaths: ['/etc/group'],
+    dangerousPatterns: []
   },
   84: {
-    world: 5,
-    title: 'Setuid y Setgid',
-    allowedCommands: ['chmod', 'ls', 'help'],
-    allowedFlags: ['-', 'R'],
-    dangerousPatterns: [/chmod\s*4[0-9]{3}\s*\/bin/i, /chmod\s*2[0-9]{3}\s*\/sbin/i]
-  },
-  85: {
-    world: 5,
-    title: 'Sticky Bit',
-    allowedCommands: ['chmod', 'help'],
-    allowedFlags: ['-', 't', 'R'],
-    dangerousPatterns: []
-  },
-  86: {
-    world: 5,
-    title: 'ACLs: Control de Acceso Extendido',
-    allowedCommands: ['setfacl', 'getfacl', 'help'],
-    allowedFlags: ['-', 'm', 'x', 'b'],
-    dangerousPatterns: []
-  },
-  87: {
-    world: 5,
-    title: 'Archivos Especiales: /dev',
-    allowedCommands: ['ls', 'cat', 'help'],
-    allowedFlags: ['-', 'l', 'a'],
+    world: 5, title: 'Archivos Especiales: /dev',
+    allowedCommands: ['ls', 'help'],
+    restrictedPaths: ['/dev'],
     dangerousPatterns: [/cat\s+\/dev\/(sda|sdb|mem|kmem)/]
   },
-  88: {
-    world: 5,
-    title: 'Archivos de Configuración Sistema',
-    allowedCommands: ['ls', 'cat', 'less', 'help'],
-    allowedFlags: ['-', 'l', 'a', 'R'],
+  85: {
+    world: 5, title: 'Archivos de Configuración',
+    allowedCommands: ['ls', 'help'],
+    restrictedPaths: ['/etc'],
     dangerousPatterns: [/rm.*\/etc/, /mv.*\/etc/]
   },
-  89: {
-    world: 5,
-    title: 'Logs del Sistema',
-    allowedCommands: ['cat', 'tail', 'grep', 'less', 'help'],
-    allowedFlags: ['-', 'f', 'n', 'i'],
+  86: {
+    world: 5, title: 'Logs del Sistema',
+    allowedCommands: ['cat', 'tail', 'ls', 'help'],
+    allowedFlags: ['-n', '-f'],
+    restrictedPaths: ['/var/log'],
     dangerousPatterns: [/rm.*\/var\/log/]
   },
-  90: {
-    world: 5,
-    title: 'Firewall Básico: iptables',
+  87: {
+    world: 5, title: 'Firewall Básico: iptables',
     allowedCommands: ['iptables', 'help'],
+    allowedFlags: ['-L', '-n'],
     dangerousPatterns: [/iptables.*ACCEPT.*0\.0\.0\.0/],
     sandboxOnly: true,
     warningMessage: 'iptables es crítico. Sé cuidadoso.'
   },
+  88: {
+    world: 5, title: 'SSH y Criptografía',
+    allowedCommands: ['ssh-keygen', 'help'],
+    allowedFlags: ['-t', '-b', '-f', '-N'],
+    sandboxOnly: true
+  },
+  89: {
+    world: 5, title: 'Seguridad en Contraseñas',
+    allowedCommands: ['cat', 'help'],
+    restrictedPaths: ['/etc/login.defs'],
+    dangerousPatterns: []
+  },
+  90: {
+    world: 5, title: 'Boss: Guardián Supremo',
+    allowedCommands: ['whoami', 'id', 'chmod', 'chown', 'chgrp', 'ls', 'cat', 'ln', 'echo', 'touch', 'iptables', 'ssh-keygen', 'vi', 'nano', 'locate', 'help'],
+    dangerousPatterns: [/rm\s+(-r|-f|--recursive|--force)[\s\w\/.-]*(\/|\*|\.\.)/i]
+  },
+
+  // ==========================================
+  // QUESTS EXTRA (IDs 91-95)
+  // ==========================================
   91: {
-    world: 5,
-    title: 'SSH y Criptografía',
-    allowedCommands: ['ssh', 'ssh-keygen', 'help'],
-    allowedFlags: ['-', 't', 'N', 'f', 'C'],
-    dangerousPatterns: [/ssh\s+root@/]
+    world: 2, title: 'El Rango Mágico',
+    allowedCommands: ['ls', 'touch', 'help'],
+    allowedGlobbing: true,
+    dangerousPatterns: []
   },
   92: {
-    world: 5,
-    title: 'Seguridad en Contraseñas',
-    allowedCommands: ['passwd', 'help'],
-    dangerousPatterns: [],
-    warningMessage: 'Las contraseñas débiles comprometen seguridad.'
+    world: 3, title: 'El Editor de los Antiguos',
+    allowedCommands: ['vi', 'help'],
+    dangerousPatterns: []
   },
   93: {
-    world: 5,
-    title: 'Auditoría: auditd',
-    allowedCommands: ['auditctl', 'ausearch', 'help'],
-    dangerousPatterns: [],
-    sandboxOnly: true
+    world: 3, title: 'El Editor Moderno',
+    allowedCommands: ['nano', 'help'],
+    dangerousPatterns: []
   },
   94: {
-    world: 5,
-    title: 'SELinux: Control de Acceso Obligatorio',
-    allowedCommands: ['semanage', 'help'],
-    dangerousPatterns: [],
-    sandboxOnly: true
+    world: 4, title: 'La Búsqueda Rápida',
+    allowedCommands: ['locate', 'updatedb', 'help'],
+    dangerousPatterns: []
   },
   95: {
-    world: 5,
-    title: 'Boss Final: Guardián Supremo',
-    allowedCommands: ['chmod', 'chown', 'sudo', 'passwd', 'ssh', 'ls', 'pwd', 'echo', 'help'],
-    allowedFlags: ['-', 'R', 'l', 'a'],
-    dangerousPatterns: [/rm\s+(-r|-f|--recursive|--force)[\s\w\/.-]*(\/|\*|\.\.)/i],
-    warningMessage: 'Boss final: domina TODO el conocimiento de seguridad.'
+    world: 5, title: 'El Grupo Cambiado',
+    allowedCommands: ['chgrp', 'ls', 'touch', 'groups', 'help'],
+    sandboxOnly: true
   }
 };
 
-/**
- * Obtiene comandos permitidos para una misión específica
- * @param {number} questId - ID de la misión
- * @returns {Object} Configuración de comandos permitidos
- */
 export const getQuestCommandConfig = (questId) => {
   return QUEST_COMMANDS_MAP[questId] || {
     allowedCommands: ['help'],
@@ -715,12 +601,6 @@ export const getQuestCommandConfig = (questId) => {
   };
 };
 
-/**
- * Valida si un comando es permitido para una misión
- * @param {string} command - Comando a validar
- * @param {number} questId - ID de la misión
- * @returns {Object} { isAllowed, reason }
- */
 export const validateCommandForQuest = (command, questId) => {
   const config = getQuestCommandConfig(questId);
   const baseCmd = command.trim().split(/\s+/)[0];
@@ -732,7 +612,6 @@ export const validateCommandForQuest = (command, questId) => {
     };
   }
 
-  // Verificar patrones peligrosos
   for (const pattern of config.dangerousPatterns) {
     if (pattern.test(command)) {
       return {

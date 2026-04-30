@@ -1,4 +1,4 @@
-import { body, validationResult } from 'express-validator';
+import { body, param, validationResult } from 'express-validator';
 
 // Validadores reutilizables
 export const validateEmail = body('email')
@@ -34,7 +34,7 @@ export const handleValidationErrors = (req, res, next) => {
 
 // Validar ID numérico
 export const validateNumericId = (paramName = 'id') => {
-  return body(paramName)
+  return param(paramName)
     .isInt({ min: 1 })
     .withMessage(`${paramName} debe ser un número válido`);
 };

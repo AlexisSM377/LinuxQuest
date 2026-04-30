@@ -27,26 +27,26 @@ export default function GameNav({ onShowAchievements }) {
         <div className="nav-item" style={{ cursor: 'default', gap: 6 }}>
           <span className="tiny up" style={{ color: 'var(--amber)' }}>NIV</span>
           <span style={{ fontFamily: 'var(--font-display)', fontSize: 11 }}>
-            {String(userStats.level).padStart(2, '0')}
+            {String(userStats?.level || 1).padStart(2, '0')}
           </span>
         </div>
 
         <div className="nav-item" style={{ cursor: 'default', gap: 6 }}>
           <span className="tiny up" style={{ color: 'var(--amber)' }}>XP</span>
           <span style={{ fontFamily: 'var(--font-display)', fontSize: 11 }}>
-            {userStats.xp}
+            {userStats?.xp || 0}
           </span>
         </div>
 
         <div className="nav-item" style={{ cursor: 'default', gap: 6 }}>
           <span style={{ fontFamily: 'var(--font-display)', fontSize: 11, color: 'var(--amber)' }}>
-            ◈ {userStats.coins}
+            ◈ {userStats?.coins || 0}
           </span>
         </div>
 
         <div style={{ height: '100%', width: '180px', display: 'flex', alignItems: 'center', padding: '0 16px', borderLeft: '4px solid var(--ink)' }}>
           <div className="bar" style={{ flex: 1, height: 12 }}>
-            <i style={{ width: `${userStats.progress || 0}%`, transition: 'width 0.3s' }} />
+            <i style={{ width: `${userStats?.progress || 0}%`, transition: 'width 0.3s' }} />
           </div>
         </div>
 

@@ -6,7 +6,9 @@ const router = express.Router();
 // Get top players by XP
 router.get('/top', async (req, res) => {
   try {
-    const limit = parseInt(req.query.limit) || 10;
+    let limit = parseInt(req.query.limit) || 10;
+    if (limit < 1) limit = 10;
+    if (limit > 100) limit = 100;
     const result = await pool.query(
       `SELECT id, username, level, xp, coins, created_at
        FROM users
@@ -88,7 +90,9 @@ router.get('/player/:userId', async (req, res) => {
 router.get('/world/:worldId', async (req, res) => {
   try {
     const worldId = parseInt(req.params.worldId);
-    const limit = parseInt(req.query.limit) || 10;
+    let limit = parseInt(req.query.limit) || 10;
+    if (limit < 1) limit = 10;
+    if (limit > 100) limit = 100;
 
     const result = await pool.query(
       `SELECT u.id, u.username, u.level, u.xp,

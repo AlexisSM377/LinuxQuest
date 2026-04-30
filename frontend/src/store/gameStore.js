@@ -181,20 +181,36 @@ export const useGameStore = create((set, get) => ({
 
       const data = await response.json();
       if (data.success) {
-        set(state => ({
-          userProgress: state.userProgress.map(p =>
-            p.quest_id === questId ? { ...p, status: 'completed' } : p
-          ),
-          userStats: {
-            xp: data.totalXp,
-            level: data.newLevel,
-            coins: state.userStats.coins + data.coinsGained,
-            xpToNext: data.xpToNext,
-            progress: data.progress || 0
-          },
-          userAchievements: state.userAchievements
-        }));
-        showSuccess(`Misión completada (+${data.xpGained || 0} XP)`);
+        set(state => {
+          const existingIdx = state.userProgress.findIndex(p => p.quest_id === questId);
+          let newProgress;
+          if (existingIdx >= 0) {
+            newProgress = state.userProgress.map(p =>
+              p.quest_id === questId ? { ...p, status: 'completed', completed_at: new Date().toISOString() } : p
+            );
+          } else {
+            newProgress = [...state.userProgress, {
+              quest_id: questId,
+              status: 'completed',
+              completed_at: new Date().toISOString(),
+              attempts: 0,
+            }];
+          }
+
+          return {
+            userProgress: newProgress,
+            userStats: {
+              xp: data.totalXp,
+              level: data.newLevel,
+              coins: state.userStats.coins + data.coinsGained,
+              xpToNext: data.xpToNext,
+              progress: data.progressPercent || 0
+            },
+            userAchievements: state.userAchievements
+          };
+        });
+        const bonusMsg = data.achievementBonusXp > 0 ? ` (+${data.achievementBonusXp} logro)` : '';
+        showSuccess(`Misión completada (+${data.xpGained || 0} XP${bonusMsg})`);
       }
       return data;
     } catch (error) {

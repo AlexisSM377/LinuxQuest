@@ -46,8 +46,8 @@ class SandboxValidator {
    */
   validateCommandInjection(command) {
     const dangerousPatterns = [
-      // Shell metacharacters que podrían permitir ejecución de código
-      /[;&|`$()]/,
+      // Shell metacharacters peligrosos (NO bloquear | que es para pipes)
+      /[;&`]/,
       // Redirecciones a archivos del sistema
       />\s*\/etc|>\s*\/boot|>\s*\/sys|>\s*\/proc|>\s*\/dev/,
       // Intentos de acceso a Docker
@@ -165,6 +165,20 @@ class SandboxValidator {
   }
 
   /**
+   * Extrae todas las rutas mencionadas en un comando
+   */
+  extractPaths(command) {
+    const paths = [];
+    const parts = command.trim().split(/\s+/);
+    for (const part of parts) {
+      if (part.startsWith('/') || part.startsWith('..') || part.startsWith('./') || part.startsWith('~')) {
+        paths.push(part);
+      }
+    }
+    return paths;
+  }
+
+  /**
    * Validación completa de un comando
    */
   fullValidate(command, questConfig = {}) {
@@ -181,19 +195,30 @@ class SandboxValidator {
       results.valid = false;
     }
 
-    // 2. Argumentos según misión
+    // 2. Path traversal - BLOQUEA (no solo advierte)
+    const paths = this.extractPaths(command);
+    for (const path of paths) {
+      const traversalCheck = this.validatePathTraversal(path);
+      if (!traversalCheck.allowed) {
+        results.errors.push(`Path traversal detected: ${path}`);
+        results.valid = false;
+      }
+    }
+
+    // 3. Acceso a archivos sensibles - BLOQUEA (no solo advierte)
+    const sensitiveCheck = this.detectSensitiveFileAccess(command);
+    if (sensitiveCheck.detected) {
+      results.errors.push(sensitiveCheck.message);
+      results.valid = false;
+    }
+
+    // 4. Argumentos según misión
     if (questConfig.allowedFlags) {
       const argsCheck = this.validateCommandArguments(command, questConfig.allowedFlags);
       if (!argsCheck.allowed) {
         results.errors.push(argsCheck.reason);
         results.valid = false;
       }
-    }
-
-    // 3. Acceso a archivos sensibles
-    const sensitiveCheck = this.detectSensitiveFileAccess(command);
-    if (sensitiveCheck.detected) {
-      results.warnings.push(sensitiveCheck.message);
     }
 
     return results;

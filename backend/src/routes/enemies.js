@@ -1,5 +1,5 @@
 import express from 'express';
-import { ENEMIES, getEnemiesbyWorld } from '../config/enemiesConfig.js';
+import { ENEMIES, getEnemiesByWorld } from '../config/enemiesConfig.js';
 
 const router = express.Router();
 
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 // Get enemies by world
 router.get('/world/:worldId', async (req, res) => {
   try {
-    const enemies = getEnemiesbyWorld(parseInt(req.params.worldId));
+    const enemies = getEnemiesByWorld(parseInt(req.params.worldId));
     res.json(enemies);
   } catch (error) {
     console.error('Error fetching enemies by world:', error);
