@@ -1,0 +1,44 @@
+#!/bin/sh
+# Mock educativo de vi - Editor de texto clásico de Linux
+# Muestra información educativa sobre vi y sale
+
+cat << 'EOF'
+╔══════════════════════════════════════════════════╗
+║              vi - Editor de Texto                ║
+║         El editor clásico de Unix/Linux          ║
+╚══════════════════════════════════════════════════╝
+
+MODOS DE vi:
+  i     - Modo Inserción (escribir texto)
+  ESC   - Volver al modo Comando
+  :     - Modo Línea de comandos
+  v     - Modo Visual (seleccionar texto)
+
+COMANDOS BÁSICOS:
+  :w        - Guardar (write)
+  :q        - Salir (quit)
+  :wq       - Guardar y salir
+  :q!       - Salir sin guardar
+  :w nombre - Guardar como
+
+EDICIÓN:
+  i     - Insertar antes del cursor
+  a     - Insertar después del cursor
+  o     - Nueva línea abajo
+  O     - Nueva línea arriba
+  dd    - Borrar línea
+  yy    - Copiar línea (yank)
+  p     - Pegar
+  u     - Deshacer
+  /patrón - Buscar patrón
+  n     - Siguiente coincidencia
+
+EJEMPLO:
+  vi archivo.txt    # Abrir archivo
+  i                 # Entrar en modo inserción
+  # Escribir texto...
+  ESC               # Salir de inserción
+  :wq               # Guardar y salir
+
+Nota: vi es un editor modal. ¡Aprender sus modos es clave!
+EOF

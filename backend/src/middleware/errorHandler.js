@@ -16,7 +16,7 @@ export const errorHandler = (err, req, res, next) => {
   console.error(err.stack || err.message);
 
   const body = {
-    error: err.message || 'Error interno del servidor',
+    error: isDev ? (err.message || 'Error interno del servidor') : 'Error interno del servidor',
     code: err.code || `HTTP_${status}`,
     method: req.method,
     path: req.originalUrl,

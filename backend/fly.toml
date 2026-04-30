@@ -32,5 +32,5 @@ primary_region = 'dfw'
   cpus = 1
   memory_mb = 512
 
-[processes]
-  app = "node src/server.js"
+# [processes] removido: el CMD del Dockerfile usa tini como entrypoint
+# Fly.io usará: ENTRYPOINT ["/sbin/tini", "--"] CMD ["node", "src/server.js"]

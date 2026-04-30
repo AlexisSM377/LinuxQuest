@@ -27,6 +27,20 @@ export const ACHIEVEMENTS = {
     icon: '🌏',
     xp_bonus: 100
   },
+  mundo_4: {
+    id: 'mundo_4',
+    title: 'Explorador del Mundo 4',
+    description: 'Completa todas las quests del Mundo 4',
+    icon: '🔧',
+    xp_bonus: 100
+  },
+  mundo_5: {
+    id: 'mundo_5',
+    title: 'Explorador del Mundo 5',
+    description: 'Completa todas las quests del Mundo 5',
+    icon: '🛡️',
+    xp_bonus: 100
+  },
   nivel_5: {
     id: 'nivel_5',
     title: 'Aprendiz',
@@ -65,7 +79,7 @@ export const ACHIEVEMENTS = {
   completista: {
     id: 'completista',
     title: 'Completista',
-    description: 'Completa todas las 95 quests',
+    description: 'Completa las 95 quests del curso LPI',
     icon: '🏆',
     xp_bonus: 1000
   },
@@ -79,7 +93,7 @@ export const ACHIEVEMENTS = {
   guerrero_persistente: {
     id: 'guerrero_persistente',
     title: 'Guerrero Persistente',
-    description: 'Completa 100 quests',
+    description: 'Completa 80 o más quests',
     icon: '⚔️',
     xp_bonus: 250
   }

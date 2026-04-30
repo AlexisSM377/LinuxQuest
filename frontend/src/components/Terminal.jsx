@@ -1,17 +1,130 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { Terminal as XTerm } from 'xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { io } from 'socket.io-client';
 import { useAuthStore } from '../store/authStore';
 import 'xterm/css/xterm.css';
 
-export default function Terminal({ questId = null }) {
+const TERMINAL_THEMES = {
+  1: {
+    name: 'CLASSIC',
+    background: '#050a08',
+    foreground: '#5fff7f',
+    cursor: '#5fff7f',
+    selectionBackground: '#3fcc5f44',
+    black: '#1a0f1f', brightBlack: '#4a2f54',
+    red: '#e85d4d', brightRed: '#ff7f7f',
+    green: '#7fb069', brightGreen: '#5fff7f',
+    yellow: '#f5a623', brightYellow: '#ffd58a',
+    blue: '#5fb3d4', brightBlue: '#5fffdf',
+    magenta: '#8b5a96', brightMagenta: '#cba6f7',
+    cyan: '#5fb3d4', brightCyan: '#5fffdf',
+    white: '#f4e4c1', brightWhite: '#ffffff',
+    barBg: '#0a1410',
+  },
+  4: {
+    name: 'PHOSPHOR',
+    background: '#0a0f0a',
+    foreground: '#33ff33',
+    cursor: '#33ff33',
+    selectionBackground: '#33ff3344',
+    black: '#0a0f0a', brightBlack: '#1a3a1a',
+    red: '#ff3333', brightRed: '#ff6666',
+    green: '#33ff33', brightGreen: '#66ff66',
+    yellow: '#ffff33', brightYellow: '#ffff66',
+    blue: '#33ffff', brightBlue: '#66ffff',
+    magenta: '#ff33ff', brightMagenta: '#ff66ff',
+    cyan: '#33ffff', brightCyan: '#66ffff',
+    white: '#ccffcc', brightWhite: '#ffffff',
+    barBg: '#0d1a0d',
+  },
+  8: {
+    name: 'AMBER',
+    background: '#0f0800',
+    foreground: '#ffb000',
+    cursor: '#ffb000',
+    selectionBackground: '#ffb00044',
+    black: '#0f0800', brightBlack: '#2a1800',
+    red: '#ff4444', brightRed: '#ff7777',
+    green: '#ffb000', brightGreen: '#ffcc44',
+    yellow: '#ffdd00', brightYellow: '#ffee66',
+    blue: '#ff8800', brightBlue: '#ffaa44',
+    magenta: '#ff6600', brightMagenta: '#ff8844',
+    cyan: '#ffcc00', brightCyan: '#ffdd66',
+    white: '#ffddaa', brightWhite: '#ffffff',
+    barBg: '#1a0f05',
+  },
+  13: {
+    name: 'COPPERPLATE',
+    background: '#1a1520',
+    foreground: '#d4c5a0',
+    cursor: '#d4a040',
+    selectionBackground: '#d4a04044',
+    black: '#1a1520', brightBlack: '#2a2530',
+    red: '#c45c4a', brightRed: '#e87d6a',
+    green: '#7a9a5a', brightGreen: '#9aba7a',
+    yellow: '#d4a040', brightYellow: '#f4c060',
+    blue: '#6a8ab0', brightBlue: '#8aaad0',
+    magenta: '#8a6a9a', brightMagenta: '#aa8aba',
+    cyan: '#5a9a9a', brightCyan: '#7ababa',
+    white: '#d4c5a0', brightWhite: '#f0e8d0',
+    barBg: '#201a28',
+  },
+};
+
+const THEME_UNLOCK_LEVELS = [1, 4, 8, 13];
+
+function getThemeForLevel(level) {
+  let themeId = 1;
+  for (const lvl of THEME_UNLOCK_LEVELS) {
+    if (level >= lvl) themeId = lvl;
+  }
+  return themeId;
+}
+
+export default function Terminal({ questId = null, onCommandExec = null, userLevel = 1 }) {
   const terminalRef = useRef(null);
   const socketRef = useRef(null);
   const commandBuffer = useRef('');
+  const cursorPos = useRef(0);
+  const history = useRef([]);
+  const historyIndex = useRef(-1);
   const { token } = useAuthStore();
   const termInstanceRef = useRef(null);
+  const fitAddonRef = useRef(null);
+  const questIdRef = useRef(questId);
+  const onCommandExecRef = useRef(onCommandExec);
+  const resizeHandlerRef = useRef(null);
+  const [connectionStatus, setConnectionStatus] = useState('connecting');
 
+  // Sync refs outside render
+  useEffect(() => {
+    questIdRef.current = questId;
+  }, [questId]);
+  useEffect(() => {
+    onCommandExecRef.current = onCommandExec;
+  }, [onCommandExec]);
+
+  const themeId = getThemeForLevel(userLevel);
+  const theme = TERMINAL_THEMES[themeId];
+
+  const redrawBuffer = useCallback((term) => {
+    const buf = commandBuffer.current;
+    const pos = cursorPos.current;
+    term.write('\r\x1b[2K');
+    term.write('\x1b[94m$\x1b[0m ');
+    term.write(buf);
+    term.write(`\x1b[${buf.length - pos}D`);
+  }, []);
+
+  // Aplicar tema sin recrear terminal
+  useEffect(() => {
+    const term = termInstanceRef.current;
+    if (!term) return;
+    term.options.theme = theme;
+  }, [theme]);
+
+  // Inicializar terminal (solo una vez por token)
   useEffect(() => {
     if (!terminalRef.current || !token) return;
 
@@ -23,35 +136,16 @@ export default function Terminal({ questId = null }) {
       try {
         term = new XTerm({
           cursorBlink: true,
-          theme: {
-            background: '#050a08',
-            foreground: '#5fff7f',
-            cursor: '#5fff7f',
-            selectionBackground: '#3fcc5f44',
-            black: '#1a0f1f',
-            brightBlack: '#4a2f54',
-            red: '#e85d4d',
-            brightRed: '#ff7f7f',
-            green: '#7fb069',
-            brightGreen: '#5fff7f',
-            yellow: '#f5a623',
-            brightYellow: '#ffd58a',
-            blue: '#5fb3d4',
-            brightBlue: '#5fffdf',
-            magenta: '#8b5a96',
-            brightMagenta: '#cba6f7',
-            cyan: '#5fb3d4',
-            brightCyan: '#5fffdf',
-            white: '#f4e4c1',
-            brightWhite: '#ffffff',
-          },
+          theme,
           fontFamily: '"JetBrains Mono", "Courier New", monospace',
           fontSize: 13,
           lineHeight: 1.55,
+          allowProposedApi: true,
         });
 
         fitAddon = new FitAddon();
         term.loadAddon(fitAddon);
+        fitAddonRef.current = fitAddon;
 
         if (mounted && terminalRef.current) {
           term.open(terminalRef.current);
@@ -61,17 +155,26 @@ export default function Terminal({ questId = null }) {
         await new Promise(resolve => setTimeout(resolve, 100));
 
         if (mounted && fitAddon && termInstanceRef.current) {
-          try { fitAddon.fit(); } catch {}
+          try { fitAddon.fit(); } catch { /* not visible */ }
         }
 
         if (mounted && term) {
           term.onData((data) => {
+            const buf = commandBuffer.current;
+            const pos = cursorPos.current;
+
             if (data === '\r') {
-              const command = commandBuffer.current.trim();
+              const command = buf.trim();
               commandBuffer.current = '';
+              cursorPos.current = 0;
+              historyIndex.current = -1;
               if (command.length > 0) {
+                if (history.current[0] !== command) {
+                  history.current.unshift(command);
+                  if (history.current.length > 50) history.current.pop();
+                }
                 term.write('\r\n');
-                socketRef.current?.emit('command', command, questId, (response) => {
+                socketRef.current?.emit('command', command, questIdRef.current, (response) => {
                   if (!term) return;
                   if (response?.error) {
                     term.write(`\x1b[91m${response.error}\x1b[0m\r\n`);
@@ -81,18 +184,96 @@ export default function Terminal({ questId = null }) {
                     term.write('(sin salida)\r\n');
                   }
                   term.write('\x1b[94m$\x1b[0m ');
+                  if (onCommandExecRef.current) onCommandExecRef.current(command, response);
                 });
               } else {
                 term.write('\x1b[94m$\x1b[0m ');
               }
-            } else if (data === '' || data === '\b') {
-              if (commandBuffer.current.length > 0) {
-                commandBuffer.current = commandBuffer.current.slice(0, -1);
-                term.write('\b \b');
+              return;
+            }
+
+            if (data === '\x7f' || data === '\b') {
+              if (pos > 0) {
+                commandBuffer.current = buf.slice(0, pos - 1) + buf.slice(pos);
+                cursorPos.current = pos - 1;
+                redrawBuffer(term);
               }
-            } else if (data >= ' ' && data <= '~') {
-              commandBuffer.current += data;
-              term.write(data);
+              return;
+            }
+
+            if (data === '\x1b[3~') {
+              if (pos < buf.length) {
+                commandBuffer.current = buf.slice(0, pos) + buf.slice(pos + 1);
+                redrawBuffer(term);
+              }
+              return;
+            }
+
+            if (data === '\x1b[D') {
+              if (pos > 0) {
+                cursorPos.current = pos - 1;
+                term.write('\x1b[D');
+              }
+              return;
+            }
+
+            if (data === '\x1b[C') {
+              if (pos < buf.length) {
+                cursorPos.current = pos + 1;
+                term.write('\x1b[C');
+              }
+              return;
+            }
+
+            if (data === '\x1b[A') {
+              if (history.current.length > 0) {
+                const newIdx = Math.min(historyIndex.current + 1, history.current.length - 1);
+                if (newIdx !== historyIndex.current) {
+                  historyIndex.current = newIdx;
+                  commandBuffer.current = history.current[newIdx];
+                  cursorPos.current = commandBuffer.current.length;
+                  redrawBuffer(term);
+                }
+              }
+              return;
+            }
+
+            if (data === '\x1b[B') {
+              if (historyIndex.current > 0) {
+                historyIndex.current--;
+                commandBuffer.current = history.current[historyIndex.current];
+                cursorPos.current = commandBuffer.current.length;
+                redrawBuffer(term);
+              } else if (historyIndex.current === 0) {
+                historyIndex.current = -1;
+                commandBuffer.current = '';
+                cursorPos.current = 0;
+                redrawBuffer(term);
+              }
+              return;
+            }
+
+            if (data === '\x1b[H') {
+              cursorPos.current = 0;
+              term.write(`\x1b[${buf.length}D`);
+              return;
+            }
+
+            if (data === '\x1b[F') {
+              cursorPos.current = buf.length;
+              term.write(`\x1b[${buf.length - pos}C`);
+              return;
+            }
+
+            if (data >= ' ' && data <= '~') {
+              commandBuffer.current = buf.slice(0, pos) + data + buf.slice(pos);
+              cursorPos.current = pos + 1;
+              if (pos === buf.length) {
+                term.write(data);
+              } else {
+                redrawBuffer(term);
+              }
+              return;
             }
           });
         }
@@ -104,6 +285,7 @@ export default function Terminal({ questId = null }) {
           });
 
           socketRef.current.on('connect', () => {
+            setConnectionStatus('connected');
             if (term) {
               term.write('\x1b[92m● CONECTADO AL SERVIDOR\x1b[0m\r\n');
               term.write('\x1b[90mLinuxQuest Terminal v1.0 — escribe "help" para ayuda\x1b[0m\r\n\r\n');
@@ -111,7 +293,23 @@ export default function Terminal({ questId = null }) {
             }
           });
 
+          socketRef.current.on('disconnect', () => {
+            setConnectionStatus('disconnected');
+            if (term) {
+              term.write('\r\n\x1b[91m● DESCONECTADO DEL SERVIDOR\x1b[0m\r\n');
+            }
+          });
+
+          socketRef.current.on('reconnect', () => {
+            setConnectionStatus('connected');
+            if (term) {
+              term.write('\r\n\x1b[92m● RECONECTADO\x1b[0m\r\n');
+              term.write('\x1b[94m$\x1b[0m ');
+            }
+          });
+
           socketRef.current.on('connect_error', (error) => {
+            setConnectionStatus('error');
             if (term) {
               term.write(`\x1b[91m✗ Error de conexión: ${error.message}\x1b[0m\r\n`);
               term.write('\x1b[94m$\x1b[0m ');
@@ -119,11 +317,12 @@ export default function Terminal({ questId = null }) {
           });
         }
 
+        // Resize handler (fuera del async, cleanup funciona correctamente)
         const handleResize = () => {
-          if (fitAddon && term) try { fitAddon.fit(); } catch {}
+          if (fitAddon && term) try { fitAddon.fit(); } catch { /* not visible */ }
         };
+        resizeHandlerRef.current = handleResize;
         window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
       } catch (error) {
         console.error('Terminal initialization error:', error);
       }
@@ -133,10 +332,35 @@ export default function Terminal({ questId = null }) {
 
     return () => {
       mounted = false;
+      if (resizeHandlerRef.current) {
+        window.removeEventListener('resize', resizeHandlerRef.current);
+        resizeHandlerRef.current = null;
+      }
       socketRef.current?.disconnect();
-      try { termInstanceRef.current?.dispose(); } catch {}
+      try { termInstanceRef.current?.dispose(); } catch { /* already disposed */ }
+      termInstanceRef.current = null;
+      fitAddonRef.current = null;
     };
-  }, [token, questId]);
+  }, [token]); // NO incluir theme aquí
+
+  const themeNames = {};
+  for (const [lvl, t] of Object.entries(TERMINAL_THEMES)) {
+    themeNames[lvl] = t.name;
+  }
+  const unlockedThemes = THEME_UNLOCK_LEVELS.filter(l => userLevel >= l);
+
+  const statusColors = {
+    connected: 'var(--leaf)',
+    disconnected: 'var(--blood)',
+    error: 'var(--blood)',
+    connecting: 'var(--amber)',
+  };
+  const statusLabels = {
+    connected: 'EN VIVO',
+    disconnected: 'OFFLINE',
+    error: 'ERROR',
+    connecting: '...',
+  };
 
   return (
     <div className="term" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -150,7 +374,10 @@ export default function Terminal({ questId = null }) {
           SANDBOX — {questId ? `quest/${String(questId).padStart(3, '0')}` : 'libre'}
         </span>
         <div style={{ flex: 1 }} />
-        <span style={{ color: 'var(--leaf)' }}>● EN VIVO</span>
+        <span style={{ fontSize: 7, opacity: 0.6, marginRight: 8 }}>
+          TEMAS: {unlockedThemes.map(l => themeNames[l]).join(' | ')}
+        </span>
+        <span style={{ color: statusColors[connectionStatus] }}>● {statusLabels[connectionStatus]}</span>
       </div>
 
       <div

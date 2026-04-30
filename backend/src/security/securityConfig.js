@@ -98,7 +98,8 @@ export const SECURITY_CONFIG = {
   // Patrones peligrosos que siempre se bloquean (regex)
   GLOBAL_DANGEROUS_PATTERNS: [
     // Inyección de comandos via shell metacharacters
-    /[;&|`]/,
+    // NOTA: | se permite para pipes educativos (ls | grep, cat | sort, etc.)
+    /[;&`]/,
 
     // Sustitución de comandos
     /\$\(/,
@@ -162,11 +163,41 @@ export const SECURITY_CONFIG = {
 
   // Comandos permitidos por defecto (si no se especifica en la misión)
   DEFAULT_ALLOWED_COMMANDS: [
+    // Básicos
     'help', 'pwd', 'ls', 'cd', 'echo', 'cat', 'touch', 'mkdir', 'rm', 'mv', 'cp',
+    // Búsqueda y procesamiento
     'find', 'grep', 'sed', 'awk', 'sort', 'uniq', 'wc', 'head', 'tail', 'tr',
-    'cut', 'paste', 'comm', 'diff', 'file', 'stat', 'whoami', 'uname', 'date',
-    'uptime', 'hostname', 'env', 'printenv', 'history', 'clear', 'man',
-    'apropos', 'less', 'more', 'tac', 'base64', 'md5sum', 'sha256sum',
+    'cut', 'paste', 'comm', 'diff', 'file', 'stat', 'tee', 'xargs',
+    // Sistema e info
+    'whoami', 'id', 'who', 'uname', 'date', 'uptime', 'hostname', 'nproc',
+    'env', 'printenv', 'history', 'clear', 'which', 'type',
+    // Documentación
+    'man', 'apropos', 'less', 'more', 'tac', 'base64', 'md5sum', 'sha256sum',
+    // Procesos
+    'ps', 'top', 'kill', 'killall', 'pkill', 'jobs', 'bg', 'fg', 'nohup', 'sleep',
+    // Disco y memoria
+    'df', 'du',     'lsblk', 'free', 'lscpu', 'lsusb', 'lspci', 'dmesg',
+    // Red
+    'ip', 'ping', 'host', 'dig', 'nslookup', 'ss', 'netstat', 'ifconfig',
+    'curl', 'ssh', 'ssh-keygen',
+    // Compresión
+    'tar', 'gzip', 'gunzip', 'zip', 'unzip', 'bzip2', 'bunzip2', 'xz', 'unxz',
+    // Permisos y usuarios
+    'chmod', 'chown', 'chgrp', 'ln', 'umask', 'getfacl', 'setfacl',
+    'useradd', 'usermod', 'groupadd', 'passwd', 'su', 'sudo',
+    'locate', 'updatedb', 'groups',
+    // Criptografía
+    'gpg',
+    // Editores
+    'vi', 'nano',
+    // Seguridad/auditoría
+    'iptables',
+    // Misc
+    'seq', 'yes', 'rev', 'column', 'fmt', 'fold', 'nl', 'od', 'strings',
+    'screen', 'tmux', 'timeout', 'test', 'true', 'false', 'printf',
+    'read', 'shift', 'return', 'exit', 'trap',
+    'wait', 'getopts', 'alias', 'unalias', 'export', 'set', 'unset',
+    'shopt', 'complete', 'compgen', 'builtin', 'command',
   ],
 
   // Argumentos peligrosos por comando (defensa profunda)

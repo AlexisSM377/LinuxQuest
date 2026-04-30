@@ -1,0 +1,44 @@
+#!/bin/sh
+# Mock educativo de htop - Monitor de procesos mejorado
+# Muestra una instantánea del sistema y sale
+
+echo "╔══════════════════════════════════════════════════╗"
+echo "║              htop - Monitor de Procesos          ║"
+echo "║         Versión mejorada de top                  ║"
+echo "╚══════════════════════════════════════════════════╝"
+echo ""
+
+# Mostrar info del sistema real
+echo "┌─ CPU ─────────────────────────────────────────┐"
+if [ -f /proc/stat ]; then
+  head -1 /proc/stat | awk '{printf "  Uso: %.1f%%  (user: %s, system: %s)\n", ($2+$4)*100/($2+$4+$5), $2, $4}'
+else
+  echo "  CPU info no disponible"
+fi
+
+echo "├─ Memoria ─────────────────────────────────────┤"
+if command -v free >/dev/null 2>&1; then
+  free -h | grep Mem | awk '{printf "  Total: %s  Usado: %s  Libre: %s\n", $2, $3, $4}'
+fi
+
+echo "├─ Procesos ────────────────────────────────────┤"
+ps aux --sort=-%cpu 2>/dev/null | head -6 || ps aux 2>/dev/null | head -6
+
+echo "└───────────────────────────────────────────────┘"
+echo ""
+echo "ATAJOS DE TECLADO:"
+echo "  F1     - Ayuda"
+echo "  F5     - Árbol de procesos"
+echo "  F6     - Ordenar por columna"
+echo "  F9     - Matar proceso (kill)"
+echo "  F10    - Salir"
+echo "  q      - Salir"
+echo "  /      - Buscar proceso"
+echo "  H      - Ocultar procesos del usuario"
+echo "  u      - Filtrar por usuario"
+echo ""
+echo "DIFERENCIAS CON top:"
+echo "  - Interfaz con colores"
+echo "  - Barra de CPU gráfica"
+echo "  - Fácil de usar con mouse"
+echo "  - Árbol de procesos (F5)"

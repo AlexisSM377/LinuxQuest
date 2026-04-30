@@ -15,7 +15,7 @@ export default class AchievementChecker {
       const levelAchievements = await this.checkLevelAchievements(level);
       newAchievements.push(...levelAchievements);
 
-      // Check world completion achievements
+      // Check world completion achievements (ALL 5 WORLDS)
       const worldAchievements = await this.checkWorldAchievements(userId);
       newAchievements.push(...worldAchievements);
 
@@ -63,21 +63,14 @@ export default class AchievementChecker {
   static async checkWorldAchievements(userId) {
     const achievements = [];
 
-    const worldQuests = {
-      1: await this.getWorldCompletionCount(userId, 1),
-      2: await this.getWorldCompletionCount(userId, 2),
-      3: await this.getWorldCompletionCount(userId, 3)
-    };
-
-    const worldTotals = {
-      1: await this.getTotalWorldQuests(1),
-      2: await this.getTotalWorldQuests(2),
-      3: await this.getTotalWorldQuests(3)
-    };
-
-    if (worldQuests[1] === worldTotals[1]) achievements.push('mundo_1');
-    if (worldQuests[2] === worldTotals[2]) achievements.push('mundo_2');
-    if (worldQuests[3] === worldTotals[3]) achievements.push('mundo_3');
+    // Check ALL 5 worlds
+    for (let world = 1; world <= 5; world++) {
+      const completed = await this.getWorldCompletionCount(userId, world);
+      const total = await this.getTotalWorldQuests(world);
+      if (completed === total && total > 0) {
+        achievements.push(`mundo_${world}`);
+      }
+    }
 
     return achievements;
   }
@@ -85,7 +78,7 @@ export default class AchievementChecker {
   static async checkQuestCountAchievements(userId, totalCompleted) {
     const achievements = [];
     if (totalCompleted >= 50) achievements.push('coleccionista');
-    if (totalCompleted >= 100) achievements.push('guerrero_persistente');
+    if (totalCompleted >= 80) achievements.push('guerrero_persistente');
     return achievements;
   }
 
