@@ -1,4 +1,4 @@
-# LinuxQuest - Status (2026-04-28) - 🟢 PRODUCTION READY
+# LinuxQuest - Status (2026-04-30) - 🟢 PRODUCTION READY
 
 ## ✅ WEEKS 1-6 COMPLETED
 
@@ -466,7 +466,37 @@ All tables: CREATED
 - `frontend/src/App.jsx` (ToastContainer global)
 
 ## Last Updated
-2026-04-29 - Semana 14 COMPLETADA (Sandbox Hardening + Mocks Educativos) ✅
-**PROJECT STATUS: 🟢 PRODUCTION READY (HARDENED)**
-**DEPLOYMENT: Frontend desplegado en Vercel, Backend listo para Fly.io redeploy**
-**SECURITY: 10+ CAPAS DE DEFENSA EN PROFUNDIDAD**
+2026-04-30 - Major Bugfix Session (17 bugs fixed) ✅
+
+### Session 2026-04-30 - Bugfix Marathon
+
+**Backend Bugs Fixed:**
+- [x] Transaction logic in quest completion (all queries now use `client`)
+- [x] Achievement XP bonuses now applied when earned
+- [x] Pipe validation now checks ALL commands in pipeline, not just first
+- [x] Removed `wget` from contradictory ALLOWED + FORBIDDEN lists
+- [x] Seed script now TRUNCATEs before inserting (idempotent)
+- [x] Fixed Chinese characters in Spanish quest hints
+
+**Frontend Bugs Fixed:**
+- [x] Quest auto-complete tracks ALL required commands (not just one)
+- [x] Battle hits only register for required commands
+- [x] Boss battles only trigger on actual boss quests (IDs 15/35/50/70/90)
+- [x] Terminal resize listener no longer leaks
+- [x] Theme change no longer destroys/recreates terminal + socket
+- [x] Victory/defeat timeouts properly cleaned up on unmount
+- [x] `completeQuest` adds new progress entry if missing
+- [x] Ref assignments moved out of render in Terminal.jsx
+
+**Improvements:**
+- [x] `validateToken()` called on App mount for session validation
+- [x] Socket disconnect/reconnect UI indicators
+- [x] `handleQuestComplete` memoized with `useCallback`
+- [x] Shared constants extracted to `gameConfig.js`
+- [x] ErrorBoundary component added
+- [x] vi/nano/htop mock scripts added
+- [x] AGENTS.md updated (fixed bugs removed, gotchas updated)
+
+**PROJECT STATUS: 🟢 PRODUCTION READY**
+**DEPLOYMENT: Frontend en Vercel, Backend listo para Fly.io redeploy**
+**SECURITY: 10+ CAPAS DE DEFENSA EN PROFUNDIDAD + pipe validation completa**
