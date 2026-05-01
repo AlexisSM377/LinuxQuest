@@ -19,11 +19,11 @@ function QuestInfo({ quest }) {
   const diff = DIFF_MAP[quest.difficulty] || { label: '?', cls: 'diff-med' };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
 
       {/* Header */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
           <span className={'diff ' + diff.cls}>{diff.label}</span>
           <span className="tiny up muted">MUNDO {quest.world} · MISIÓN {String(quest.order).padStart(2, '0')}</span>
           {quest.rewards && (
@@ -32,9 +32,9 @@ function QuestInfo({ quest }) {
             </span>
           )}
         </div>
-        <h3 style={{ fontSize: 13, marginBottom: 8 }}>{quest.title.toUpperCase()}</h3>
+        <h3 style={{ fontSize: 12, marginBottom: 6 }}>{quest.title.toUpperCase()}</h3>
         {quest.description && (
-          <p className="vt" style={{ color: 'var(--parchment-2)', fontSize: 18 }}>{quest.description}</p>
+          <p className="vt" style={{ color: 'var(--parchment-2)', fontSize: 16 }}>{quest.description}</p>
         )}
       </div>
 
@@ -43,21 +43,21 @@ function QuestInfo({ quest }) {
 
       {/* Story */}
       {quest.story && (
-        <div className="pcard" style={{ background: 'var(--bg-3)', padding: 14 }}>
+        <div className="pcard" style={{ background: 'var(--bg-3)', padding: 10 }}>
           <SectionLabel color="var(--sky)">HISTORIA</SectionLabel>
-          <p className="vt" style={{ color: 'var(--parchment-2)', fontSize: 17 }}>{quest.story}</p>
+          <p className="vt" style={{ color: 'var(--parchment-2)', fontSize: 15 }}>{quest.story}</p>
         </div>
       )}
 
       {/* Objectives */}
       {quest.objectives?.length > 0 && (
-        <div className="pcard" style={{ background: 'var(--bg-3)', padding: 14 }}>
+        <div className="pcard" style={{ background: 'var(--bg-3)', padding: 10 }}>
           <SectionLabel color="var(--leaf)">OBJETIVOS</SectionLabel>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
             {quest.objectives.map((obj, i) => (
-              <li key={i} className="vt" style={{ display: 'flex', gap: 12, alignItems: 'flex-start', fontSize: 18 }}>
+              <li key={i} className="vt" style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontSize: 16 }}>
                 <span style={{
-                  width: 14, height: 14, flexShrink: 0, marginTop: 4,
+                  width: 12, height: 12, flexShrink: 0, marginTop: 3,
                   border: '3px solid var(--ink)', background: 'transparent', display: 'inline-block',
                 }} />
                 {obj.description || obj}
@@ -69,11 +69,11 @@ function QuestInfo({ quest }) {
 
       {/* Commands */}
       {quest.required_commands?.length > 0 && (
-        <div className="pcard" style={{ background: 'var(--bg-3)', padding: 14 }}>
+        <div className="pcard" style={{ background: 'var(--bg-3)', padding: 10 }}>
           <SectionLabel color="var(--sky)">COMANDOS PERMITIDOS</SectionLabel>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {quest.required_commands.map((cmd, i) => (
-              <code key={i} style={{ fontSize: 12, padding: '4px 8px' }}>{cmd}</code>
+              <code key={i} style={{ fontSize: 11, padding: '3px 7px' }}>{cmd}</code>
             ))}
           </div>
         </div>
@@ -81,9 +81,9 @@ function QuestInfo({ quest }) {
 
       {/* Rewards */}
       {quest.rewards && (
-        <div className="pcard" style={{ background: 'var(--bg-3)', padding: 14 }}>
+        <div className="pcard" style={{ background: 'var(--bg-3)', padding: 10 }}>
           <SectionLabel color="var(--amber)">RECOMPENSAS</SectionLabel>
-          <div style={{ display: 'flex', gap: 16 }}>
+          <div style={{ display: 'flex', gap: 12 }}>
             <span className="chip">XP: +{quest.rewards.xp || 0}</span>
             <span className="chip">◈ +{quest.rewards.coins || 0}</span>
           </div>
@@ -116,7 +116,7 @@ function QuestInfo({ quest }) {
   );
 }
 
-export default function Quest({ onCompleteClick, battleRef }) {
+export default function Quest({ onCompleteClick, battleRef, canComplete = false, onGoToTerminal }) {
   const {
     currentQuestId, currentQuest, quests, loading, npcs, enemies,
     setCurrentQuest, setCurrentQuestId, userProgress, fetchUserProgress, fetchNPCs,
@@ -223,7 +223,7 @@ export default function Quest({ onCompleteClick, battleRef }) {
     }}>
 
       {/* Quest detail — scrollable */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: 16 }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '10px 12px' }}>
         <QuestInfo quest={questWithNPC || currentQuest} />
 
         {/* Boss battle */}
@@ -240,16 +240,27 @@ export default function Quest({ onCompleteClick, battleRef }) {
       </div>
 
       {/* Complete / Locked button */}
-      <div style={{ padding: 12, borderTop: '4px solid var(--ink)', flexShrink: 0 }}>
+      <div style={{ padding: '8px 12px', borderTop: '4px solid var(--ink)', flexShrink: 0 }}>
         {unlocked ? (
-          <button
-            className={completing ? 'btn' : 'btn btn-leaf'}
-            onClick={handleCompleteClick}
-            disabled={completing}
-            style={{ width: '100%', opacity: completing ? 0.6 : 1 }}
-          >
-            {completing ? 'COMPLETANDO...' : '✓ COMPLETAR MISIÓN'}
-          </button>
+          <div style={{ display: 'flex', gap: 8, flexDirection: 'column' }}>
+            {onGoToTerminal && !canComplete && (
+              <button
+                className="btn btn-ghost"
+                onClick={onGoToTerminal}
+                style={{ width: '100%', fontSize: 9, padding: '10px 14px', border: '2px solid var(--leaf)', color: 'var(--leaf)' }}
+              >
+                ▶ IR AL TERMINAL
+              </button>
+            )}
+            <button
+              className={completing || !canComplete ? 'btn' : 'btn btn-leaf'}
+              onClick={handleCompleteClick}
+              disabled={completing || !canComplete}
+              style={{ width: '100%', opacity: completing || !canComplete ? 0.5 : 1, cursor: !canComplete ? 'not-allowed' : 'pointer' }}
+            >
+              {completing ? 'COMPLETANDO...' : canComplete ? '✓ COMPLETAR MISIÓN' : '⌨ EJECUTA LOS COMANDOS PRIMERO'}
+            </button>
+          </div>
         ) : (
           <div>
             <div className="btn" style={{ width: '100%', opacity: 0.5, cursor: 'not-allowed', marginBottom: 10 }}>
@@ -268,7 +279,7 @@ export default function Quest({ onCompleteClick, battleRef }) {
       {/* World / Quest list */}
       <div style={{
         borderTop: '4px solid var(--ink)',
-        maxHeight: 200, overflowY: 'auto', flexShrink: 0,
+        maxHeight: 240, overflowY: 'auto', flexShrink: 0,
         background: 'var(--bg)',
       }}>
         {worlds.map((world, wi) => (

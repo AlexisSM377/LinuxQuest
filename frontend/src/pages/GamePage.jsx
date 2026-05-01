@@ -8,6 +8,16 @@ import GameNav from '../components/game/GameNav';
 import { useAuthStore } from '../store/authStore';
 import { useGameStore } from '../store/gameStore';
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return isMobile;
+}
+
 export default function GamePage() {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
@@ -19,8 +29,11 @@ export default function GamePage() {
   } = useGameStore();
   const [notification, setNotification] = useState(null);
   const [showAchievements, setShowAchievements] = useState(false);
+  const [canComplete, setCanComplete] = useState(false);
+  const [activeTab, setActiveTab] = useState('quest');
   const battleRef = useRef(null);
   const executedCommandsRef = useRef(new Set());
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (!isAuthenticated) navigate('/');
@@ -35,10 +48,11 @@ export default function GamePage() {
     fetchEnemies();
   }, []);
 
-  // Reset executed commands when quest changes
   useEffect(() => {
     executedCommandsRef.current = new Set();
-  }, [currentQuestId]);
+    const required = currentQuest?.required_commands || [];
+    setCanComplete(required.length === 0);
+  }, [currentQuestId, currentQuest]);
 
   const handleQuestComplete = useCallback(async () => {
     if (!currentQuestId) return;
@@ -71,7 +85,6 @@ export default function GamePage() {
     const required = quest.required_commands || [];
     const cmdName = command.trim().split(/\s+/)[0];
 
-    // Battle: solo registrar hits por comandos requeridos de la quest
     const isRequiredCommand = required.length === 0 || required.includes(cmdName);
     if (battleRef.current && isRequiredCommand) {
       if (response.error) {
@@ -84,19 +97,17 @@ export default function GamePage() {
     if (response.error) return;
     if (required.length === 0) return;
 
-    // Verificar que el comando tiene argumentos reales (no solo --help/-h)
     const args = command.trim().split(/\s+/).slice(1);
     const isHelpOnly = args.length > 0 && args.every(a => a === '--help' || a === '-h');
     if (isHelpOnly) return;
 
-    // Trackear comando ejecutado
     if (required.includes(cmdName)) {
       executedCommandsRef.current.add(cmdName);
     }
 
-    // Solo completar cuando TODOS los required_commands hayan sido ejecutados
     const allDone = required.every(cmd => executedCommandsRef.current.has(cmd));
     if (allDone) {
+      setCanComplete(true);
       const alreadyDone = userProgress.some(
         p => p.quest_id === quest.id && p.status === 'completed'
       );
@@ -105,6 +116,28 @@ export default function GamePage() {
       }
     }
   }, [currentQuest, userProgress, handleQuestComplete]);
+
+  // En móvil: cambiar a terminal cuando el usuario completa comandos
+  const handleCommandExecMobile = useCallback((command, response) => {
+    handleCommandExec(command, response);
+  }, [handleCommandExec]);
+
+  const questPanel = (
+    <Quest
+      onCompleteClick={handleQuestComplete}
+      battleRef={battleRef}
+      canComplete={canComplete}
+      onGoToTerminal={isMobile ? () => setActiveTab('terminal') : undefined}
+    />
+  );
+
+  const terminalPanel = (
+    <Terminal
+      questId={currentQuestId}
+      userLevel={userStats?.level || 1}
+      onCommandExec={isMobile ? handleCommandExecMobile : handleCommandExec}
+    />
+  );
 
   return (
     <div style={{
@@ -117,52 +150,74 @@ export default function GamePage() {
     }}>
       <GameNav onShowAchievements={() => setShowAchievements(true)} />
 
-      {/* Breadcrumb bar */}
-      <div style={{
-        padding: '12px 20px',
-        borderBottom: '4px solid var(--ink)',
-        background: 'var(--bg-2)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 16,
-        flexShrink: 0,
-      }}>
-        <button
-          className="btn btn-ghost"
-          onClick={() => navigate('/')}
-          style={{ fontSize: 9, padding: '8px 12px' }}
-        >
-          ◀ MAPA DE MISIONES
-        </button>
-        <div style={{ flex: 1 }} />
-        {userStats && (
+      {/* Main content */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
+        {isMobile ? (
+          /* Mobile: single panel visible, tabs abajo */
           <>
-            <span className="chip" style={{ fontSize: 9 }}>
-              NIV {String(userStats.level).padStart(2, '0')}
-            </span>
-            <span className="chip" style={{ fontSize: 9 }}>
-              XP: {userStats.xp}
-            </span>
+            <div style={{ flex: 1, minWidth: 0, overflow: 'hidden', display: activeTab === 'quest' ? 'flex' : 'none', flexDirection: 'column' }}>
+              {questPanel}
+            </div>
+            <div style={{ flex: 1, minWidth: 0, overflow: 'hidden', display: activeTab === 'terminal' ? 'flex' : 'none', flexDirection: 'column' }}>
+              {terminalPanel}
+            </div>
+          </>
+        ) : (
+          /* Desktop: side by side */
+          <>
+            <div style={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
+              {questPanel}
+            </div>
+            <div style={{ width: '50%', minWidth: 300, flexShrink: 0, borderLeft: '4px solid var(--ink)' }}>
+              {terminalPanel}
+            </div>
           </>
         )}
       </div>
 
-      {/* Main content */}
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
-        {/* Left: Quest panel */}
-        <div style={{ width: '40%', minWidth: 300, maxWidth: 480, flexShrink: 0 }}>
-          <Quest onCompleteClick={handleQuestComplete} battleRef={battleRef} />
+      {/* Tab bar — solo en móvil */}
+      {isMobile && (
+        <div style={{
+          display: 'flex',
+          borderTop: '4px solid var(--ink)',
+          background: 'var(--bg-2)',
+          flexShrink: 0,
+        }}>
+          <button
+            onClick={() => setActiveTab('quest')}
+            style={{
+              flex: 1,
+              padding: '16px 8px',
+              fontFamily: 'var(--font-display)',
+              fontSize: 9,
+              letterSpacing: 1,
+              color: activeTab === 'quest' ? 'var(--ink)' : 'var(--parchment-2)',
+              background: activeTab === 'quest' ? 'var(--amber)' : 'var(--bg-2)',
+              border: 'none',
+              borderRight: '4px solid var(--ink)',
+              cursor: 'pointer',
+            }}
+          >
+            MISIÓN
+          </button>
+          <button
+            onClick={() => setActiveTab('terminal')}
+            style={{
+              flex: 1,
+              padding: '16px 8px',
+              fontFamily: 'var(--font-display)',
+              fontSize: 9,
+              letterSpacing: 1,
+              color: activeTab === 'terminal' ? 'var(--ink)' : 'var(--parchment-2)',
+              background: activeTab === 'terminal' ? 'var(--leaf)' : 'var(--bg-2)',
+              border: 'none',
+              cursor: 'pointer',
+            }}
+          >
+            TERMINAL
+          </button>
         </div>
-
-        {/* Right: Terminal */}
-        <div style={{ flex: 1, minWidth: 0, borderLeft: '4px solid var(--ink)' }}>
-          <Terminal
-            questId={currentQuestId}
-            userLevel={userStats?.level || 1}
-            onCommandExec={handleCommandExec}
-          />
-        </div>
-      </div>
+      )}
 
       {notification && (
         <XpNotification {...notification} onClose={() => setNotification(null)} />

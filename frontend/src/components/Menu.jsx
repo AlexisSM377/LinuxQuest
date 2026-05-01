@@ -60,11 +60,7 @@ function StatsBar({ userStats }) {
     { k: 'PROGRESO',     v: `${Math.round(userStats.progress || 0)}%`, sub: 'DEL VIAJE COMPLETADO' },
   ];
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
-      borderBottom: '4px solid var(--ink)',
-    }}>
+    <div className="stats-grid">
       {stats.map((s, i) => (
         <div key={i} style={{
           padding: '22px 28px',

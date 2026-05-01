@@ -105,8 +105,27 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
     onCommandExecRef.current = onCommandExec;
   }, [onCommandExec]);
 
-  const themeId = getThemeForLevel(userLevel);
-  const theme = TERMINAL_THEMES[themeId];
+  const [selectedThemeId, setSelectedThemeId] = useState(() => {
+    const saved = localStorage.getItem('linuxquest-terminal-theme');
+    const id = saved ? parseInt(saved) : 1;
+    return THEME_UNLOCK_LEVELS.includes(id) ? id : 1;
+  });
+
+  const theme = TERMINAL_THEMES[selectedThemeId] || TERMINAL_THEMES[1];
+
+  const selectTheme = useCallback((lvl) => {
+    if (userLevel < lvl) return;
+    setSelectedThemeId(lvl);
+    localStorage.setItem('linuxquest-terminal-theme', String(lvl));
+  }, [userLevel]);
+
+  // Si el nivel baja (improbable) o al montar, asegurarse que el tema sea válido
+  useEffect(() => {
+    if (userLevel < selectedThemeId) {
+      const best = getThemeForLevel(userLevel);
+      setSelectedThemeId(best);
+    }
+  }, [userLevel, selectedThemeId]);
 
   const redrawBuffer = useCallback((term) => {
     const buf = commandBuffer.current;
@@ -138,8 +157,8 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
           cursorBlink: true,
           theme,
           fontFamily: '"JetBrains Mono", "Courier New", monospace',
-          fontSize: 13,
-          lineHeight: 1.55,
+          fontSize: 12,
+          lineHeight: 1.4,
           allowProposedApi: true,
         });
 
@@ -343,12 +362,6 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
     };
   }, [token]); // NO incluir theme aquí
 
-  const themeNames = {};
-  for (const [lvl, t] of Object.entries(TERMINAL_THEMES)) {
-    themeNames[lvl] = t.name;
-  }
-  const unlockedThemes = THEME_UNLOCK_LEVELS.filter(l => userLevel >= l);
-
   const statusColors = {
     connected: 'var(--leaf)',
     disconnected: 'var(--blood)',
@@ -374,15 +387,42 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
           SANDBOX — {questId ? `quest/${String(questId).padStart(3, '0')}` : 'libre'}
         </span>
         <div style={{ flex: 1 }} />
-        <span style={{ fontSize: 7, opacity: 0.6, marginRight: 8 }}>
-          TEMAS: {unlockedThemes.map(l => themeNames[l]).join(' | ')}
-        </span>
+        <div style={{ display: 'flex', gap: 3, alignItems: 'center', marginRight: 8 }}>
+          {THEME_UNLOCK_LEVELS.map(lvl => {
+            const t = TERMINAL_THEMES[lvl];
+            const isUnlocked = userLevel >= lvl;
+            const isActive = selectedThemeId === lvl;
+            return (
+              <button
+                key={lvl}
+                onClick={() => selectTheme(lvl)}
+                disabled={!isUnlocked}
+                title={isUnlocked ? `Tema: ${t.name}` : `Desbloquea en nivel ${lvl}`}
+                style={{
+                  fontSize: 7,
+                  padding: '2px 6px',
+                  fontFamily: 'var(--font-display)',
+                  letterSpacing: '0.05em',
+                  background: isActive ? theme.foreground : 'transparent',
+                  color: isActive ? theme.background : isUnlocked ? theme.foreground : 'var(--parchment-2)',
+                  border: `2px solid ${isActive ? theme.foreground : isUnlocked ? theme.foreground + '88' : '#444'}`,
+                  cursor: isUnlocked ? 'pointer' : 'not-allowed',
+                  opacity: isUnlocked ? 1 : 0.35,
+                  transition: 'none',
+                  lineHeight: '1.4',
+                }}
+              >
+                {isUnlocked ? t.name : `LV${lvl}`}
+              </button>
+            );
+          })}
+        </div>
         <span style={{ color: statusColors[connectionStatus] }}>● {statusLabels[connectionStatus]}</span>
       </div>
 
       <div
         ref={terminalRef}
-        style={{ flex: 1, padding: '8px 4px', minHeight: 0 }}
+        style={{ flex: 1, padding: '4px', minHeight: 0 }}
       />
     </div>
   );
