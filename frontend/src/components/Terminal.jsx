@@ -130,10 +130,19 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
   const redrawBuffer = useCallback((term) => {
     const buf = commandBuffer.current;
     const pos = cursorPos.current;
+    // Mover cursor al inicio de la línea, borrar toda la línea
     term.write('\r\x1b[2K');
+    // Escribir prompt
     term.write('\x1b[94m$\x1b[0m ');
-    term.write(buf);
-    term.write(`\x1b[${buf.length - pos}D`);
+    // Escribir buffer
+    if (buf.length > 0) {
+      term.write(buf);
+    }
+    // Mover cursor a la posición correcta
+    const moveBack = buf.length - pos;
+    if (moveBack > 0) {
+      term.write(`\x1b[${moveBack}D`);
+    }
   }, []);
 
   // Aplicar tema sin recrear terminal
@@ -195,12 +204,27 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
                 term.write('\r\n');
                 socketRef.current?.emit('command', command, questIdRef.current, (response) => {
                   if (!term) return;
-                  if (response?.error) {
+                  // Handle clear command
+                  if (response?.isClear) {
+                    term.clear();
+                    term.write('\x1b[94m$\x1b[0m ');
+                    if (onCommandExecRef.current) onCommandExecRef.current(command, response);
+                    return;
+                  }
+                  if (response?.error && !response?.output) {
                     term.write(`\x1b[91m${response.error}\x1b[0m\r\n`);
                   } else if (response?.output) {
-                    term.write(`${response.output.replace(/\n/g, '\r\n')}\r\n`);
+                    // Normalize line endings for terminal
+                    const output = response.output.replace(/\n/g, '\r\n');
+                    term.write(output);
+                    if (!output.endsWith('\r\n')) {
+                      term.write('\r\n');
+                    }
+                    if (response?.error) {
+                      term.write(`\x1b[91m${response.error}\x1b[0m\r\n`);
+                    }
                   } else {
-                    term.write('(sin salida)\r\n');
+                    term.write('\r\n');
                   }
                   term.write('\x1b[94m$\x1b[0m ');
                   if (onCommandExecRef.current) onCommandExecRef.current(command, response);

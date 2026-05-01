@@ -112,27 +112,39 @@ class SandboxValidator {
   }
 
   /**
-   * Detecta intentos de acceso a archivos sensibles
+   * Detecta intentos de acceso a archivos sensibles del SISTEMA REAL
+   * (no del sandbox que tiene sus propios /etc simulados)
    */
   detectSensitiveFileAccess(command) {
-    const sensitivePatterns = [
-      '/etc/passwd',
+    // Solo bloquear acceso a archivos sensibles del SISTEMA REAL
+    // No del sandbox (que tiene sus propios /etc, /var, etc.)
+    const realSystemPatterns = [
       '/etc/shadow',
       '/etc/sudoers',
       '/root/',
       '/.ssh/',
-      '/var/log/auth.log',
       '/.dockerenv',
-      '/proc/self/cgroup',
-      '/sys/kernel'
+      '/proc/self/environ',
+      '/proc/self/maps',
+      '/proc/kcore',
+      '/sys/kernel',
+      '/sys/firmware',
+      '/dev/mem',
+      '/dev/kmem',
+      '/dev/sd',
+      '/dev/nvme',
+      '/boot/',
     ];
 
-    for (const pattern of sensitivePatterns) {
+    for (const pattern of realSystemPatterns) {
       if (command.includes(pattern)) {
+        // Verificar que no es una ruta del sandbox (ej: /tmp/.../user_X/etc/...)
+        // Las rutas del sandbox NO deberían contener /etc/shadow, /root, etc.
+        // pero sí pueden contener /etc/passwd, /etc/group, etc.
         return {
           detected: true,
           file: pattern,
-          message: `Attempted access to sensitive file: ${pattern}`
+          message: `Acceso bloqueado a archivo sensible del sistema: ${pattern}`
         };
       }
     }

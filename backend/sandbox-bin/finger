@@ -1,0 +1,27 @@
+#!/bin/sh
+# Mock educativo de finger - Información de usuarios
+
+if [ -z "$1" ]; then
+  cat <<'EOF'
+Login     Name           Tty      Idle  Login Time   Office
+sandbox   LinuxQuest San pts/0          Apr 30 10:00 (:0)
+student   Student User   pts/1    2:30  Apr 30 08:00 (192.168.1.100)
+
+[NOTA: Salida simulada - información de usuarios del sandbox]
+EOF
+  exit 0
+fi
+
+USER=$(printf '%s' "$1" | tr -cd 'a-zA-Z0-9_' | head -c 32)
+cat <<EOF
+Login: $USER
+Name:   $USER User
+Directory: /home/$USER
+Shell: /bin/bash
+On since $(date '+%a %b %d %H:%M') on pts/0 from :0
+No mail.
+No Plan.
+
+[NOTA: Salida simulada]
+EOF
+exit 0

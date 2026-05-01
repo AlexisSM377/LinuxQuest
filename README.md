@@ -153,7 +153,7 @@ LinuxQuest/
 ## 🛠️ Stack Tecnológico
 
 **Frontend:**
-- React 18 + Vite (build rápido & HMR)
+- React 19 + Vite (build rápido & HMR)
 - TailwindCSS (diseño responsivo)
 - Zustand (gestión estado ligera)
 - xterm.js (emulación de terminal)
@@ -178,45 +178,50 @@ LinuxQuest/
 
 ---
 
-## 🔒 Características de Seguridad (8 Capas)
+## 🔒 Características de Seguridad (9 Capas)
 
 LinuxQuest implementa seguridad integral para prevenir abusos y proteger el sistema:
 
-### 1. Auditoría Completa
+### 1. Preprocesador de Comandos
+- Convierte comandos interactivos a no-interactivos (cat, less, man, top)
+- Reescribe rutas del sistema a sandbox-local (/etc/os-release → sandbox/etc/os-release)
+- Agrega flags de seguridad automáticamente (ping -c 4, curl --connect-timeout)
+
+### 2. Auditoría Completa
 - Registro completo de todos los intentos de comando
 - Detección de amenazas en tiempo real
 - Capacidades de análisis forense
 
-### 2. Allowlist Global
+### 3. Allowlist Global
 - Solo 40+ comandos aprobados
 - Bloquea comandos peligrosos: `sudo`, `docker`, `mount`, `dd`, etc.
 
-### 3. Detección de Patrones
+### 4. Detección de Patrones
 - Bloquea inyección shell: `&&`, `||`, `;`, `$()`, sustitución de comandos
 - Previene redirecciones: `>`, `<`, `>>`, `|`
 
-### 4. Validación de Sandbox
+### 5. Validación de Sandbox
 - Prevención de path traversal
 - Protección de archivos sensibles (`/etc/*`, `/root`, `/sys`, `/proc`)
 - Aislamiento por usuario
 
-### 5. Whitelist por Quest
+### 6. Whitelist por Quest
 - Cada misión tiene comandos específicos permitidos
 - Quest 1 (uname): solo `uname` permitido
 - Quest archivos: solo `ls`, `cd`, `pwd`, `cat` permitidos
 
-### 6. Ejecución en Sandbox
+### 7. Ejecución en Sandbox
 - Directorio de ejecución aislado por usuario: `/tmp/linuxquest-sandbox/user_<id>/`
 - Acceso cruzado entre usuarios es imposible
 - Auto-cleanup al desconectar
 
-### 7. Límites de Recursos
+### 8. Límites de Recursos
 - Timeout: máximo 30 segundos por comando
 - Output: buffer máximo 5MB
 - Líneas: máximo 10,000 líneas de output
 - Previene agotamiento de recursos
 
-### 8. Seguridad HTTP
+### 9. Seguridad HTTP
 - **Helmet.js:** CSP, X-Frame-Options: DENY, HSTS, protección MIME sniffing
 - **CORS:** Solo dominio frontend (verificación estricta de origen)
 - **Rate Limiting:** 100 requests/15min global + 10 comandos/10s por usuario
@@ -360,7 +365,7 @@ user_id, achievement_id, earned_at (timestamp)
 | Personajes NPC | 9 |
 | Encuentros de Jefe | 6 |
 | Endpoints API | 16+ |
-| Capas de Seguridad | 8 |
+| Capas de Seguridad | 9 |
 | Archivos de Auditoría | 4 |
 | Líneas de Código | 5,000+ |
 
@@ -418,6 +423,10 @@ Todas las tablas: CREADAS
 - ✅ **Semana 10:** Sistema de Combate + Batallas de Jefes
 - ✅ **Semana 11:** Tabla de Clasificación + Página de Estadísticas
 - ✅ **Semana 12:** Endurecimiento de Seguridad + Listo para Producción
+- ✅ **Semana 13:** Pixel Art Design System
+- ✅ **Semana 14:** Sandbox Hardening + Mocks Educativos
+- ✅ **Semana 15:** Terminal Themes + Responsive
+- ✅ **Semana 17:** Terminal/Sandbox Overhaul (preprocessor + sandbox enriquecido)
 
 **Estado:** 🟢 LISTO PARA PRODUCCIÓN
 

@@ -32,7 +32,7 @@
 - [x] Indexes optimized
 
 **Frontend:**
-- [x] React 18 + Vite
+- [x] React 19 + Vite
 - [x] Zustand state management
 - [x] 5 pages + 15+ components
 - [x] xterm.js integration

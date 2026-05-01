@@ -140,8 +140,8 @@ export const SECURITY_CONFIG = {
 
     // Fork bombs y bucles infinitos obvios
     /:\(\)\s*\{\s*:\|:&\s*\}/,
-    /while\s+(true|:|1)/i,
-    /for\s+\(\(\s*;;\s*\)\)/i,
+    // NOTA: while true / while : son legítimos para aprender scripting (Mundo 5)
+    // Se bloquean solo en quests que no son de scripting via per-quest patterns
 
     // Variables de entorno peligrosas
     /LD_PRELOAD\s*=/i,
@@ -185,7 +185,8 @@ export const SECURITY_CONFIG = {
     // Permisos y usuarios
     'chmod', 'chown', 'chgrp', 'ln', 'umask', 'getfacl', 'setfacl',
     'useradd', 'usermod', 'groupadd', 'passwd', 'su', 'sudo',
-    'locate', 'updatedb', 'groups',
+    'locate', 'updatedb', 'groups', 'newgrp', 'finger',
+    'last', 'lastlog', 'chage', 'gpasswd', 'userdel', 'groupdel',
     // Criptografía
     'gpg',
     // Editores
@@ -206,14 +207,14 @@ export const SECURITY_CONFIG = {
     chmod: [/777/, /666/, /\+s/, /u\+s/, /g\+s/],
     chown: [/root/i, /\s+0:0/, /-R.*\//],
     find: [/-exec/i, /-delete/i, /-execdir/i],
-    cp: [/\/etc\//i, /\/sys\//i, /\/proc\//i],
-    mv: [/\/etc\//i, /\/sys\//i, /\/proc\//i],
-    ln: [/\/etc\//i, /\/sys\//i, /\/proc\//i],
-    cat: [/\/etc\/shadow/i, /\/etc\/sudoers/i, /\/proc\/[0-9]+\/mem/i],
-    head: [/\/etc\/shadow/i, /\/etc\/sudoers/i],
-    tail: [/\/etc\/shadow/i, /\/etc\/sudoers/i],
-    grep: [/\/etc\/shadow/i, /\/etc\/sudoers/i, /-r.*\/etc/i],
-    sed: [/-i.*\/etc\//i, /-i.*\/sys\//i],
+    cp: [/\/sys\//i, /\/proc\//i],
+    mv: [/\/sys\//i, /\/proc\//i],
+    ln: [/\/sys\//i, /\/proc\//i],
+    cat: [/\/proc\/[0-9]+\/mem/i],
+    head: [],
+    tail: [],
+    grep: [/-r.*\/etc/i],
+    sed: [/-i.*\/etc\/shadow/i, /-i.*\/etc\/sudoers/i, /-i.*\/sys\//i],
     awk: [/system\(/i, /getline.*\|/i],
     curl: [/file:\/\//i, /-o\s+\/etc/i, /-o\s+\/bin/i, /\bgopher:\/\//i, /\bdict:\/\//i, /\bldap:\/\//i],
     ssh: [/-o\s*ProxyCommand/i, /-o\s*LocalCommand/i],

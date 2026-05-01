@@ -1,0 +1,14 @@
+#!/bin/sh
+# Mock educativo de userdel - Eliminar usuario
+
+echo "[Modo educativo] userdel está bloqueado en este sandbox."
+echo ""
+echo "Sintaxis: userdel [-r] <usuario>"
+echo "  -r  También elimina el directorio home y el correo"
+echo ""
+echo "Usuario que intentaste eliminar: ${1:-<ninguno>}"
+echo ""
+echo "En un sistema real, userdel elimina la cuenta del usuario."
+echo "Con -r elimina también /home/usuario y /var/mail/usuario."
+echo "Solo root puede ejecutar este comando."
+exit 0

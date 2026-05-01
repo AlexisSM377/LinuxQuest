@@ -528,3 +528,92 @@ All tables: CREATED
 **PROJECT STATUS: 🟢 PRODUCTION READY**
 **DEPLOYMENT: Frontend en Vercel, Backend listo para Fly.io redeploy**
 **SECURITY: 10+ CAPAS DE DEFENSA EN PROFUNDIDAD + pipe validation completa**
+
+### Session 2026-05-01 — Terminal/Sandbox Overhaul ✅
+
+**Problema principal:** La terminal simulada tenía múltiples comandos que colgaban indefinidamente, comandos que fallaban sin razón, y el sandbox era demasiado básico para soportar las misiones educativas.
+
+**Command Preprocessor (commandService.js — reescritura completa):**
+- [x] Pre-procesamiento ANTES de validación de quest (reordenamiento de flujo)
+- [x] `cat` sin args → mensaje de ayuda (antes colgaba esperando stdin)
+- [x] `cat -n`/`cat -b` sin archivo → mensaje de ayuda
+- [x] `less`/`more` → convertidos a `cat` (no son interactivos)
+- [x] `man` → usa `MANPAGER=cat PAGER=cat` (no abre paginador)
+- [x] `top` → batch mode `top -b -n 1` (no es interactivo)
+- [x] `ping` → agrega `-c 4 -W 3` automáticamente
+- [x] `curl` → agrega `--connect-timeout 5 -m 10`
+- [x] `ssh-keygen` → modo no interactivo (`-t ed25519 -N ""`)
+- [x] `head`/`tail`/`grep`/`wc`/`sort`/`sed`/`awk` sin archivo → mensaje de ayuda
+- [x] `clear` → limpieza de terminal (bypass antes de validación de quest)
+- [x] `history` → simulado con datos de ejemplo
+
+**Emulación de comandos del sistema:**
+- [x] `who`/`w`/`last`/`lastlog` → simulados con formato real
+- [x] `groups` → "sandbox student wheel"
+- [x] `id` → "uid=1001(sandbox) gid=1001(sandbox) groups=..."
+- [x] `id <usuario>` → simulado para cualquier usuario
+- [x] `env`/`printenv` → variables del sandbox
+- [x] `locate` → usa `find` como alternativa + nota educativa
+- [x] `updatedb` → simulado
+- [x] `lscpu`/`lsblk` → simulados si no existen en container
+- [x] `gpg --version` → simulado
+- [x] `hostnamectl` → simulado
+- [x] `chage -l` → simulado
+
+**Reescritura de rutas del sistema a sandbox-local:**
+- [x] `/etc/os-release` → `sandbox/etc/os-release`
+- [x] `/etc/passwd` → `sandbox/etc/passwd`
+- [x] `/etc/group` → `sandbox/etc/group`
+- [x] `/etc/hostname` → `sandbox/etc/hostname`
+- [x] `/etc/hosts` → `sandbox/etc/hosts`
+- [x] `/etc/resolv.conf` → `sandbox/etc/resolv.conf`
+- [x] `/etc/login.defs` → `sandbox/etc/login.defs`
+- [x] `/var/log/syslog` → `sandbox/var/log/syslog`
+- [x] `/var/log/auth.log` → `sandbox/var/log/auth.log`
+
+**Sandbox enriquecido (sandboxService.js):**
+- [x] Archivos de ejemplo: `datos.txt`, `ejemplo.log`, `numeros.txt`, `nombres.txt`, `datos.csv`, `script_demo.sh`
+- [x] Estructura `/etc` simulada: os-release, passwd, group, hostname, hosts, resolv.conf, login.defs
+- [x] Estructura `/var/log` simulada: syslog, auth.log
+- [x] Estructura `/dev` simulada con info de dispositivos
+- [x] Directorios de práctica: `practica/`, `aventura/heroe/`, `aventura/inventario/`
+- [x] Archivos para globbing: `archivo1.txt`, `archivo2.txt`, `archivo3.txt`
+- [x] Archivos para quests de copia/movimiento: `aventura.txt`, `original.txt`
+- [x] `numeros_grandes.txt` para sort/wc
+
+**Seguridad ajustada (securityConfig.js + sandboxValidator.js):**
+- [x] `sandboxValidator.js` — Solo bloquea archivos sensibles del SISTEMA REAL (no del sandbox)
+- [x] `cat` ya no bloquea `/etc/passwd`/`/etc/shadow` en DANGEROUS_COMMAND_ARGS
+- [x] `head`/`tail`/`grep` args relajados para sandbox
+- [x] `sed` solo bloquea `/etc/shadow`/`/etc/sudoers` in-place
+- [x] `cp`/`mv`/`ln` ya no bloquean `/etc/` genérico (sandbox tiene su propio /etc)
+- [x] `while true` removido de patrones peligrosos (legítimo para scripting Mundo 5)
+- [x] Agregados a DEFAULT_ALLOWED_COMMANDS: `finger`, `newgrp`, `last`, `lastlog`, `chage`, `gpasswd`, `userdel`, `groupdel`
+
+**Terminal frontend (Terminal.jsx):**
+- [x] `redrawBuffer` mejorado — borra correctamente al editar en medio del buffer
+- [x] Handle `clear` command — limpia pantalla con `term.clear()`
+- [x] Handle `isClear` flag del servidor
+- [x] Output normalizado — siempre termina con `\r\n`
+- [x] Error/output display mejorado — no muestra "(sin salida)" innecesario
+
+**Nuevos mocks educativos (sandbox-bin/):**
+- [x] `finger` — información de usuarios simulada
+- [x] `newgrp` — cambio de grupo simulado
+- [x] `groupdel` — eliminación de grupo bloqueada
+- [x] `userdel` — eliminación de usuario bloqueada
+- [x] `chage` — aging de contraseña simulado
+
+**Dockerfile actualizado:**
+- [x] 5 nuevos mocks copiados: finger, newgrp, chage, groupdel, userdel
+- [x] Total: 22 mocks educativos
+
+**Verificación de seguridad:**
+- [x] `rm -rf /` sigue bloqueado
+- [x] Shell injection con `;` sigue bloqueado
+- [x] Path traversal sigue bloqueado
+- [x] Command substitution `$()` y backticks siguen bloqueados
+- [x] Acceso a archivos reales del sistema sigue bloqueado
+- [x] Fork bombs siguen bloqueadas
+- [x] Frontend build: OK (sin errores nuevos)
+- [x] Backend modules: OK (todos cargan correctamente)

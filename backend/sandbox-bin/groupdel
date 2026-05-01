@@ -1,0 +1,13 @@
+#!/bin/sh
+# Mock educativo de groupdel - Eliminar grupo
+
+echo "[Modo educativo] groupdel está bloqueado en este sandbox."
+echo ""
+echo "Sintaxis: groupdel <grupo>"
+echo "Elimina el grupo especificado del sistema."
+echo ""
+echo "Grupo que intentaste eliminar: ${1:-<ninguno>}"
+echo ""
+echo "En un sistema real, groupdel elimina la entrada del grupo de /etc/group."
+echo "Solo el root puede ejecutar este comando."
+exit 0

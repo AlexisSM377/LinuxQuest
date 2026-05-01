@@ -55,11 +55,16 @@ RUN cp /app/sandbox-bin/* /usr/local/bin/ && \
               /usr/local/bin/useradd \
               /usr/local/bin/usermod \
               /usr/local/bin/groupadd \
+              /usr/local/bin/groupdel \
+              /usr/local/bin/userdel \
               /usr/local/bin/passwd \
               /usr/local/bin/visudo \
               /usr/local/bin/vi \
               /usr/local/bin/nano \
-              /usr/local/bin/htop
+              /usr/local/bin/htop \
+              /usr/local/bin/finger \
+              /usr/local/bin/newgrp \
+              /usr/local/bin/chage
 
 # Crear usuario sandbox sin privilegios para ejecutar Node
 RUN addgroup -S linuxquest -g 1001 && \
