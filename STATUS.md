@@ -100,16 +100,15 @@
 - [x] World completion achievements
 - [x] XP bonus per achievement
 
-## 📋 Next Phase - Week 9-12
-- [ ] Boss battle missions (visual/narrative)
-- [ ] Item/reward inventory UI
-- [ ] User progression page (stats + achievements timeline)
-- [ ] Settings/preferences (language, difficulty, etc)
+## 📋 Next Phase - Week 15+
+- [x] Terminal theme selector (4 temas desbloqueables por nivel) ✅
+- [x] Responsive layout (mobile tabs, hamburger menu, media queries) ✅
+- [ ] Email verification con Resend (staged — pendiente de aplicar)
+- [ ] Traducir UI frontend al español
+- [ ] Settings/preferences (language, difficulty)
 - [ ] Daily quests & streaks
-- [ ] Leaderboard system
 - [ ] Performance monitoring dashboard
 - [ ] Timed challenges
-- [ ] Advanced threat detection
 
 ## Architecture
 ```
@@ -466,7 +465,36 @@ All tables: CREATED
 - `frontend/src/App.jsx` (ToastContainer global)
 
 ## Last Updated
-2026-04-30 - Major Bugfix Session (17 bugs fixed) ✅
+2026-04-30 - Terminal Themes + Responsive + Email Verification (staged) ✅
+
+### Session 2026-04-30 (2) — Terminal Themes + Responsive + Email Verification
+
+**Terminal Themes (commiteado):**
+- [x] 4 temas desbloqueables por nivel: CLASSIC (1), PHOSPHOR (4), AMBER (8), COPPERPLATE (13)
+- [x] Selector en barra del terminal — botones clickeables, activo resaltado con foreground del tema
+- [x] Temas bloqueados visibles pero no seleccionables (opacidad 35%, `cursor: not-allowed`, tooltip con nivel requerido)
+- [x] Persistencia en `localStorage` (`linuxquest-terminal-theme`)
+- [x] Validación al cambiar de nivel — regresa al mejor disponible si el seleccionado se bloquea
+
+**Responsive Layout (commiteado):**
+- [x] `useIsMobile()` hook — detecta `< 768px`, listener sin leak de memoria
+- [x] GamePage: tabs MISIÓN / TERMINAL en móvil (ambos paneles montados, CSS display toggle)
+- [x] GameNav: hamburger `☰` en móvil con dropdown (XP, coins, STATS, LOGROS); items ocultos con `.nav-hide-mobile`
+- [x] Quest: botón `▶ IR AL TERMINAL` en móvil cuando hay comandos pendientes (`onGoToTerminal` prop)
+- [x] index.css: media queries `@768px` (tipografía, nav, cards) y `@480px` (ultra-compacto)
+- [x] Menu: `stats-grid` CSS class — 4 cols desktop → 2 cols en `@600px`
+- [x] Nav brand: "LINUXQUEST" en desktop, "LQ" en móvil
+
+**Email Verification con Resend (staged — NO commiteado):**
+- [~] `emailService.js` — Resend SDK + template pixel-art verde, fallback a `console.warn` sin API key
+- [~] `User.js` — token `crypto.randomBytes(32)`, expira 24h, métodos: findByVerificationToken, markEmailVerified, updateVerificationToken
+- [~] `auth.js` — POST /register (sin JWT), POST /login (bloquea si no verificado), GET /verify-email, POST /resend-verification (cooldown 60s)
+- [~] `add-email-verification.js` — script de migración (ya ejecutado en Neon ✅)
+- [~] `VerifyEmailPage.jsx` — `/verificar-email?token=`, 3 estados: verifying / success / error
+- [~] `RegisterPage.jsx` — muestra "revisa tu correo" post-registro
+- [~] `LoginPage.jsx` — bloque EMAIL_NOT_VERIFIED con botón reenviar
+- [~] `App.jsx` — ruta `/verificar-email`
+- [~] `.env` — `RESEND_API_KEY` y `RESEND_FROM` configurados
 
 ### Session 2026-04-30 - Bugfix Marathon
 

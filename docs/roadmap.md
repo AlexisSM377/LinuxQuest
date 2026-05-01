@@ -146,8 +146,9 @@
 ---
 
 ## Progreso General
-**Completadas:** Semanas 1-14 ✅ (Setup, Frontend, Terminal, Backend, Quests, Ejecución, XP System, Achievements, NPCs, Combat, Leaderboard, Security, Pixel Art Design System, Sandbox Hardening + Mocks)
-**Próxima:** Semana 15 (Localización / Pulido final)
+**Completadas:** Semanas 1-15 ✅ (Setup → Sandbox Hardening → Terminal Themes → Responsive)
+**Staged (pendiente):** Semana 16 — Email Verification con Resend
+**Próxima:** Semana 17 (Localización / Polish)
 **Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL (Neon)
 
 ## Contenido Seeded - 95 Quests Distribuidas
@@ -184,7 +185,7 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
   └─ Proyectos: cron, background jobs, logging
 ```
 
-## Cambios Recientes (2026-04-28)
+## Cambios Recientes (2026-04-30)
 - ✅ Semana 7 COMPLETADA: XP system con 20 niveles + nivel-up notifications
 - ✅ Semana 8 COMPLETADA: Quest unlock system + 12 achievements
 - ✅ Semana 9 COMPLETADA: NPC system + Quest card redesign
@@ -290,7 +291,30 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
 - ✅ Comandos con null bytes
 - ✅ Comandos excesivamente largos
 
-## Semana 15+ (opcional): Localización
+## Semana 15: Terminal Themes + Responsive ✅ (2026-04-30)
+- [x] 4 temas de consola desbloqueables por nivel
+  - CLASSIC (nivel 1) · PHOSPHOR (nivel 4) · AMBER (nivel 8) · COPPERPLATE (nivel 13)
+  - Selector interactivo en barra del terminal, persistido en localStorage
+  - Temas bloqueados visibles con nivel requerido como tooltip
+- [x] Layout responsive completo
+  - GamePage: tabs MISIÓN / TERMINAL en móvil con `useIsMobile()` hook
+  - GameNav: hamburger `☰` en móvil, dropdown con stats y logros
+  - Quest: botón "IR AL TERMINAL" contextual en móvil
+  - index.css: media queries `@768px` y `@480px`
+  - Menu: stats-grid adaptativo 4→2 columnas en `@600px`
+
+## Semana 16: Email Verification con Resend ⏳ (staged)
+- [ ] Aplicar commit staged de verificación de email
+  - `emailService.js` — Resend SDK + template pixel-art
+  - `User.js` — token 64-char hex, expira 24h
+  - `auth.js` — flujo completo: registro sin JWT, login bloqueado, verify, resend
+  - `VerifyEmailPage.jsx` — `/verificar-email?token=`
+  - `RegisterPage.jsx` / `LoginPage.jsx` — estados post-registro y error verificación
+- [ ] Configurar dominio en Resend (DNS records)
+- [ ] Test end-to-end en producción
+- [ ] Marcar usuarios existentes como verificados en Neon
+
+## Semana 17+ (opcional): Localización & Polish
 - [ ] Traducir UI frontend al español (PRIORIDAD ALTA)
   - [ ] Componentes React: textos, placeholders, botones, etiquetas
   - [ ] Mensajes de error y validación
