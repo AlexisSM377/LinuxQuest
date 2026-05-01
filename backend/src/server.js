@@ -200,7 +200,7 @@ io.on('connection', (socket) => {
 
       const userSandboxDir = getSandboxPath(socket.userId);
       const result = await executeCommand(command, userSandboxDir, questId, socket.userId);
-      callback({ error: result.error || '', output: result.output || '' });
+      callback({ error: result.error || '', output: result.output || '', isClear: result.isClear || false });
     } catch (error) {
       console.error('Command execution error:', error);
       callback({ error: error.message, output: '' });

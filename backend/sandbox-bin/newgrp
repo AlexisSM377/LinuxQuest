@@ -1,0 +1,11 @@
+#!/bin/sh
+# Mock educativo de newgrp - Cambiar grupo efectivo
+
+echo "newgrp: Cambiado a grupo '${1:-sandbox}' (simulado)"
+echo ""
+echo "Uso: newgrp <grupo>"
+echo "Cambia el grupo efectivo actual al especificado."
+echo ""
+echo "NOTA: En un sistema real, newgrp abre un nuevo shell con el grupo indicado."
+echo "En este sandbox, el cambio es simulado."
+exit 0

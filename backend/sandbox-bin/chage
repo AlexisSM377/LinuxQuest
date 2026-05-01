@@ -1,0 +1,38 @@
+#!/bin/sh
+# Mock educativo de chage - Cambiar aging de contraseña
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
+  cat <<'EOF'
+Uso: chage [opciones] LOGIN
+
+Opciones:
+  -d, --lastday LAST_DAY    Último día de cambio
+  -E, --expiredate EXPIRE   Fecha de expiración de la cuenta
+  -I, --inactive INACTIVE   Días de inactividad antes de bloqueo
+  -l, --list                Mostrar información de aging
+  -m, --mindays MIN_DAYS    Días mínimos entre cambios
+  -M, --maxdays MAX_DAYS    Días máximos antes de cambio obligatorio
+  -W, --warndays WARN_DAYS  Días de aviso antes de expiración
+EOF
+  exit 0
+fi
+
+if [ "$1" = "-l" ] || [ "$1" = "--list" ]; then
+  USER=${2:-sandbox}
+  cat <<EOF
+Last password change                                    : Apr 30, 2026
+Password expires                                        : never
+Password inactive                                       : never
+Account expires                                         : never
+Minimum number of days between password change          : 0
+Maximum number of days between password change          : 99999
+Number of days of warning before password expires       : 7
+
+[NOTA: Salida simulada]
+EOF
+  exit 0
+fi
+
+echo "[Modo educativo] chage: cambio de aging simulado para: ${1:-<ninguno>}"
+echo "Usa 'chage -l <usuario>' para ver el aging actual."
+exit 0

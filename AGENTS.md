@@ -32,7 +32,7 @@ cd backend && npm run init-db && npm run seed-quests && npm run seed-achievement
 
 ```
 Frontend (Vercel)          Backend (Fly.io)           DB (Neon)
-React 18 + Vite  ------>  Express + Socket.io  --->  PostgreSQL
+React 19 + Vite  ------>  Express + Socket.io  --->  PostgreSQL
 Port 5173                 Port 3000
 ```
 
@@ -60,17 +60,19 @@ All previously known bugs have been fixed in this session:
 - ~~fly.toml `[processes]`~~ → Commented out, `tini` works as PID 1
 - ~~vercel.json SPA rewrite~~ → Added `{ "source": "/((?!assets/).*)", "destination": "/index.html" }`
 
-## Security Architecture (8 layers)
+## Security Architecture (9 layers)
 
 Commands go through validation in `backend/src/services/commandService.js` before execution:
-1. Audit logging (all attempts)
-2. Global command blacklist (`securityConfig.js` FORBIDDEN_COMMANDS)
-3. Global pattern detection (shell injection, redirections)
-4. Sandbox validator (path traversal, sensitive files)
-5. Per-quest command allowlist (`config/questCommands.js`)
-6. Per-quest dangerous patterns
-7. Sandbox execution (isolated `/tmp` directory per user)
-8. Resource limits (30s timeout, 5MB output, 10k lines)
+1. Special command handling (clear, help)
+2. Command preprocessor (interactive→non-interactive, path rewriting)
+3. Audit logging (all attempts)
+4. Global command blacklist (`securityConfig.js` FORBIDDEN_COMMANDS)
+5. Global pattern detection (shell injection, redirections)
+6. Sandbox validator (path traversal, sensitive files)
+7. Per-quest command allowlist (`config/questCommands.js`)
+8. Per-quest dangerous patterns
+9. Sandbox execution (isolated `/tmp` directory per user)
+10. Resource limits (30s timeout, 5MB output, 10k lines)
 
 All commands in a pipe are validated individually (not just the first one).
 
@@ -90,9 +92,10 @@ Logs written to `/tmp/linuxquest-audit/` (commands.log, security-threats.log, et
 ## Deployment
 
 - **Frontend**: Vercel — auto-detects Vite, root dir = `frontend/`, set `VITE_API_URL` env var
-- **Backend**: Fly.io — `fly deploy` from `backend/`, uses Dockerfile (Alpine + 21 system packages + 14 mock scripts)
+- **Backend**: Fly.io — `fly deploy` from `backend/`, uses Dockerfile (Alpine + 21 system packages + 22 mock scripts)
 - **Backend runs as non-root user** (`sandbox`, UID 1001) inside Docker
 - Mock scripts in `backend/sandbox-bin/` are installed to `/usr/local/bin/` in the container for educational command responses (journalctl, sudo, etc.)
+- Command preprocessor converts interactive commands to non-interactive and rewrites system paths to sandbox-local
 
 ## File Map (key files)
 
@@ -100,7 +103,7 @@ Logs written to `/tmp/linuxquest-audit/` (commands.log, security-threats.log, et
 backend/src/
   server.js              — Express + Socket.io setup, CORS, rate limiting
   db.js                  — PostgreSQL pool (Neon)
-  services/commandService.js — 8-layer command validation + execution
+  services/commandService.js — 10-layer command validation + execution (with preprocessor)
   services/sandboxService.js — Per-user sandbox creation/cleanup
   security/securityConfig.js — Blacklists, dangerous patterns, limits, DEFAULT_ALLOWED_COMMANDS
   security/sandboxValidator.js — Path traversal, arg validation

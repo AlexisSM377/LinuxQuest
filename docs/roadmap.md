@@ -133,7 +133,7 @@
 - Documentation: Actualizar guides y FAQs
 
 ## Stack Final
-- **Frontend:** React 18 + Vite → Vercel
+- **Frontend:** React 19 + Vite → Vercel
 - **Backend:** Node.js + Express + Socket.io → Fly.io
 - **Database:** PostgreSQL → Neon
 - **All HTTPS + Auto-scaling**
@@ -314,7 +314,41 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
 - [ ] Test end-to-end en producción
 - [ ] Marcar usuarios existentes como verificados en Neon
 
-## Semana 17+ (opcional): Localización & Polish
+## Semana 17: Terminal/Sandbox Overhaul ✅ (2026-05-01)
+
+### Command Preprocessor (commandService.js)
+- [x] Pre-procesamiento ANTES de validación de quest (reordenamiento de flujo)
+- [x] Comandos interactivos convertidos a no-interactivos: cat, less, more, man, top
+- [x] Comandos sin args muestran ayuda: head, tail, grep, wc, sort, sed, awk, ping
+- [x] Comandos del sistema emulados: who, w, last, lastlog, groups, id, env
+- [x] Comandos de búsqueda emulados: locate (usa find), updatedb
+- [x] Comandos de info emulados: lscpu, lsblk, gpg --version, hostnamectl, chage
+- [x] Reescritura de rutas: /etc/os-release, /etc/passwd, /etc/group → sandbox local
+- [x] clear bypass validación de quest
+
+### Sandbox enriquecido (sandboxService.js)
+- [x] Estructura /etc simulada: os-release, passwd, group, hostname, hosts, resolv.conf, login.defs
+- [x] Estructura /var/log simulada: syslog, auth.log
+- [x] Estructura /dev simulada con info
+- [x] Archivos de práctica: datos.txt, ejemplo.log, numeros.txt, nombres.txt, datos.csv
+- [x] Directorios para misiones: practica/, aventura/heroe/, aventura/inventario/
+- [x] Archivos para globbing: archivo1-3.txt
+
+### Seguridad ajustada
+- [x] sandboxValidator — Solo bloquea archivos del SISTEMA REAL (no del sandbox)
+- [x] DANGEROUS_COMMAND_ARGS relajados para sandbox-local paths
+- [x] while true removido de patrones peligrosos (legítimo para scripting)
+- [x] Nuevos comandos permitidos: finger, newgrp, last, lastlog, chage, gpasswd, userdel, groupdel
+
+### Terminal frontend (Terminal.jsx)
+- [x] redrawBuffer mejorado para borrar correctamente
+- [x] clear command con term.clear()
+- [x] Output normalizado siempre termina con \r\n
+
+### Nuevos mocks educativos
+- [x] finger, newgrp, groupdel, userdel, chage (5 nuevos, total: 22)
+
+## Semana 18+ (opcional): Localización & Polish
 - [ ] Traducir UI frontend al español (PRIORIDAD ALTA)
   - [ ] Componentes React: textos, placeholders, botones, etiquetas
   - [ ] Mensajes de error y validación

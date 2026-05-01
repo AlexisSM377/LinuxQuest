@@ -1,8 +1,8 @@
 # LinuxQuest
 
 ## Stack
-- Frontend: React 18 + Vite + Zustand + xterm.js + Tailwind
-- Backend: Node.js 20 + Express + PostgreSQL + Socket.io
+- Frontend: React 19 + Vite + Zustand + xterm.js + Tailwind
+- Backend: Node.js 20 + Express 5 + PostgreSQL + Socket.io
 - Deploy: Vercel + Fly.io + Neon
 
 ## Estructura
