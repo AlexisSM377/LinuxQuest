@@ -10,7 +10,8 @@ export default function PixelInput({ label, type = 'text', placeholder, value, o
         gap: 10,
         background: 'var(--bg)',
         border: '4px solid var(--ink)',
-        padding: '10px 14px',
+        padding: '12px 14px',
+        minHeight: 44,
         boxShadow: '4px 4px 0 var(--shadow)',
       }}>
         <span style={{ color: 'var(--leaf)', fontFamily: 'var(--font-code)', flexShrink: 0 }}>{'>'}</span>

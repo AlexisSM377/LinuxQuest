@@ -452,11 +452,35 @@ button {
   .nav-label-short { display: inline; }
   .nav-label-full { display: none; }
 
+  /* Hamburger menu */
+  .nav-hamburger { display: flex !important; }
+  .nav-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-2);
+    border: 2px solid var(--ink);
+    border-top: none;
+    flex-direction: column;
+    gap: 0;
+    z-index: 1000;
+  }
+  .nav-menu-open {
+    display: flex !important;
+  }
+
   /* Cards */
   .pcard { padding: 12px; }
 
-  /* Botones */
-  .btn { font-size: 10px; padding: 12px 16px; }
+  /* Botones — touch targets mínimo 44px */
+  .btn { font-size: 10px; padding: 12px 16px; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  button { min-height: 44px; }
+
+  /* Quest instructions */
+  .quest-instructions li { font-size: 16px; padding: 8px 0; }
+
+  /* Scroll suave en iOS */
+  * { -webkit-overflow-scrolling: touch; }
 
   /* Barra de progreso del nav */
   .nav-xp-bar { display: none; }
@@ -484,5 +508,47 @@ button {
   }
   .stats-grid > div:nth-child(3) {
     border-top: 4px solid var(--ink);
+  }
+}
+
+/* Barra de teclas rápidas para móvil */
+.mobile-keys-bar {
+  display: none;
+  gap: 6px;
+  padding: 8px;
+  background: var(--bg-3);
+  border-top: 2px solid var(--ink);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .mobile-keys-bar {
+    display: flex;
+  }
+
+  .mobile-keys-bar button {
+    min-width: 40px;
+    min-height: 40px;
+    padding: 6px 10px;
+    font-size: 11px;
+    font-family: var(--font-display);
+    background: var(--bg-2);
+    color: var(--parchment);
+    border: 2px solid var(--parchment-2);
+    cursor: pointer;
+    transition: all 0.1s;
+  }
+
+  .mobile-keys-bar button:active {
+    background: var(--parchment);
+    color: var(--ink);
+    transform: scale(0.95);
+  }
+
+  .mobile-keys-bar button:hover {
+    background: var(--amber);
+    color: var(--ink);
+    border-color: var(--amber);
   }
 }

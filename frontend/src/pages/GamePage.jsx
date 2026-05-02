@@ -37,6 +37,7 @@ export default function GamePage() {
   const [activeTab, setActiveTab] = useState('quest');
   const battleRef = useRef(null);
   const executedCommandsRef = useRef(new Set());
+  const completedObjectivesRef = useRef(new Set());
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -54,8 +55,9 @@ export default function GamePage() {
 
   useEffect(() => {
     executedCommandsRef.current = new Set();
-    const required = currentQuest?.required_commands || [];
-    setCanComplete(required.length === 0);
+    completedObjectivesRef.current = new Set();
+    const objectives = currentQuest?.objectives || [];
+    setCanComplete(objectives.length === 0);
   }, [currentQuestId, currentQuest]);
 
   const handleQuestComplete = useCallback(async () => {
@@ -85,10 +87,11 @@ export default function GamePage() {
   const handleCommandExec = useCallback((command, response) => {
     if (!currentQuest || !response) return;
 
-    const quest = currentQuest;
-    const required = quest.required_commands || [];
+    const objectives = currentQuest.objectives || [];
+    const output = response.output || '';
     const cmdName = command.trim().split(/\s+/)[0];
 
+    const required = currentQuest.required_commands || [];
     const isRequiredCommand = required.length === 0 || required.includes(cmdName);
     if (battleRef.current && isRequiredCommand) {
       if (response.error) {
@@ -98,22 +101,44 @@ export default function GamePage() {
       }
     }
 
-    if (response.error) return;
-    if (required.length === 0) return;
+    if (response.error || objectives.length === 0) return;
 
-    const args = command.trim().split(/\s+/).slice(1);
-    const isHelpOnly = args.length > 0 && args.every(a => a === '--help' || a === '-h');
-    if (isHelpOnly) return;
+    const normalized = command.trim().replace(/\s+/g, ' ');
 
-    if (required.includes(cmdName)) {
-      executedCommandsRef.current.add(cmdName);
+    for (const obj of objectives) {
+      if (completedObjectivesRef.current.has(obj.id)) continue;
+
+      const expected = obj.expectedCommand;
+      let cmdMatches = false;
+
+      if (Array.isArray(expected)) {
+        cmdMatches = expected.some(e => normalized === e.trim().replace(/\s+/g, ' '));
+      } else if (expected) {
+        cmdMatches = normalized === expected.trim().replace(/\s+/g, ' ');
+      }
+
+      if (!cmdMatches) continue;
+
+      if (obj.validationFn) {
+        try {
+          // eslint-disable-next-line no-new-func
+          const check = new Function('output', `return ${obj.validationFn}`);
+          if (!check(output)) continue;
+        } catch {
+          continue;
+        }
+      }
+
+      completedObjectivesRef.current.add(obj.id);
     }
 
-    const allDone = required.every(cmd => executedCommandsRef.current.has(cmd));
+    const allDone = objectives.length > 0 &&
+      objectives.every(obj => completedObjectivesRef.current.has(obj.id));
+
     if (allDone) {
       setCanComplete(true);
       const alreadyDone = userProgress.some(
-        p => p.quest_id === quest.id && p.status === 'completed'
+        p => p.quest_id === currentQuest.id && p.status === 'completed'
       );
       if (!alreadyDone) {
         handleQuestComplete();

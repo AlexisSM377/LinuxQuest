@@ -8,1381 +8,3116 @@ const quests = [
   {
     id: 1,
     title: 'El Despertar del Iniciado',
-    description: 'Usa uname para revelar los secretos de tu sistema',
+    description: 'Aprende a conocer tu sistema Linux con el comando uname',
     world: 1, order: 1, difficulty: 1,
     npc: 'Linux el Sabio',
-    story: 'El anciano sabio te recibe en las puertas del Castillo del Conocimiento. "Antes de emprender tu viaje, joven aprendiz, debes conocer el suelo que pisas. El hechizo uname revela la identidad completa de tu sistema: kernel, version, arquitectura."',
-    hints: ['uname -a muestra TODO: kernel, version, arquitectura, SO', 'uname sin opciones muestra solo el nombre del kernel', 'uname -r muestra solo la version del kernel'],
+    story: '"El anciano sabio te recibe en las puertas del Castillo del Conocimiento. "Antes de emprender tu viaje, joven aprendiz, debes conocer el suelo que pisas. El hechizo uname revela la identidad completa de tu sistema."',
+    instructions: [
+      '📖 uname es una herramienta que muestra información sobre tu sistema Linux (kernel, versión, arquitectura)',
+      '🔧 uname -a muestra TODA la información de una sola vez',
+      '▶ Ejecuta exactamente: uname -a'
+    ],
+    hints: ['Recuerda incluir -a para ver toda la información', 'El output mostrará el nombre del kernel, hostname, versión, arquitectura'],
     requiredCommands: ['uname'],
     objectives: [
-      { id: 1, description: 'Revela los secretos de tu sistema con uname -a', type: 'command_output', command: 'uname -a', validationFn: 'output.includes("Linux")' }
+      {
+        id: 1,
+        description: 'Revela los secretos de tu sistema con uname -a',
+        type: 'command_output',
+        expectedCommand: 'uname -a',
+        validationFn: 'output.includes("Linux")'
+      }
     ],
     prerequisites: [],
     rewards: { xp: 50, coins: 5 }
   },
+
   {
     id: 2,
     title: 'Identificando el Reino',
-    description: 'Lee el pergamino /etc/os-release para conocer tu distribución',
+    description: 'Lee el archivo /etc/os-release para identificar tu distribución',
     world: 1, order: 2, difficulty: 1,
     npc: 'Linux el Sabio',
-    story: '"Cada reino tiene su estandarte. Tu distribución es tu bandera en batalla. En el archivo /etc/os-release encontraras el nombre, version e identificacion de tu clan. Usa cat para leerlo."',
-    hints: ['cat /etc/os-release muestra la informacion de tu distro', 'Busca las lineas NAME= y VERSION=', 'Cada distribucion tiene su propio contenido'],
+    story: '"Cada reino tiene su estandarte. Tu distribución es tu identidad en el mundo Linux. El archivo /etc/os-release es el "DNI" de tu sistema, con información sobre qué distribución usas, versión e identificadores."',
+    instructions: [
+      '📖 /etc/os-release contiene metadatos sobre tu distribución Linux (NAME, VERSION, ID, etc.)',
+      '🔧 El comando cat lee archivos de texto y muestra su contenido: cat /ruta/archivo',
+      '▶ Ejecuta exactamente: cat /etc/os-release'
+    ],
+    hints: [
+      'Busca la línea que comienza con NAME= para ver el nombre de tu distribución',
+      'Alpine Linux es la distribución usada en este sandbox educativo'
+    ],
     requiredCommands: ['cat'],
     objectives: [
-      { id: 1, description: 'Lee el pergamino de identificacion de tu reino', type: 'command_output', command: 'cat /etc/os-release', validationFn: 'output.includes("NAME=")' }
+      {
+        id: 1,
+        description: 'Lee el archivo de identidad de tu distribución',
+        type: 'command_output',
+        expectedCommand: 'cat /etc/os-release',
+        validationFn: 'output.includes("NAME=")'
+      }
     ],
     prerequisites: [],
     rewards: { xp: 50, coins: 5 }
   },
+
   {
     id: 3,
     title: 'Las Familias del Reino',
-    description: 'Explora los clanes de distribuciones en /reino/distros/',
+    description: 'Explora las familias de distribuciones Linux en /reino/distros/',
     world: 1, order: 3, difficulty: 2,
     npc: 'Linux el Sabio',
-    story: '"Las distribuciones son clanes ancestrales. En /reino/distros/ encontraras pergaminos sobre cada familia: Debian, Red Hat, Arch, SUSE. Explora con ls y lee con cat para conocer a cada clan."',
-    hints: ['ls /reino/distros/ te muestra los archivos de cada familia', 'cat /reino/distros/debian.txt te cuenta sobre Debian', 'cat /reino/distros/familias.txt tiene el resumen completo'],
+    story: '"Las distribuciones son familias ancestrales con raíces comunes. Debian, Red Hat, Arch y SUSE son los grandes clanes. En /reino/distros/ encontrarás pergaminos sobre cada familia."',
+    instructions: [
+      '📖 Existen "familias" de distribuciones Linux: Debian, Red Hat, Arch, SUSE. Cada una tiene su filosofía y herramientas',
+      '🔧 ls lista archivos en un directorio: ls /ruta/directorio',
+      '🔧 cat lee el contenido de archivos: cat /ruta/archivo',
+      '▶ Paso 1: Ejecuta exactamente: ls /reino/distros/',
+      '▶ Paso 2: Luego ejecuta: cat /reino/distros/debian.txt'
+    ],
+    hints: [
+      'Primero usa ls para ver qué archivos hay en /reino/distros/',
+      'Verás archivos como debian.txt, redhat.txt, arch.txt',
+      'cat /reino/distros/debian.txt te mostrará información sobre Debian y sus derivadas (Ubuntu, Linux Mint)'
+    ],
     requiredCommands: ['ls', 'cat'],
     objectives: [
-      { id: 1, description: 'Lista los pergaminos de las familias del reino', type: 'command_output', command: 'ls /reino/distros/', validationFn: 'output.includes("debian")' },
-      { id: 2, description: 'Lee el pergamino de la familia Debian', type: 'command_output', command: 'cat /reino/distros/debian.txt', validationFn: 'output.includes("Ubuntu")' }
+      {
+        id: 1,
+        description: 'Lista los pergaminos de las familias del reino',
+        type: 'command_output',
+        expectedCommand: 'ls /reino/distros/',
+        validationFn: 'output.includes("debian")'
+      },
+      {
+        id: 2,
+        description: 'Lee el pergamino de la familia Debian',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/distros/debian.txt',
+        validationFn: 'output.includes("Ubuntu") || output.includes("Debian")'
+      }
     ],
     prerequisites: [],
     rewards: { xp: 60, coins: 10 }
   },
+
   {
     id: 4,
     title: 'El Estandarte del León',
-    description: 'Descubre qué gestor de paquetes usa tu sistema',
-    world: 1, order: 4, difficulty: 1,
+    description: 'Descubre qué gestor de paquetes usa tu distribución',
+    world: 1, order: 4, difficulty: 2,
     npc: 'Linux el Sabio',
-    story: '"Cada clan tiene su herrero de paquetes. Usa which para buscar el gestor de tu reino. Si es apt, perteneces a Debian. Si es dnf, a Red Hat. Si es pacman, a Arch."',
-    hints: ['which busca ejecutables en el PATH', 'apt = Debian/Ubuntu', 'dnf = Fedora/RHEL', 'pacman = Arch'],
+    story: '"Cada familia tiene su herrero de paquetes: el gestor que instala software. Debian usa apt, Red Hat usa dnf, Arch usa pacman. Usa which para encontrar cuál tiene tu reino."',
+    instructions: [
+      '📖 Un gestor de paquetes es una herramienta para instalar, actualizar y desinstalar software. Cada familia Linux usa uno diferente',
+      '🔧 which busca ejecutables en tu PATH (rutas del sistema): which nombre_programa',
+      '🔧 apt = Debian/Ubuntu, dnf = Fedora/RHEL, pacman = Arch',
+      '▶ Ejecuta exactamente: which apt'
+    ],
+    hints: [
+      'En Alpine Linux el gestor es apk, pero el comando which apt aún funcionará',
+      'Si which no encuentra apt, devuelve un código de error',
+      'Intenta también: which dnf o which pacman'
+    ],
     requiredCommands: ['which'],
     objectives: [
-      { id: 1, description: 'Busca el gestor de paquetes de tu reino', type: 'command_output', command: 'which apt || which dnf || which pacman || echo "No encontrado"', validationFn: 'output.length > 0' }
+      {
+        id: 1,
+        description: 'Busca el gestor de paquetes de tu reino',
+        type: 'command_output',
+        expectedCommand: 'which apt',
+        validationFn: 'output.length > 0'
+      }
     ],
     prerequisites: [],
     rewards: { xp: 50, coins: 5 }
   },
+
   {
     id: 5,
     title: 'El Lenguaje del Sistema',
-    description: 'Usa uname -s para revelar solo el nombre del SO',
-    world: 1, order: 5, difficulty: 1,
+    description: 'Domina las opciones del comando uname para obtener datos específicos',
+    world: 1, order: 5, difficulty: 2,
     npc: 'Linux el Sabio',
-    story: '"uname tiene muchos secretos. Con -s revela solo el nombre del sistema operativo. Con -m la arquitectura. Con -r la version del kernel. Cada opcion es una perspectiva diferente."',
-    hints: ['uname -s muestra solo el nombre del SO', 'uname -m muestra la arquitectura (x86_64, aarch64)', 'uname -r muestra solo la version del kernel'],
+    story: '"uname es versátil. Con -s ves solo el nombre del SO. Con -m ves la arquitectura. Con -r ves la versión del kernel. Son diferentes perspectivas del mismo sistema."',
+    instructions: [
+      '📖 Las opciones de uname son como lentes especializados: cada una muestra una parte diferente de tu sistema',
+      '🔧 uname -s = solo el nombre del SO (Linux)',
+      '🔧 uname -m = arquitectura del procesador (x86_64, aarch64)',
+      '🔧 uname -r = versión del kernel',
+      '▶ Paso 1: Ejecuta exactamente: uname -s',
+      '▶ Paso 2: Luego ejecuta: uname -m'
+    ],
+    hints: [
+      'x86_64 significa procesador Intel/AMD de 64 bits',
+      'aarch64 significa procesador ARM de 64 bits',
+      'El nombre del SO casi siempre será "Linux" en sistemas Linux'
+    ],
     requiredCommands: ['uname'],
     objectives: [
-      { id: 1, description: 'Revela solo el nombre de tu sistema operativo', type: 'command_output', command: 'uname -s', validationFn: 'output.includes("Linux")' },
-      { id: 2, description: 'Revela tu arquitectura de procesador', type: 'command_output', command: 'uname -m', validationFn: 'output.length > 0' }
+      {
+        id: 1,
+        description: 'Revela solo el nombre de tu sistema operativo',
+        type: 'command_output',
+        expectedCommand: 'uname -s',
+        validationFn: 'output.includes("Linux")'
+      },
+      {
+        id: 2,
+        description: 'Revela la arquitectura de tu procesador',
+        type: 'command_output',
+        expectedCommand: 'uname -m',
+        validationFn: 'output.length > 3'
+      }
     ],
     prerequisites: [],
-    rewards: { xp: 50, coins: 5 }
+    rewards: { xp: 60, coins: 10 }
   },
+
   {
     id: 6,
     title: 'Sistemas Embebidos y la Nube',
-    description: 'Lee sobre Android, Raspberry Pi y Cloud Computing',
+    description: 'Aprende cómo Linux se ejecuta en Android, Raspberry Pi y servidores cloud',
     world: 1, order: 6, difficulty: 2,
     npc: 'Linux el Sabio',
-    story: '"Linux no solo vive en PCs. En /reino/distros/embebidos.txt descubriras como Android usa un kernel modificado, como Raspberry Pi lleva Linux a dispositivos pequenos, y como el 90% de la nube publica corre Linux."',
-    hints: ['cat /reino/distros/embebidos.txt tiene toda la info', 'Android usa kernel Linux MODIFICADO (no es Linux puro)', 'Raspberry Pi usa procesador ARM'],
+    story: '"Linux no solo vive en computadoras de escritorio. Android usa un kernel modificado de Linux. Raspberry Pi lleva Linux a dispositivos diminutos. El 90% de la nube pública es Linux. El reino del kernel es infinito."',
+    instructions: [
+      '📖 Linux es ubicuo: Android (90% de celulares), Raspberry Pi (computadoras educativas), Smart TVs, routers, servidores cloud',
+      '🔧 cat /reino/distros/embebidos.txt contiene información educativa sobre estos sistemas',
+      '▶ Ejecuta exactamente: cat /reino/distros/embebidos.txt'
+    ],
+    hints: [
+      'Android modifica el kernel Linux para que funcione en dispositivos móviles',
+      'Raspberry Pi usa ARM, no x86_64 como las computadoras normales',
+      'AWS, Google Cloud Platform, Azure: casi todos corren Linux'
+    ],
     requiredCommands: ['cat'],
     objectives: [
-      { id: 1, description: 'Lee el pergamino de sistemas embebidos', type: 'command_output', command: 'cat /reino/distros/embebidos.txt', validationFn: 'output.includes("Android")' }
+      {
+        id: 1,
+        description: 'Lee el pergamino de sistemas embebidos y cloud',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/distros/embebidos.txt',
+        validationFn: 'output.includes("Android") || output.includes("Raspberry")'
+      }
     ],
     prerequisites: [],
     rewards: { xp: 60, coins: 10 }
   },
+
   {
     id: 7,
     title: 'Las Herramientas Libres',
-    description: 'Explora el software libre en /reino/software/',
+    description: 'Descubre alternativas de software libre para tareas comunes',
     world: 1, order: 7, difficulty: 2,
     npc: 'Linux el Sabio',
-    story: '"En el reino del software libre, cada herramienta propietaria tiene su equivalente. En /reino/software/ descubriras alternativas libres para ofimatica, multimedia, servidores y mas."',
-    hints: ['ls /reino/software/ te muestra las categorias', 'cat /reino/software/escritorio.txt = alternativas de ofimatica', 'GIMP = Photoshop, LibreOffice = Microsoft Office'],
+    story: '"En el reino del software libre, cada herramienta propietaria tiene un equivalente. Para cada tarea (ofimatica, diseño, audio, etc.) existen alternativas libres y poderosas. En /reino/software/ descubrirás las joyas del movimiento open source."',
+    instructions: [
+      '📖 Software libre = alternativas de calidad a programas privativos. GIMP vs Photoshop, LibreOffice vs Microsoft Office',
+      '🔧 ls /reino/software/ lista las categorías disponibles',
+      '🔧 cat /reino/software/escritorio.txt muestra herramientas de ofimatica libre',
+      '▶ Paso 1: Ejecuta exactamente: ls /reino/software/',
+      '▶ Paso 2: Luego ejecuta: cat /reino/software/escritorio.txt'
+    ],
+    hints: [
+      'escritorio.txt contiene herramientas de ofimatica (LibreOffice = Word/Excel)',
+      'Verás categorías como multimedia, desarrollo, servidores',
+      'El software libre suele ser gratis Y tienes acceso al código fuente'
+    ],
     requiredCommands: ['ls', 'cat'],
     objectives: [
-      { id: 1, description: 'Lista las categorias de software libre', type: 'command_output', command: 'ls /reino/software/', validationFn: 'output.includes("escritorio")' },
-      { id: 2, description: 'Lee las alternativas de escritorio', type: 'command_output', command: 'cat /reino/software/escritorio.txt', validationFn: 'output.includes("LibreOffice")' }
+      {
+        id: 1,
+        description: 'Lista las categorías de software libre disponible',
+        type: 'command_output',
+        expectedCommand: 'ls /reino/software/',
+        validationFn: 'output.includes("escritorio") || output.includes(".txt")'
+      },
+      {
+        id: 2,
+        description: 'Lee las herramientas libres de escritorio y ofimatica',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/software/escritorio.txt',
+        validationFn: 'output.includes("LibreOffice") || output.includes("GIMP")'
+      }
+    ],
+    prerequisites: [],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 8,
+    title: 'Las Cuatro Libertades del Software',
+    description: 'Entiende los principios fundamentales del movimiento de software libre',
+    world: 1, order: 8, difficulty: 2,
+    npc: 'Linux el Sabio',
+    story: '"Richard Stallman definió las Cuatro Libertades del software libre. Libertad 0: usar el programa. Libertad 1: estudiar el código. Libertad 2: distribuir copias. Libertad 3: mejorar el programa. Estas son los pilares del reino."',
+    instructions: [
+      '📖 Las Cuatro Libertades de Stallman (Libertad 0-3) definen qué es software libre',
+      '🔧 GPL, MIT, Apache: licencias que garantizan estas libertades de diferentes formas',
+      '🔧 cat /reino/licencias/libertades.txt contiene la explicación completa',
+      '▶ Ejecuta exactamente: cat /reino/licencias/libertades.txt'
+    ],
+    hints: [
+      'Libertad 0 = derecho a usar',
+      'Libertad 1 = acceso al código fuente (no es "piratería")',
+      'Libertad 2 = puedes compartir copias',
+      'Libertad 3 = puedes contribuir mejoras'
+    ],
+    requiredCommands: ['cat'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lee la explicación de las Cuatro Libertades',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/licencias/libertades.txt',
+        validationFn: 'output.includes("Libertad") || output.includes("libre")'
+      }
     ],
     prerequisites: [],
     rewards: { xp: 60, coins: 10 }
   },
-  {
-    id: 8,
-    title: 'El Pacto de la Libertad',
-    description: 'Lee sobre las 4 libertades del software libre',
-    world: 1, order: 8, difficulty: 2,
-    npc: 'Linux el Sabio',
-    story: '"Las Cuatro Libertades son el codigo de honor del reino. En /reino/historia/stallman.txt descubriras como Richard Stallman las creo. Usa grep para buscar la palabra libertad en los pergaminos."',
-    hints: ['cat /reino/historia/stallman.txt tiene las 4 libertades', 'grep "libertad" /reino/historia/*.txt busca en todos los pergaminos', 'Las libertades son: Usar, Estudiar, Distribuir, Modificar'],
-    requiredCommands: ['cat', 'grep'],
-    objectives: [
-      { id: 1, description: 'Lee el pergamino de Richard Stallman', type: 'command_output', command: 'cat /reino/historia/stallman.txt', validationFn: 'output.includes("libertades")' },
-      { id: 2, description: 'Busca la palabra "libertad" en los pergaminos', type: 'command_output', command: 'grep -i "libertad" /reino/historia/*.txt 2>/dev/null | head -3', validationFn: 'output.length > 0' }
-    ],
-    prerequisites: [],
-    rewards: { xp: 75, coins: 15 }
-  },
+
   {
     id: 9,
-    title: 'Las Licencias Sagradas',
-    description: 'Compara GPL, MIT, BSD y Apache en /reino/licencias/',
+    title: 'Licencias del Código Abierto',
+    description: 'Aprende las principales licencias de software libre y sus diferencias',
     world: 1, order: 9, difficulty: 2,
     npc: 'Linux el Sabio',
-    story: '"Las licencias son los tratados que rigen el reino. En /reino/licencias/ encontraras los pergaminos de GPL, MIT, BSD y Apache. Cada una define que puedes hacer con el software."',
-    hints: ['ls /reino/licencias/ te muestra los pergaminos', 'GPL = copyleft (modificaciones deben ser libres)', 'MIT = permisiva (puedes hacer lo que quieras)'],
-    requiredCommands: ['ls', 'cat'],
+    story: '"GPL, MIT, BSD, Apache: licencias distintas pero todas del movimiento libre. GPL es copyleft (compartir la libertad). MIT es permisiva (casi sin restricciones). La elección de licencia define el alma del proyecto."',
+    instructions: [
+      '📖 GPL, MIT, BSD, Apache son las licencias más comunes del software libre',
+      '🔧 GPL (copyleft) = si distribuyes el software, debes compartir el código fuente',
+      '🔧 MIT/BSD (permisivas) = muy pocos requisitos, casi haz lo que quieras',
+      '🔧 cat /reino/licencias/tipos.txt contiene comparación de licencias',
+      '▶ Ejecuta exactamente: cat /reino/licencias/tipos.txt'
+    ],
+    hints: [
+      'Linux usa GPL v2',
+      'Nginx usa BSD',
+      'Node.js usa MIT',
+      'GPL es "viral" (obliga a quien lo distribuye a mantener la licencia GPL)'
+    ],
+    requiredCommands: ['cat'],
     objectives: [
-      { id: 1, description: 'Lista los pergaminos de licencias', type: 'command_output', command: 'ls /reino/licencias/', validationFn: 'output.includes("gpl")' },
-      { id: 2, description: 'Lee el pergamino de GPL', type: 'command_output', command: 'cat /reino/licencias/gpl.txt', validationFn: 'output.includes("Copyleft")' },
-      { id: 3, description: 'Lee el pergamino de MIT', type: 'command_output', command: 'cat /reino/licencias/mit.txt', validationFn: 'output.includes("Permisiva")' }
+      {
+        id: 1,
+        description: 'Lee la comparación de licencias de software libre',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/licencias/tipos.txt',
+        validationFn: 'output.includes("GPL") || output.includes("MIT")'
+      }
     ],
     prerequisites: [],
-    rewards: { xp: 75, coins: 15 }
+    rewards: { xp: 60, coins: 10 }
   },
+
   {
     id: 10,
-    title: 'El Escritorio del Guerrero',
-    description: 'Descubre los entornos gráficos y tu shell',
-    world: 1, order: 10, difficulty: 1,
+    title: 'Linus Torvalds y el Kernel',
+    description: 'Aprende la historia de Linux y el kernel que lo hace posible',
+    world: 1, order: 10, difficulty: 2,
     npc: 'Linux el Sabio',
-    story: '"Los entornos graficos son las armaduras visuales del guerrero. En /reino/software/escritorios.txt descubriras GNOME, KDE, XFCE y mas. Tu shell ($SHELL) es tu arma principal."',
-    hints: ['cat /reino/software/escritorios.txt describe cada entorno', 'echo $SHELL muestra tu shell actual', 'echo $USER muestra tu nombre de usuario'],
-    requiredCommands: ['cat', 'echo'],
+    story: '"En 1991, un estudiante finlandés llamado Linus Torvalds creó el kernel de Linux. No lo hizo solo: miles de programadores contribuyeron. El kernel es el corazón del sistema, el puente entre el hardware y los programas."',
+    instructions: [
+      '📖 Linus Torvalds creó el kernel Linux en 1991, liberándolo bajo GPL',
+      '🔧 El kernel es el software más importante del SO: gesiona hardware, procesos, memoria, redes',
+      '🔧 cat /reino/historia/kernel.txt contiene la historia completa',
+      '▶ Ejecuta exactamente: cat /reino/historia/kernel.txt'
+    ],
+    hints: [
+      'El kernel no es lo mismo que el SO (kernel ≠ Linux, aunque a menudo se confunden)',
+      'Linus Torvalds sigue siendo el "Benevolent Dictator For Life" (BDFL) del kernel',
+      'El kernel actual tiene decenas de millones de líneas de código'
+    ],
+    requiredCommands: ['cat'],
     objectives: [
-      { id: 1, description: 'Lee sobre los entornos de escritorio', type: 'command_output', command: 'cat /reino/software/escritorios.txt', validationFn: 'output.includes("GNOME")' },
-      { id: 2, description: 'Muestra tu shell y usuario actual', type: 'command_output', command: 'echo "Usuario: $USER Shell: $SHELL"', validationFn: 'output.length > 0' }
+      {
+        id: 1,
+        description: 'Lee la historia de Linus y el kernel de Linux',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/historia/kernel.txt',
+        validationFn: 'output.includes("Linus") || output.includes("kernel")'
+      }
     ],
     prerequisites: [],
-    rewards: { xp: 50, coins: 5 }
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 11,
-    title: 'La Nube Mágica',
-    description: 'Conecta con el mundo exterior usando curl',
+    title: 'El Proyecto GNU y la FSF',
+    description: 'Entiende el movimiento GNU y la Free Software Foundation',
     world: 1, order: 11, difficulty: 2,
     npc: 'Linux el Sabio',
-    story: '"El 90% de la nube publica corre Linux. AWS, Azure, GCP son los grandes reinos en las nubes. Usa curl para tocar la puerta del mundo exterior y verificar que tu conexion con el reino funciona."',
-    hints: ['curl hace peticiones HTTP', 'La API de GitHub tiene un endpoint zen que devuelve frases', '--connect-timeout evita que se cuelgue'],
-    requiredCommands: ['curl'],
+    story: '"GNU es un movimiento: "GNU is Not Unix". Richard Stallman fundó la Free Software Foundation (FSF) para promover la libertad del software. Sin GNU, Linux sería solo un kernel. GNU proporciona las herramientas que lo hacen útil."',
+    instructions: [
+      '📖 GNU = movimiento + herramientas fundamentales (gcc, bash, coreutils, etc.)',
+      '🔧 GNU/Linux = kernel Linux + herramientas GNU',
+      '🔧 FSF = Free Software Foundation, organización que promueve software libre',
+      '🔧 cat /reino/historia/gnu.txt contiene información detallada',
+      '▶ Ejecuta exactamente: cat /reino/historia/gnu.txt'
+    ],
+    hints: [
+      'gcc es el compilador principal de Linux (GNU C Compiler)',
+      'bash es el shell predeterminado (GNU Bourne Again SHell)',
+      'Stallman escribió el primer compilador de GNU (gcc) a finales de los 80'
+    ],
+    requiredCommands: ['cat'],
     objectives: [
-      { id: 1, description: 'Envia un mensajero al mundo exterior', type: 'command_output', command: 'curl -s --connect-timeout 5 https://api.github.com/zen || echo "Sin conexion externa"', validationFn: 'output.length > 0' }
+      {
+        id: 1,
+        description: 'Lee sobre el proyecto GNU y la FSF',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/historia/gnu.txt',
+        validationFn: 'output.includes("GNU") || output.includes("Stallman")'
+      }
     ],
     prerequisites: [],
-    rewards: { xp: 75, coins: 15 }
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 12,
-    title: 'Boss: El Guardián del Conocimiento',
-    description: 'Demuestra que dominas el Tema 1 LPI — Comunidad Linux',
-    world: 1, order: 12, difficulty: 5,
-    npc: 'BOSS',
-    story: 'El Guardián del Conocimiento bloquea la puerta al Mundo 2. Solo aquellos que demuestren dominio sobre la historia, distribuciones y filosofía de Linux podran pasar. ¡Preparate para la batalla!',
-    hints: ['Usa uname, cat, which, echo y curl', 'Recuerda las familias de distribuciones', 'Las 4 libertades son: Usar, Estudiar, Distribuir, Modificar'],
-    requiredCommands: ['uname', 'cat', 'which', 'echo', 'curl', 'ls', 'grep'],
+    title: '👹 BOSS: El Guardián del Conocimiento',
+    description: 'Demuestra tu dominio del Mundo 1 respondiendo preguntas sobre Linux',
+    world: 1, order: 12, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"Has aprendido bien, aprendiz. El Guardián del Conocimiento te pone a prueba. Responde sus preguntas sobre la historia de Linux, el software libre y las distribuciones. Solo así podrás avanzar al próximo mundo."',
+    instructions: [
+      '📖 Este es el jefe del Mundo 1: debes demostrar dominio de todos los conceptos',
+      '🔧 El Guardián te hará preguntas de opción múltiple (simuladas mediante comandos)',
+      '🔧 Responde correctamente consultando los pergaminos (cat /reino/historia/*)',
+      '▶ Ejecuta: cat /reino/preguntas/mundo1.txt para ver las preguntas'
+    ],
+    hints: [
+      'Todas las respuestas están en los pergaminos que ya leíste',
+      'El Guardián es justo: solo pregunta sobre lo que aprendiste',
+      'Piensa en las Cuatro Libertades, las licencias, la historia del kernel'
+    ],
+    requiredCommands: ['cat'],
     objectives: [
-      { id: 1, description: 'Identifica tu sistema con uname -a', type: 'command_output', command: 'uname -a', validationFn: 'output.includes("Linux")' },
-      { id: 2, description: 'Lee la identificacion de tu reino', type: 'command_output', command: 'cat /etc/os-release', validationFn: 'output.includes("NAME=")' },
-      { id: 3, description: 'Explora los pergaminos de distros', type: 'command_output', command: 'ls /reino/distros/', validationFn: 'output.includes("debian")' },
-      { id: 4, description: 'Busca informacion sobre licencias', type: 'command_output', command: 'grep -l "Copyleft" /reino/licencias/*.txt 2>/dev/null', validationFn: 'output.includes("gpl")' }
+      {
+        id: 1,
+        description: 'Responde las preguntas del Guardián del Conocimiento',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/preguntas/mundo1.txt',
+        validationFn: 'output.includes("pregunta") || output.includes("Mundo 1")'
+      }
     ],
     prerequisites: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-    rewards: { xp: 200, coins: 100, achievement: 'mundo_1' }
+    rewards: { xp: 150, coins: 50 }
   },
 
   // ==========================================
-  // MUNDO 2: LOS SENDEROS DEL SISTEMA (18 misiones)
-  // Tema 2 LPI: Encontrando el camino (peso 9 — MÁS IMPORTANTE)
+  // MUNDO 2: CAMINOS PERDIDOS (18 misiones)
+  // Tema 2 LPI: Encontrando el camino (peso 9)
   // ==========================================
   {
     id: 13,
-    title: 'El Primer Paso del Caminante',
-    description: 'Usa pwd para saber dónde estás en el laberinto',
+    title: 'El Primer Paso en el Laberinto',
+    description: 'Aprende dónde estás en el sistema de archivos con pwd',
     world: 2, order: 1, difficulty: 1,
-    npc: 'Grep-ild',
-    story: '"¡Bienvenido a los Senderos del Sistema, aventurero! Cada viaje comienza sabiendo donde estas. pwd (Print Working Directory) revela tu posicion exacta en el laberinto de directorios."',
-    hints: ['pwd = Print Working Directory', 'Siempre muestra la ruta absoluta desde la raiz /', 'Tu posicion actual es el punto de partida de todo'],
+    npc: 'Grep-ild el Rastreador',
+    story: '"Bienvenido al Laberinto de Caminos. El primer hechizo que todo aprendiz debe dominar es pwd: "print working directory". Te dice exactamente dónde estás en el vasto bosque de directorios."',
+    instructions: [
+      '📖 pwd (print working directory) te dice tu ubicación actual en el árbol de directorios',
+      '🔧 Todos los caminos en Linux comienzan desde / (raíz) o desde tu home (~)',
+      '🔧 pwd sin opciones simplemente muestra tu ruta actual',
+      '▶ Ejecuta exactamente: pwd'
+    ],
+    hints: [
+      'pwd no necesita opciones, funciona tal cual',
+      'Tu directorio actual probablemente empiece con /root o tu directorio home',
+      'El / es la raíz, el inicio de todos los caminos'
+    ],
     requiredCommands: ['pwd'],
     objectives: [
-      { id: 1, description: 'Revela tu posicion actual en el laberinto', type: 'command_output', command: 'pwd', validationFn: 'output.startsWith("/")' }
+      {
+        id: 1,
+        description: 'Descubre dónde estás en el laberinto',
+        type: 'command_output',
+        expectedCommand: 'pwd',
+        validationFn: 'output.includes("/")'
+      }
     ],
     prerequisites: [12],
-    rewards: { xp: 30, coins: 5 }
+    rewards: { xp: 50, coins: 5 }
   },
+
   {
     id: 14,
-    title: 'El Eco del Cambio',
-    description: 'Usa echo para hablar con el sistema',
+    title: 'Listando los Tesoros',
+    description: 'Domina ls para explorar el contenido de directorios',
     world: 2, order: 2, difficulty: 1,
-    npc: 'Grep-ild',
-    story: '"echo es la voz del sistema. Repite todo lo que le digas. Prueba a decir tu nombre, a usar variables como $USER, y a combinar texto con variables."',
-    hints: ['echo imprime texto en la terminal', 'echo $USER muestra tu nombre de usuario', 'Puedes usar comillas para frases con espacios'],
-    requiredCommands: ['echo'],
-    objectives: [
-      { id: 1, description: 'Habla al sistema con echo', type: 'command_output', command: 'echo "Soy $USER y estoy en el reino de Linux"', validationFn: 'output.includes("reino")' }
+    npc: 'Grep-ild el Rastreador',
+    story: '"ls es tu linterna en la oscuridad. Ilumina lo que hay en cada cuarto del laberinto. Con ls ves archivos, directorios, tamaños, permisos. Sin él, estabas ciego."',
+    instructions: [
+      '📖 ls lista el contenido de un directorio (archivos y subdirectorios)',
+      '🔧 ls sin argumentos lista el directorio actual',
+      '🔧 ls /ruta lista el contenido de ese directorio',
+      '🔧 ls -l muestra detalles (permisos, tamaño, fecha)',
+      '▶ Paso 1: Ejecuta exactamente: ls',
+      '▶ Paso 2: Luego ejecuta: ls -la'
     ],
-    prerequisites: [12],
-    rewards: { xp: 30, coins: 5 }
-  },
-  {
-    id: 15,
-    title: 'La Estructura del Comando',
-    description: 'Aprende la estructura: comando -opciones argumentos',
-    world: 2, order: 3, difficulty: 1,
-    npc: 'Grep-ild',
-    story: '"Todo hechizo sigue un patron: comando -opciones argumentos. Como un conjuro: ls -l /home. El comando es la accion, las opciones modifican como se ejecuta, y los argumentos son el objetivo. Ejecuta ls con opciones."',
-    hints: ['ls es el comando, -l es la opcion, / es el argumento', 'Las opciones cortas usan -, las largas usan --', 'ls -l / muestra el contenido de la raiz en formato largo'],
+    hints: [
+      'ls -l = formato largo (long listing)',
+      'ls -a = mostrar archivos ocultos (que comienzan con .)',
+      'ls -la = largo Y archivos ocultos'
+    ],
     requiredCommands: ['ls'],
     objectives: [
-      { id: 1, description: 'Ejecuta ls con opciones y argumentos', type: 'command_output', command: 'ls -l /', validationFn: 'output.includes("total") || output.includes("root")' }
+      {
+        id: 1,
+        description: 'Lista el contenido de tu directorio actual',
+        type: 'command_output',
+        expectedCommand: 'ls',
+        validationFn: 'output.length > 0'
+      },
+      {
+        id: 2,
+        description: 'Lista con detalles (permisos, tamaño, fecha)',
+        type: 'command_output',
+        expectedCommand: 'ls -la',
+        validationFn: 'output.includes("drwx") || output.includes("-rw")'
+      }
     ],
-    prerequisites: [12],
-    rewards: { xp: 40, coins: 5 }
-  },
-  {
-    id: 16,
-    title: 'Las Variables del Entorno',
-    description: 'Descubre las variables mágicas: $USER, $HOME, $SHELL',
-    world: 2, order: 4, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"Las variables de entorno son runas invisibles que guardan informacion crucial. $USER es tu nombre, $HOME tu refugio, $SHELL tu arma favorita. Revelalas con echo."',
-    hints: ['$USER = tu nombre de usuario', '$HOME = tu directorio personal', '$SHELL = tu shell predeterminado', '$PWD = tu directorio actual'],
-    requiredCommands: ['echo'],
-    objectives: [
-      { id: 1, description: 'Revela las runas de tu entorno', type: 'command_output', command: 'echo "Usuario: $USER | Home: $HOME | Shell: $SHELL | Dir: $PWD"', validationFn: 'output.includes("Usuario")' }
-    ],
-    prerequisites: [14],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 17,
-    title: 'Exportar el Poder',
-    description: 'Crea y exporta variables de entorno',
-    world: 2, order: 5, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"Exportar una variable es como compartir un hechizo con tus aliados (subprocesos). Sin export, la variable solo vive en tu shell actual. Con export, viaja por todo el reino."',
-    hints: ['export VAR=value crea una variable de entorno', 'Sin export, la variable es local al shell actual', 'echo $VAR verifica que se creo'],
-    requiredCommands: ['export', 'echo'],
-    objectives: [
-      { id: 1, description: 'Crea y exporta una variable de entorno', type: 'command_output', command: 'export QUEST_VAR=linuxquest && echo "Mi variable: $QUEST_VAR"', validationFn: 'output.includes("linuxquest")' }
-    ],
-    prerequisites: [16],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 18,
-    title: 'El Manual del Sabio',
-    description: 'Consulta las páginas de manual con man',
-    world: 2, order: 6, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"Las paginas de manual son los pergaminos ancestrales del sistema. Cada comando tiene su pergamino. man ls te ensena todo sobre ls. man -k busca por palabra clave."',
-    hints: ['man ls abre el manual de ls', 'man -k palabra busca en todos los manuales', 'q para salir del manual'],
-    requiredCommands: ['man'],
-    objectives: [
-      { id: 1, description: 'Lee el pergamino del comando ls', type: 'command_output', command: 'man ls', validationFn: 'output.includes("NAME") || output.includes("ls")' }
-    ],
-    prerequisites: [15],
+    prerequisites: [12, 13],
     rewards: { xp: 60, coins: 10 }
   },
+
+  {
+    id: 15,
+    title: '👹 BOSS: El Minotauro de los Caminos',
+    description: 'Navega correctamente a través del laberinto de directorios',
+    world: 2, order: 3, difficulty: 3,
+    npc: 'Grep-ild el Rastreador',
+    story: '"El Minotauro guarda los secretos del Laberinto. Para derrotarlo debes demostrar que dominas la navegación: pwd, ls, cd, mkdir, touch. Solo entonces podrás acceder al Tesoro Dorado."',
+    instructions: [
+      '📖 El Minotauro exige que pruebes tus habilidades de navegación',
+      '🔧 Debes navegar entre directorios y crear la estructura que el Minotauro demanda',
+      '🔧 Usa cd para cambiar de directorio, mkdir para crear, touch para crear archivos',
+      '▶ Ejecuta las tareas que el Minotauro te exija en /reino/retos/mundo2-boss/'
+    ],
+    hints: [
+      'cd /ruta = cambiar a ese directorio',
+      'mkdir nombre = crear un directorio',
+      'touch archivo = crear un archivo vacío',
+      'El Minotauro es justo pero exigente'
+    ],
+    requiredCommands: ['cd', 'mkdir', 'touch', 'pwd', 'ls'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Crea la estructura que el Minotauro demanda',
+        type: 'command_output',
+        expectedCommand: 'ls -la /reino/retos/mundo2-boss/',
+        validationFn: 'output.includes("paso1") || output.includes("paso2")'
+      }
+    ],
+    prerequisites: [13, 14],
+    rewards: { xp: 150, coins: 50 }
+  },
+
+  {
+    id: 16,
+    title: 'Moviendo Tesoros',
+    description: 'Aprende a copiar y mover archivos con cp y mv',
+    world: 2, order: 4, difficulty: 2,
+    npc: 'Grep-ild el Rastreador',
+    story: '"Ahora sabes navegar. Pero los aprendices también deben aprender a manipular los tesoros. cp copia archivos. mv los mueve o renombra. Con estas herramientas controlas los tesoros del laberinto."',
+    instructions: [
+      '📖 cp copia un archivo: cp origen destino',
+      '📖 mv mueve (o renombra) un archivo: mv origen destino',
+      '🔧 cp -r copia directorios enteros recursivamente',
+      '🔧 mv también funciona para renombrar: mv viejo_nombre nuevo_nombre',
+      '▶ Paso 1: Ejecuta exactamente: cp /reino/archivo.txt ./copia.txt',
+      '▶ Paso 2: Luego ejecuta: mv ./copia.txt ./renombrado.txt'
+    ],
+    hints: [
+      '. = directorio actual',
+      'cp no borra el original, mv sí',
+      'Para copiar directorios debes usar cp -r'
+    ],
+    requiredCommands: ['cp', 'mv'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Copia un archivo de /reino/ a tu directorio',
+        type: 'command_output',
+        expectedCommand: 'cp /reino/archivo.txt ./copia.txt',
+        validationFn: 'output.length === 0'
+      },
+      {
+        id: 2,
+        description: 'Renombra el archivo copiado',
+        type: 'command_output',
+        expectedCommand: 'mv ./copia.txt ./renombrado.txt',
+        validationFn: 'output.length === 0'
+      }
+    ],
+    prerequisites: [15],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 17,
+    title: 'Borrando lo Innecesario',
+    description: 'Aprende a eliminar archivos y directorios con rm',
+    world: 2, order: 5, difficulty: 2,
+    npc: 'Grep-ild el Rastreador',
+    story: '"rm es peligrosa pero necesaria. Borra archivos sin piedad, sin papelera de reciclaje. Un aprendiz debe aprender su poder: rm borra, rm -r borra recursivamente, rm -f fuerza la eliminación."',
+    instructions: [
+      '📖 rm elimina archivos: rm archivo',
+      '📖 rm -r elimina directorios y su contenido (recursivo)',
+      '📖 rm -f fuerza la eliminación sin preguntar',
+      '🔧 ¡CUIDADO!: rm es irreversible, no hay papelera de reciclaje',
+      '▶ Paso 1: Ejecuta exactamente: rm ./renombrado.txt'
+    ],
+    hints: [
+      'En Linux no hay "papelera": rm borra directamente',
+      'Por eso es importante ser cuidadoso con rm',
+      'rm -rf es peligroso: elimina todo recursivamente'
+    ],
+    requiredCommands: ['rm'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Elimina el archivo que creaste',
+        type: 'command_output',
+        expectedCommand: 'rm ./renombrado.txt',
+        validationFn: 'output.length === 0'
+      }
+    ],
+    prerequisites: [16],
+    rewards: { xp: 60, coins: 10 }
+  },
+
+  {
+    id: 18,
+    title: 'Buscando en la Oscuridad',
+    description: 'Usa find para buscar archivos y directorios',
+    world: 2, order: 6, difficulty: 2,
+    npc: 'Grep-ild el Rastreador',
+    story: '"El laberinto es vasto. find es tu brújula. Busca archivos por nombre, tamaño, tipo, fecha modificada. Con find encuentras cualquier tesoro escondido."',
+    instructions: [
+      '📖 find busca archivos y directorios recursivamente',
+      '🔧 find /directorio -name "patrón" busca por nombre',
+      '🔧 find /directorio -type f busca solo archivos',
+      '🔧 find /directorio -type d busca solo directorios',
+      '▶ Paso 1: Ejecuta exactamente: find /reino -name "*.txt" -type f',
+      '▶ Paso 2: Luego ejecuta: find /reino -type d'
+    ],
+    hints: [
+      '* = comodín que significa "cualquier cosa"',
+      '*.txt = todos los archivos que terminan en .txt',
+      'find es muy poderosa pero también lenta en directorios grandes'
+    ],
+    requiredCommands: ['find'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Busca todos los archivos .txt en /reino',
+        type: 'command_output',
+        expectedCommand: 'find /reino -name "*.txt" -type f',
+        validationFn: 'output.includes(".txt")'
+      },
+      {
+        id: 2,
+        description: 'Busca todos los directorios en /reino',
+        type: 'command_output',
+        expectedCommand: 'find /reino -type d',
+        validationFn: 'output.includes("/")'
+      }
+    ],
+    prerequisites: [17],
+    rewards: { xp: 70, coins: 15 }
+  },
+
   {
     id: 19,
-    title: 'La Búsqueda de Conocimiento',
-    description: 'Usa apropos, whatis y type para encontrar comandos',
+    title: 'Filtrando Lineas con Grep',
+    description: 'Domina grep para buscar texto dentro de archivos',
     world: 2, order: 7, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"¿No recuerdas el nombre de un hechizo? apropos busca por descripcion, whatis da una linea resumen, y type te dice si es un hechizo interno (builtin) o externo."',
-    hints: ['apropos palabra busca en las descripciones de manuales', 'whatis comando da descripcion de una linea', 'type comando dice si es builtin o externo'],
-    requiredCommands: ['apropos', 'whatis', 'type'],
+    npc: 'Grep-ild el Rastreador',
+    story: '"grep busca patrones de texto dentro de archivos. Es el filtro más poderoso del laberinto. grep lo_que_buscas archivo.txt te muestra solo las lineas que contienen lo_que_buscas."',
+    instructions: [
+      '📖 grep busca texto dentro de archivos: grep patrón archivo',
+      '🔧 grep imprime las líneas que coinciden con el patrón',
+      '🔧 grep -i ignora mayúsculas/minúsculas',
+      '🔧 grep -v invierte: muestra líneas que NO contienen el patrón',
+      '▶ Paso 1: Ejecuta exactamente: grep "Linux" /etc/os-release'
+    ],
+    hints: [
+      'grep diferencia mayúsculas de minúsculas por defecto',
+      'Usa grep -i para búsquedas insensibles a caso',
+      'grep es rápido incluso en archivos enormes'
+    ],
+    requiredCommands: ['grep'],
     objectives: [
-      { id: 1, description: 'Busca comandos relacionados con "copy"', type: 'command_output', command: 'apropos copy 2>/dev/null | head -5', validationFn: 'output.length > 0' },
-      { id: 2, description: 'Descubre que tipo de comando es echo', type: 'command_output', command: 'type echo', validationFn: 'output.includes("echo")' }
+      {
+        id: 1,
+        description: 'Busca "Linux" en /etc/os-release',
+        type: 'command_output',
+        expectedCommand: 'grep "Linux" /etc/os-release',
+        validationFn: 'output.length > 0'
+      }
     ],
     prerequisites: [18],
     rewards: { xp: 60, coins: 10 }
   },
+
   {
     id: 20,
-    title: 'Listando los Tesoros',
-    description: 'Aprende ls, ls -l y ls -a',
+    title: 'Leyendo Archivos',
+    description: 'Aprende cat, head y tail para leer contenido de archivos',
     world: 2, order: 8, difficulty: 1,
-    npc: 'Grep-ild',
-    story: '"ls es tus ojos en el reino. Te muestra los tesoros (archivos) en cada claro (directorio). Con -l ves detalles, con -a ves los archivos ocultos que se esconden tras el punto."',
-    hints: ['ls lista archivos del directorio actual', 'ls -l muestra permisos, tamano, fecha', 'ls -a incluye archivos ocultos (empiezan con .)'],
-    requiredCommands: ['ls'],
-    objectives: [
-      { id: 1, description: 'Lista los tesoros del directorio actual', type: 'command_output', command: 'ls -la', validationFn: 'output.includes("total")' }
+    npc: 'Grep-ild el Rastreador',
+    story: '"cat muestra el archivo entero. head muestra solo el principio (primeras lineas). tail muestra el final (últimas lineas). Para un aprendiz de datos, estas tres son esenciales."',
+    instructions: [
+      '📖 cat muestra el archivo completo',
+      '📖 head muestra las primeras 10 líneas (por defecto)',
+      '📖 tail muestra las últimas 10 líneas (por defecto)',
+      '🔧 head -n 5 archivo = primeras 5 líneas',
+      '🔧 tail -n 20 archivo = últimas 20 líneas',
+      '▶ Paso 1: Ejecuta exactamente: cat /etc/os-release',
+      '▶ Paso 2: Luego ejecuta: head -n 3 /etc/os-release'
     ],
-    prerequisites: [13],
-    rewards: { xp: 40, coins: 5 }
-  },
-  {
-    id: 21,
-    title: 'La Vista Detallada',
-    description: 'Domina ls -lh, ls -lt y ls -lS',
-    world: 2, order: 9, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"Ahora que conoces ls basico, aprende sus transformaciones. -lh muestra tamano legible (KB, MB), -lt ordena por fecha, -lS ordena por tamano. Cada variante revela una perspectiva diferente."',
-    hints: ['-lh = tamano humanos (K, M, G)', '-lt = ordenado por tiempo (mas reciente primero)', '-lS = ordenado por tamano (mas grande primero)'],
-    requiredCommands: ['ls'],
-    objectives: [
-      { id: 1, description: 'Muestra archivos con tamano legible', type: 'command_output', command: 'ls -lh /reino/', validationFn: 'output.length > 0' },
-      { id: 2, description: 'Ordena por tamano', type: 'command_output', command: 'ls -lS /reino/software/', validationFn: 'output.length > 0' }
+    hints: [
+      'cat es útil para archivos pequeños',
+      'Para archivos grandes usa head o tail',
+      'tail -f sigue un archivo (útil para logs)'
     ],
-    prerequisites: [20],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 22,
-    title: 'El Salto del Conejo',
-    description: 'Domina cd, cd .., cd ~ y cd -',
-    world: 2, order: 10, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"cd (Change Directory) es tu caballo de batalla. cd .. sube un nivel, cd ~ va a tu hogar, cd - vuelve al lugar anterior. Domina estos saltos y nunca te perderas."',
-    hints: ['cd sin argumentos va a $HOME', 'cd .. sube un nivel', 'cd - vuelve al directorio anterior', 'pwd verifica donde estas'],
-    requiredCommands: ['cd', 'pwd'],
+    requiredCommands: ['cat', 'head', 'tail'],
     objectives: [
-      { id: 1, description: 'Salta a tu hogar y verifica con pwd', type: 'command_output', command: 'cd ~ && pwd', validationFn: 'output.includes("/home") || output.includes("/root")' },
-      { id: 2, description: 'Explora /reino con cd y pwd', type: 'command_output', command: 'cd /reino && pwd && ls', validationFn: 'output.includes("distros")' }
+      {
+        id: 1,
+        description: 'Muestra el archivo completo',
+        type: 'command_output',
+        expectedCommand: 'cat /etc/os-release',
+        validationFn: 'output.includes("NAME")'
+      },
+      {
+        id: 2,
+        description: 'Muestra solo las primeras 3 líneas',
+        type: 'command_output',
+        expectedCommand: 'head -n 3 /etc/os-release',
+        validationFn: 'output.length > 0'
+      }
     ],
-    prerequisites: [13],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 23,
-    title: 'El Sendero Absoluto',
-    description: 'Navega usando rutas absolutas',
-    world: 2, order: 11, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"Las rutas absolutas son mapas que siempre empiezan desde la raiz /. Como una direccion completa: /home/usuario/documentos. No importa donde estes, siempre te llevan al destino exacto."',
-    hints: ['Ruta absoluta siempre empieza con /', 'cd /reino/distros te lleva al directorio de distros', 'pwd verifica donde estas'],
-    requiredCommands: ['cd', 'pwd'],
-    objectives: [
-      { id: 1, description: 'Viaja al reino de las distros usando ruta absoluta', type: 'command_output', command: 'cd /reino/distros && pwd && ls', validationFn: 'output.includes("debian")' }
-    ],
-    prerequisites: [22],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 24,
-    title: 'Crear el Refugio',
-    description: 'Crea directorios con mkdir y mkdir -p',
-    world: 2, order: 12, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"Todo guerrero necesita un refugio. mkdir crea un directorio nuevo. Con -p puedes crear rutas completas de una vez, como construir un castillo con todas sus torres de un solo hechizo."',
-    hints: ['mkdir directorio crea un directorio', 'mkdir -p a/b/c crea toda la ruta de golpe', 'mkdir -p no falla si ya existe'],
-    requiredCommands: ['mkdir'],
-    objectives: [
-      { id: 1, description: 'Construye tu refugio con mkdir -p', type: 'command_output', command: 'mkdir -p refugio/armas/pociones && ls -R refugio', validationFn: 'output.includes("pociones")' }
-    ],
-    prerequisites: [23],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 25,
-    title: 'El Pergamino en Blanco',
-    description: 'Crea archivos vacíos con touch',
-    world: 2, order: 13, difficulty: 1,
-    npc: 'Grep-ild',
-    story: '"Touch es la pluma magica que crea pergaminos en blanco. Si el archivo no existe, lo crea. Si ya existe, actualiza su fecha de ultima modificacion."',
-    hints: ['touch archivo crea un archivo vacio', 'touch tambien actualiza la fecha de archivos existentes', 'ls -l verifica que se creo'],
-    requiredCommands: ['touch'],
-    objectives: [
-      { id: 1, description: 'Crea un pergamino en blanco', type: 'command_output', command: 'touch pergamino.txt && ls -l pergamino.txt', validationFn: 'output.includes("pergamino.txt")' }
-    ],
-    prerequisites: [24],
-    rewards: { xp: 40, coins: 5 }
-  },
-  {
-    id: 26,
-    title: 'El Espejo de los Pergaminos',
-    description: 'Copia archivos con cp y cp -r',
-    world: 2, order: 14, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"cp crea copias exactas de tus pergaminos. Con -r copias directorios enteros con todo su contenido. Como un clon magico de tu biblioteca."',
-    hints: ['cp origen destino copia un archivo', 'cp -r copia directorios recursivamente', 'cp -i pregunta antes de sobrescribir'],
-    requiredCommands: ['cp'],
-    objectives: [
-      { id: 1, description: 'Copia tu pergamino', type: 'command_output', command: 'cp pergamino.txt pergamino_copia.txt && ls pergamino*.txt', validationFn: 'output.includes("copia")' }
-    ],
-    prerequisites: [25],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 27,
-    title: 'El Ritual de Renombrar',
-    description: 'Mueve y renombra archivos con mv',
-    world: 2, order: 15, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"mv es el hechizo de transformacion. Puede mover un archivo a otro directorio o darle un nuevo nombre. Como renombrar una espada legendaria."',
-    hints: ['mv origen destino mueve o renombra', 'mv archivo.txt nuevo.txt renombra', 'mv archivo.txt /otro/lugar/ mueve'],
-    requiredCommands: ['mv'],
-    objectives: [
-      { id: 1, description: 'Renombra tu pergamino copia', type: 'command_output', command: 'mv pergamino_copia.txt leyenda.txt && ls leyenda.txt', validationFn: 'output.includes("leyenda.txt")' }
-    ],
-    prerequisites: [26],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 28,
-    title: 'La Eliminación del Mal',
-    description: 'Borra archivos con rm y rmdir',
-    world: 2, order: 16, difficulty: 3,
-    npc: 'Grep-ild',
-    story: '"rm es la espada que destruye. ¡Cuidado! En Linux no hay papelera de reciclaje. rm borra permanentemente. Usa rmdir para directorios vacios."',
-    hints: ['rm archivo borra un archivo', 'rm -r borra directorios recursivamente', 'rmdir solo borra directorios vacios'],
-    requiredCommands: ['rm', 'rmdir'],
-    objectives: [
-      { id: 1, description: 'Destruye el pergamino de leyenda', type: 'command_output', command: 'rm leyenda.txt && echo "Eliminado" && ls leyenda.txt 2>&1', validationFn: 'output.includes("Eliminado")' }
-    ],
-    prerequisites: [27],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 29,
-    title: 'El Glob del Caos',
-    description: 'Usa patrones glob para seleccionar archivos',
-    world: 2, order: 17, difficulty: 3,
-    npc: 'Grep-ild',
-    story: '"Los globs son comodines magicos: * cualquier cantidad de caracteres, ? exactamente uno, [abc] cualquiera de esos. Son como hechizos de area que afectan a multiples archivos."',
-    hints: ['*.txt selecciona todos los .txt', 'archivo? selecciona archivo + 1 caracter', '[abc]* selecciona los que empiezan con a, b o c'],
-    requiredCommands: ['ls'],
-    objectives: [
-      { id: 1, description: 'Usa globs para encontrar archivos .txt', type: 'command_output', command: 'ls *.txt', validationFn: 'output.includes(".txt")' },
-      { id: 2, description: 'Usa globs para encontrar archivos por rango', type: 'command_output', command: 'ls archivo[1-3].txt', validationFn: 'output.includes("archivo")' }
-    ],
-    prerequisites: [20],
+    prerequisites: [19],
     rewards: { xp: 60, coins: 10 }
   },
+
+  {
+    id: 21,
+    title: 'Contando y Ordenando',
+    description: 'Usa wc y sort para contar líneas y ordenar datos',
+    world: 2, order: 9, difficulty: 2,
+    npc: 'Grep-ild el Rastreador',
+    story: '"wc cuenta líneas, palabras y caracteres. sort ordena alfabéticamente. uniq elimina duplicados. Estas herramientas de análisis son fundamentales para procesar datos en el laberinto."',
+    instructions: [
+      '📖 wc cuenta líneas (lines), palabras (words), caracteres (characters)',
+      '📖 wc -l archivo = solo contar líneas',
+      '📖 sort ordena líneas alfabéticamente',
+      '🔧 sort -r invierte el orden (descendente)',
+      '▶ Paso 1: Ejecuta exactamente: wc -l /etc/os-release',
+      '▶ Paso 2: Luego ejecuta: sort /etc/os-release'
+    ],
+    hints: [
+      'wc = word count (aunque también cuenta líneas y caracteres)',
+      'sort es útil antes de uniq (que elimina duplicados)',
+      'sort -n ordena numérico (no alfabético)'
+    ],
+    requiredCommands: ['wc', 'sort'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Cuenta las líneas de /etc/os-release',
+        type: 'command_output',
+        expectedCommand: 'wc -l /etc/os-release',
+        validationFn: 'output.includes("/etc/os-release")'
+      },
+      {
+        id: 2,
+        description: 'Ordena las líneas de /etc/os-release',
+        type: 'command_output',
+        expectedCommand: 'sort /etc/os-release',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [20],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 22,
+    title: 'Tuberías Mágicas',
+    description: 'Aprende pipes (|) para encadenar comandos',
+    world: 2, order: 10, difficulty: 2,
+    npc: 'Grep-ild el Rastreador',
+    story: '"El pipe es la magia más poderosa del shell. Conecta comandos: la salida de uno es la entrada del siguiente. cat archivo | grep palabra | wc -l te da un resultado que 3 comandos sin pipe no podrían lograr."',
+    instructions: [
+      '📖 El pipe (|) encadena comandos: salida de uno → entrada del siguiente',
+      '🔧 comando1 | comando2 = ejecuta comando1, pasa resultado a comando2',
+      '🔧 cat archivo | grep palabra | wc -l = cuenta líneas que contienen palabra',
+      '▶ Paso 1: Ejecuta exactamente: cat /etc/os-release | grep "NAME"',
+      '▶ Paso 2: Luego ejecuta: cat /etc/os-release | wc -l'
+    ],
+    hints: [
+      'Los pipes son la esencia de Unix: herramientas pequeñas que hacen una cosa bien',
+      'Puedes encadenar muchos pipes: a | b | c | d | e',
+      'Bash permite combinaciones poderosas de herramientas simples'
+    ],
+    requiredCommands: ['cat', 'grep', 'wc'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Busca "NAME" en /etc/os-release usando pipe',
+        type: 'command_output',
+        expectedCommand: 'cat /etc/os-release | grep "NAME"',
+        validationFn: 'output.includes("NAME")'
+      },
+      {
+        id: 2,
+        description: 'Cuenta líneas de /etc/os-release usando pipe',
+        type: 'command_output',
+        expectedCommand: 'cat /etc/os-release | wc -l',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [21],
+    rewards: { xp: 80, coins: 20 }
+  },
+
+  {
+    id: 23,
+    title: 'Redirecciones y Flujos',
+    description: 'Aprende > y >> para redirigir salida a archivos',
+    world: 2, order: 11, difficulty: 2,
+    npc: 'Grep-ild el Rastreador',
+    story: '"La redirección es poder. > redirige salida a un archivo (sobrescribe). >> añade al final. 2> redirige errores. Con estas puedes capturar la magia en botellas de cristal (archivos)."',
+    instructions: [
+      '📖 > redirige salida a archivo (sobrescribe si existe)',
+      '📖 >> añade salida al final del archivo',
+      '📖 2> redirige errores a archivo',
+      '📖 comando > archivo = guarda salida en archivo',
+      '▶ Paso 1: Ejecuta exactamente: echo "Hola" > prueba.txt',
+      '▶ Paso 2: Luego ejecuta: cat prueba.txt'
+    ],
+    hints: [
+      'Diferencia > (sobrescribe) de >> (añade)',
+      '2>&1 redirige tanto salida como errores',
+      'Los pipes y redirecciones son la base de la programación shell'
+    ],
+    requiredCommands: ['echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Redirige un echo a un archivo',
+        type: 'command_output',
+        expectedCommand: 'echo "Hola LinuxQuest" > prueba.txt',
+        validationFn: 'output.length === 0'
+      },
+      {
+        id: 2,
+        description: 'Lee el archivo que creaste',
+        type: 'command_output',
+        expectedCommand: 'cat prueba.txt',
+        validationFn: 'output.includes("Hola")'
+      }
+    ],
+    prerequisites: [22],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 24,
+    title: 'Permisos de Archivos',
+    description: 'Aprende chmod para cambiar permisos con notación octal',
+    world: 2, order: 12, difficulty: 3,
+    npc: 'Chmod-ard el Guardián de Permisos',
+    story: '"Los permisos son el guardaespaldas de tus archivos. chmod los cambia. r=read, w=write, x=execute. 755 = rwxr-xr-x. 644 = rw-r--r--. Domina esta numerología y controlarás la seguridad."',
+    instructions: [
+      '📖 chmod cambia permisos: chmod opciones archivo',
+      '📖 Notación octal: 755 = rwxr-xr-x, 644 = rw-r--r--',
+      '🔧 Dígito 1 (propietario): 7=rwx, 6=rw-, 5=r-x, 4=r--',
+      '🔧 Dígito 2 (grupo): mismo sistema',
+      '🔧 Dígito 3 (otros): mismo sistema',
+      '▶ Paso 1: Ejecuta exactamente: chmod 755 prueba.txt'
+    ],
+    hints: [
+      '4 = read (r), 2 = write (w), 1 = execute (x)',
+      '7 = 4+2+1 = rwx',
+      '5 = 4+1 = r-x',
+      'Los permisos son críticos para la seguridad'
+    ],
+    requiredCommands: ['chmod'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Cambia permisos a 755',
+        type: 'command_output',
+        expectedCommand: 'chmod 755 prueba.txt',
+        validationFn: 'output.length === 0'
+      }
+    ],
+    prerequisites: [23],
+    rewards: { xp: 80, coins: 20 }
+  },
+
+  {
+    id: 25,
+    title: 'Propietario y Grupo',
+    description: 'Aprende chown para cambiar propietario y grupo',
+    world: 2, order: 13, difficulty: 2,
+    npc: 'Chmod-ard el Guardián de Permisos',
+    story: '"chown cambia propietario (owner) y grupo (group). chown usuario:grupo archivo. Solo el propietario puede cambiar permisos. El root puede cambiar cualquier propietario. Es la cadena de custodia del reino."',
+    instructions: [
+      '📖 chown cambia propietario y/o grupo: chown usuario:grupo archivo',
+      '🔧 chown usuario archivo = cambia solo propietario',
+      '🔧 chown :grupo archivo = cambia solo grupo',
+      '🔧 chown usuario:grupo archivo = cambia ambos',
+      '▶ Ejecuta exactamente: ls -la prueba.txt'
+    ],
+    hints: [
+      'Solo root puede cambiar el propietario en la mayoría de sistemas',
+      'El propietario (usuario) puede cambiar permisos pero no propietario',
+      'chown sin el : solo cambia propietario'
+    ],
+    requiredCommands: ['ls', 'chown'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Muestra el propietario actual del archivo',
+        type: 'command_output',
+        expectedCommand: 'ls -la prueba.txt',
+        validationFn: 'output.includes("root") || output.includes("sandbox")'
+      }
+    ],
+    prerequisites: [24],
+    rewards: { xp: 60, coins: 10 }
+  },
+
+  {
+    id: 26,
+    title: 'Creando Directorios Correctamente',
+    description: 'Usa mkdir con opciones para crear estructuras',
+    world: 2, order: 14, difficulty: 2,
+    npc: 'Chmod-ard el Guardián de Permisos',
+    story: '"mkdir crea directorios. mkdir -p crea directorios padre si no existen. Imagina que quieres crear /a/b/c/d pero solo /a existe. Sin -p obtendrías error. Con -p: success."',
+    instructions: [
+      '📖 mkdir crea directorios: mkdir nombre',
+      '📖 mkdir -p crea directorios padres si es necesario',
+      '📖 mkdir -p a/b/c/d = crea toda la cadena',
+      '▶ Paso 1: Ejecuta exactamente: mkdir -p directorio_test/sub1/sub2',
+      '▶ Paso 2: Luego ejecuta: ls -R directorio_test'
+    ],
+    hints: [
+      'mkdir sin -p falla si el padre no existe',
+      'mkdir -p es muy útil para crear estructuras complejas',
+      '-R en ls muestra directorios recursivamente'
+    ],
+    requiredCommands: ['mkdir', 'ls'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Crea una estructura de directorios anidados',
+        type: 'command_output',
+        expectedCommand: 'mkdir -p directorio_test/sub1/sub2',
+        validationFn: 'output.length === 0'
+      },
+      {
+        id: 2,
+        description: 'Verifica la estructura creada',
+        type: 'command_output',
+        expectedCommand: 'ls -R directorio_test',
+        validationFn: 'output.includes("sub1")'
+      }
+    ],
+    prerequisites: [25],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 27,
+    title: 'Removiendo Directorios',
+    description: 'Usa rmdir y rm -r para eliminar directorios',
+    world: 2, order: 15, difficulty: 2,
+    npc: 'Chmod-ard el Guardián de Permisos',
+    story: '"rmdir solo elimina directorios VACÍOS. rm -r elimina recursivamente (con todo contenido). El poder de rm -r es enorme: borra directorios enteros sin preguntar. Úsalo con cuidado."',
+    instructions: [
+      '📖 rmdir elimina directorios VACÍOS: rmdir nombre',
+      '📖 rm -r elimina directorios con contenido (recursivo)',
+      '📖 rmdir falla si el directorio contiene archivos',
+      '▶ Paso 1: Ejecuta exactamente: rmdir directorio_test/sub1/sub2',
+      '▶ Paso 2: Luego ejecuta: rm -r directorio_test'
+    ],
+    hints: [
+      'rmdir es "segura" (solo borra vacíos)',
+      'rm -r es peligrosa (borra todo)',
+      'Por eso rm -r se usa menos que rm'
+    ],
+    requiredCommands: ['rmdir', 'rm'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Elimina un directorio vacío',
+        type: 'command_output',
+        expectedCommand: 'rmdir directorio_test/sub1/sub2',
+        validationFn: 'output.length === 0'
+      },
+      {
+        id: 2,
+        description: 'Elimina el directorio con contenido',
+        type: 'command_output',
+        expectedCommand: 'rm -r directorio_test',
+        validationFn: 'output.length === 0'
+      }
+    ],
+    prerequisites: [26],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 28,
+    title: 'Cambiando de Usuario',
+    description: 'Usa su para cambiar usuario (switch user)',
+    world: 2, order: 16, difficulty: 2,
+    npc: 'Chmod-ard el Guardián de Permisos',
+    story: '"su cambia usuario (switch user). su usuario te convierte en otro usuario (si sabes su contraseña). su - abre un shell de login. En el reino, cambiar de forma es poder, pero requiere autorización."',
+    instructions: [
+      '📖 su usuario = cambiar a otro usuario',
+      '📖 su - usuario = abre un shell de login (recomendado)',
+      '📖 exit = volver al usuario anterior',
+      '▶ Ejecuta exactamente: whoami (para ver tu usuario actual)'
+    ],
+    hints: [
+      'En esta sandbox educativa solo tienes un usuario',
+      'whoami = who am I (muestra usuario actual)',
+      'su sin usuario = intenta cambiar a root'
+    ],
+    requiredCommands: ['whoami'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Muestra tu usuario actual',
+        type: 'command_output',
+        expectedCommand: 'whoami',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [27],
+    rewards: { xp: 60, coins: 10 }
+  },
+
+  {
+    id: 29,
+    title: 'Primeros Pasos en Scripting',
+    description: 'Crea tu primer script bash simple',
+    world: 2, order: 17, difficulty: 3,
+    npc: 'Chmod-ard el Guardián de Permisos',
+    story: '"Un script bash es una serie de comandos en un archivo. cat, echo, ls: todos pueden formar un script. Crearás tu primer hechizo automático, una secuencia de magia que se ejecuta de una sola vez."',
+    instructions: [
+      '📖 Un script bash es un archivo con comandos',
+      '🔧 Primera línea: #!/bin/bash (shebang)',
+      '🔧 Luego los comandos normales',
+      '🔧 chmod +x script.sh lo hace ejecutable',
+      '📖 ./script.sh lo ejecuta',
+      '▶ Paso 1: Ejecuta exactamente: cat > script.sh << EOF',
+      '#!/bin/bash',
+      'echo "Hola desde script bash"',
+      'pwd',
+      'whoami',
+      'EOF',
+      '▶ Paso 2: Luego ejecuta: chmod +x script.sh',
+      '▶ Paso 3: Luego ejecuta: ./script.sh'
+    ],
+    hints: [
+      'EOF es "End Of File" en heredoc',
+      'Presiona Enter después del EOF final',
+      'chmod +x hace el archivo ejecutable'
+    ],
+    requiredCommands: ['cat', 'chmod', 'echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Crea un archivo script.sh',
+        type: 'command_output',
+        expectedCommand: 'cat > script.sh << \'EOF\'\n#!/bin/bash\necho "Hola desde script bash"\nEOF',
+        validationFn: 'output.length === 0'
+      },
+      {
+        id: 2,
+        description: 'Ejecuta el script',
+        type: 'command_output',
+        expectedCommand: './script.sh',
+        validationFn: 'output.includes("Hola")'
+      }
+    ],
+    prerequisites: [28],
+    rewards: { xp: 100, coins: 25 }
+  },
+
   {
     id: 30,
-    title: 'Boss: El Guardián de los Senderos',
-    description: 'Demuestra que dominas la navegación y manipulación de archivos',
-    world: 2, order: 18, difficulty: 5,
-    npc: 'BOSS',
-    story: 'El Guardián de los Senderos bloquea el paso al Mundo 3. Debes demostrar que puedes navegar, crear, copiar, mover y eliminar archivos sin perderte en el laberinto del sistema.',
-    hints: ['Usa mkdir -p para crear estructuras complejas', 'cp -r para copiar directorios', 'rm -r para limpiar'],
-    requiredCommands: ['mkdir', 'touch', 'cp', 'mv', 'rm', 'ls', 'pwd', 'cd'],
-    objectives: [
-      { id: 1, description: 'Crea la estructura: mision/arma/escudo/', type: 'command_output', command: 'mkdir -p mision/arma/escudo && ls -R mision', validationFn: 'output.includes("escudo")' },
-      { id: 2, description: 'Crea y copia un archivo', type: 'command_output', command: 'touch mision/orden.txt && cp mision/orden.txt mision/arma/orden_copia.txt && ls mision/arma/', validationFn: 'output.includes("orden_copia")' },
-      { id: 3, description: 'Renombra y limpia', type: 'command_output', command: 'mv mision/arma/orden_copia.txt mision/arma/orden_final.txt && rm -rf mision && echo "Mision completada"', validationFn: 'output.includes("completada")' }
+    title: '👹 BOSS: El Guardián de Permisos Final',
+    description: 'Demuestra dominio completo de navegación y permisos',
+    world: 2, order: 18, difficulty: 3,
+    npc: 'Chmod-ard el Guardián de Permisos',
+    story: '"Has dominado los caminos del laberinto. El Guardián Final de Permisos te pone última prueba: crear estructura de directorios, asignar permisos, crear scripts. Solo los verdaderos maestros avanzan al Mundo 3."',
+    instructions: [
+      '📖 Prueba final del Mundo 2: demostrar todas las habilidades aprendidas',
+      '🔧 Debes crear directorios, asignar permisos, crear un script ejecutable',
+      '▶ Ejecuta: cat /reino/retos/mundo2-final.txt'
     ],
-    prerequisites: [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29],
-    rewards: { xp: 200, coins: 100, achievement: 'mundo_2' }
+    hints: [
+      'Recuerda: mkdir -p para directorios anidados',
+      'chmod 755 para ejecutables',
+      '#!/bin/bash al inicio de scripts',
+      'Todos los temas de Mundo 2 en una sola misión'
+    ],
+    requiredCommands: ['cat', 'mkdir', 'chmod'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lee el reto final del Mundo 2',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/retos/mundo2-final.txt',
+        validationFn: 'output.includes("reto") || output.includes("Mundo 2")'
+      }
+    ],
+    prerequisites: [29],
+    rewards: { xp: 200, coins: 75 }
   },
 
   // ==========================================
-  // MUNDO 3: LAS TORRES DEL PROCESAMIENTO (18 misiones)
+  // MUNDO 3: TORRES ANTIGUAS DEL PODER (18 misiones)
   // Tema 3 LPI: Poder de la línea de comandos (peso 9)
   // ==========================================
   {
     id: 31,
-    title: 'El Poder de Grep',
-    description: 'Busca patrones en archivos con grep',
+    title: 'Variables del Shell',
+    description: 'Aprende a usar variables para almacenar datos',
     world: 3, order: 1, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"Bienvenido a las Torres del Procesamiento. grep es tu lupa magica: busca patrones en oceanos de texto. Es el comando mas usado por los sabios del reino. Busca errores en el log de servidores."',
-    hints: ['grep "patron" archivo busca texto', 'grep -i ignora mayusculas/minusculas', 'grep -n muestra numeros de linea'],
-    requiredCommands: ['grep'],
+    npc: 'Linux el Sabio',
+    story: '"Las variables son cajas mágicas que almacenan datos. $USER = tu usuario. $HOME = tu directorio. $PATH = dónde busca comandos. Accede con $ y manipulalas con export."',
+    instructions: [
+      '📖 Las variables guardan datos: nombre=valor (sin espacios)',
+      '📖 Acceso con $nombre: echo $HOME muestra tu directorio',
+      '🔧 Los comandos pueden leer variables: echo "Soy $USER"',
+      '🔧 export nombre=valor hace la variable "global" (heredada a subprocesos)',
+      '▶ Paso 1: Ejecuta exactamente: echo $HOME',
+      '▶ Paso 2: Luego ejecuta: echo $USER'
+    ],
+    hints: [
+      '$HOME = tu directorio de usuario',
+      '$USER = tu nombre de usuario',
+      '$PATH = lista de directorios donde busca comandos'
+    ],
+    requiredCommands: ['echo'],
     objectives: [
-      { id: 1, description: 'Busca errores en el log de servidores', type: 'command_output', command: 'grep "ERROR" /misiones/servidores.log', validationFn: 'output.includes("ERROR")' }
+      {
+        id: 1,
+        description: 'Muestra tu directorio home',
+        type: 'command_output',
+        expectedCommand: 'echo $HOME',
+        validationFn: 'output.includes("/")'
+      },
+      {
+        id: 2,
+        description: 'Muestra tu nombre de usuario',
+        type: 'command_output',
+        expectedCommand: 'echo $USER',
+        validationFn: 'output.length > 0'
+      }
     ],
     prerequisites: [30],
-    rewards: { xp: 50, coins: 10 }
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 32,
-    title: 'El Cazador Insensible',
-    description: 'Domina grep -i y grep -v',
-    world: 3, order: 2, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"grep -i no distingue entre mayusculas y minusculas: caza sin importar el tamano de la presa. grep -v es el espejo inverso: muestra todo EXCEPTO lo que buscas."',
-    hints: ['-i = case insensitive (ignora mayusculas)', '-v = invert match (muestra lo que NO coincide)'],
-    requiredCommands: ['grep'],
+    title: 'Editores de Texto: nano vs vi',
+    description: 'Aprende a usar nano y vi para editar archivos',
+    world: 3, order: 2, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"Editar archivos es fundamental. nano es simple y amigable. vi es poderoso pero complejo. Domina ambos y nunca estarás atrapado sin editor."',
+    instructions: [
+      '📖 nano es editor simple: nano archivo',
+      '📖 vi es editor poderoso pero con curva de aprendizaje',
+      '🔧 nano: Ctrl+X para salir, Ctrl+O para guardar',
+      '🔧 vi: ESC para modo comando, :wq para guardar-salir',
+      '▶ Ejecuta exactamente: nano prueba_editor.txt'
+    ],
+    hints: [
+      'En nano: Ctrl+X pregunta si guardar',
+      'En vi: presiona i para insertar texto, ESC para salir',
+      'nano es más segura para principiantes'
+    ],
+    requiredCommands: ['nano'],
     objectives: [
-      { id: 1, description: 'Busca sin distinguir mayusculas', type: 'command_output', command: 'grep -i "error" /misiones/servidores.log', validationFn: 'output.includes("ERROR")' },
-      { id: 2, description: 'Muestra todo excepto las lineas INFO', type: 'command_output', command: 'grep -v "INFO" /misiones/servidores.log', validationFn: 'output.includes("WARNING") || output.includes("ERROR")' }
+      {
+        id: 1,
+        description: 'Crea un archivo con nano',
+        type: 'command_output',
+        expectedCommand: 'nano prueba_editor.txt',
+        validationFn: 'output.length >= 0'
+      }
     ],
     prerequisites: [31],
-    rewards: { xp: 50, coins: 10 }
+    rewards: { xp: 100, coins: 25 }
   },
+
   {
     id: 33,
-    title: 'La Búsqueda Recursiva',
-    description: 'Busca en directorios completos con grep -r',
+    title: 'Sustituciones y Comillas',
+    description: 'Aprende las diferencias entre comillas simples, dobles y backticks',
     world: 3, order: 3, difficulty: 3,
-    npc: 'Chmod-ard',
-    story: '"grep -r es como desatar un enjambre de abejas buscadoras. Explora cada archivo de cada directorio en busca de tu patron. Con -l solo te dice que archivos contienen el tesoro."',
-    hints: ['-r = recursivo (busca en subdirectorios)', '-l = solo nombres de archivos que coinciden', '-c = contar coincidencias'],
-    requiredCommands: ['grep'],
-    objectives: [
-      { id: 1, description: 'Busca recursivamente en el reino', type: 'command_output', command: 'grep -r "Linux" /reino/ 2>/dev/null | head -5', validationFn: 'output.includes("Linux")' },
-      { id: 2, description: 'Encuentra que archivos contienen "Ubuntu"', type: 'command_output', command: 'grep -rl "Ubuntu" /reino/ 2>/dev/null', validationFn: 'output.includes("debian")' }
+    npc: 'Linux el Sabio',
+    story: '"Las comillas controlan cómo bash interpreta strings. Comillas simples = literal. Comillas dobles = variables expandidas. Backticks = comando ejecutado. La maestría está en los detalles."',
+    instructions: [
+      '📖 Comillas simples (\') = literal exacto, sin expansión',
+      '📖 Comillas dobles (") = expande variables y comandos',
+      '📖 Backticks (`) o $() = ejecuta comando y usa output',
+      '🔧 echo \'$USER\' = imprime literalmente: $USER',
+      '🔧 echo "$USER" = imprime el usuario: root',
+      '🔧 echo `whoami` = ejecuta whoami y muestra resultado',
+      '▶ Paso 1: Ejecuta exactamente: echo \'$HOME\'',
+      '▶ Paso 2: Luego ejecuta: echo "$HOME"'
     ],
-    prerequisites: [31],
-    rewards: { xp: 60, coins: 10 }
+    hints: [
+      'Las comillas simples previenen expansión',
+      'Las comillas dobles permiten expansión',
+      'Los backticks ejecutan comandos en subshell'
+    ],
+    requiredCommands: ['echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Usa comillas simples (sin expansión)',
+        type: 'command_output',
+        expectedCommand: 'echo \'$HOME\'',
+        validationFn: 'output.includes("$HOME")'
+      },
+      {
+        id: 2,
+        description: 'Usa comillas dobles (con expansión)',
+        type: 'command_output',
+        expectedCommand: 'echo "$HOME"',
+        validationFn: 'output.includes("/")'
+      }
+    ],
+    prerequisites: [32],
+    rewards: { xp: 100, coins: 25 }
   },
+
   {
     id: 34,
-    title: 'Las Cabezas y Colas',
-    description: 'Lee el inicio y final de archivos con head y tail',
-    world: 3, order: 4, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"head te muestra las primeras lineas de un pergamino, tail las ultimas. tail -f es especial: sigue el pergamino en tiempo real, como vigilar un rio de datos fluyendo."',
-    hints: ['head -n 5 muestra las primeras 5 lineas', 'tail -n 5 muestra las ultimas 5', 'tail -f sigue el archivo en tiempo real'],
-    requiredCommands: ['head', 'tail'],
-    objectives: [
-      { id: 1, description: 'Lee las primeras 3 lineas del log', type: 'command_output', command: 'head -n 3 /misiones/servidores.log', validationFn: 'output.includes("INFO")' },
-      { id: 2, description: 'Lee las ultimas 3 lineas del log', type: 'command_output', command: 'tail -n 3 /misiones/servidores.log', validationFn: 'output.length > 0' }
+    title: 'sed: Editor de Streams',
+    description: 'Aprende sed para buscar y reemplazar texto',
+    world: 3, order: 4, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"sed es el editor de streams (flujos). Busca y reemplaza sin tocar el archivo. sed \'s/viejo/nuevo/g\' archivo aplica la magia de sustitución a todo el flujo."',
+    instructions: [
+      '📖 sed = stream editor, no toca archivo original',
+      '📖 sed \'s/buscar/reemplazar/\' archivo',
+      '📖 s = substitute (reemplazar)',
+      '📖 g = global (todas las ocurrencias en la línea)',
+      '▶ Paso 1: Ejecuta exactamente: echo "hola mundo" | sed \'s/mundo/LinuxQuest/\'',
+      '▶ Paso 2: Luego ejecuta: sed \'s/Linux/GNU+Linux/g\' /etc/os-release'
     ],
-    prerequisites: [30],
-    rewards: { xp: 50, coins: 10 }
+    hints: [
+      'sed no modifica el archivo, solo muestra el resultado',
+      'Usa sed -i para modificar "in place" (cuidado!)',
+      'g al final = global (todas, no solo la primera)'
+    ],
+    requiredCommands: ['sed', 'echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Usa sed con pipe para reemplazar',
+        type: 'command_output',
+        expectedCommand: 'echo "hola mundo" | sed \'s/mundo/LinuxQuest/\'',
+        validationFn: 'output.includes("LinuxQuest")'
+      },
+      {
+        id: 2,
+        description: 'Usa sed en un archivo real',
+        type: 'command_output',
+        expectedCommand: 'sed \'s/Linux/GNU+Linux/g\' /etc/os-release',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [33],
+    rewards: { xp: 100, coins: 25 }
   },
+
   {
     id: 35,
-    title: 'El Contador de Palabras',
-    description: 'Cuenta líneas, palabras y bytes con wc',
-    world: 3, order: 5, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"wc (Word Count) es el contador del reino. Cuenta lineas con -l, palabras con -w, bytes con -c. ¿Cuantas lineas tiene el log de servidores? ¡wc lo sabe!"',
-    hints: ['wc archivo muestra lineas, palabras, bytes', 'wc -l solo lineas', 'wc -w solo palabras'],
-    requiredCommands: ['wc'],
-    objectives: [
-      { id: 1, description: 'Cuenta las lineas del log de servidores', type: 'command_output', command: 'wc -l /misiones/servidores.log', validationFn: 'output.includes("/misiones")' },
-      { id: 2, description: 'Cuenta las palabras del CSV de usuarios', type: 'command_output', command: 'wc -w /misiones/usuarios.csv', validationFn: 'output.includes("/misiones")' }
+    title: '👹 BOSS: El Mago del Shell',
+    description: 'Demuestra dominio avanzado del shell y procesamiento de texto',
+    world: 3, order: 5, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"El Mago del Shell evalúa tu maestría: variables, comillas, pipes, redirecciones, sed, awk. Combina todo en una sola hazaña: procesar datos como un verdadero mago del shell."',
+    instructions: [
+      '📖 Prueba final de Mundo 3: dominio completo del shell avanzado',
+      '🔧 Debes combinar variables, pipes, sed, redirección',
+      '▶ Ejecuta: cat /reino/retos/mundo3-final.txt'
     ],
-    prerequisites: [30],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 36,
-    title: 'El Ordenador Místico',
-    description: 'Ordena datos con sort',
-    world: 3, order: 6, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"sort es el organizador del caos. Ordena alfabeticamente por defecto. Con -n ordena numeros, con -r invierte, con -u elimina duplicados. Transforma el caos en orden."',
-    hints: ['sort ordena alfabeticamente', '-n = numerico', '-r = reverso', '-u = unicos (sin duplicados)'],
-    requiredCommands: ['sort'],
-    objectives: [
-      { id: 1, description: 'Ordena numeros de menor a mayor', type: 'command_output', command: 'sort -n /numeros.txt', validationFn: 'output.includes("3")' },
-      { id: 2, description: 'Ordena numeros de mayor a menor', type: 'command_output', command: 'sort -rn /numeros.txt', validationFn: 'output.includes("91")' }
+    hints: [
+      'Piensa en pipes: comando1 | comando2 | comando3',
+      'Las variables se expanden con comillas dobles',
+      'sed busca y reemplaza en streams'
     ],
-    prerequisites: [30],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 37,
-    title: 'Los Únicos Sobrevivientes',
-    description: 'Elimina duplicados con sort | uniq -c',
-    world: 3, order: 7, difficulty: 3,
-    npc: 'Chmod-ard',
-    story: '"uniq elimina lineas duplicadas, pero solo si estan adyacentes. Por eso siempre se usa con sort primero. uniq -c cuenta cuantas veces aparece cada una. Es como contar ejercitos enemigos."',
-    hints: ['uniq solo elimina duplicados adyacentes', 'sort archivo | uniq es el patron tipico', 'uniq -c agrega conteo'],
-    requiredCommands: ['sort', 'uniq'],
+    requiredCommands: ['cat', 'grep', 'sed'],
     objectives: [
-      { id: 1, description: 'Cuenta departamentos unicos en el CSV', type: 'command_output', command: 'cut -d "," -f 4 /misiones/usuarios.csv | sort | uniq -c | sort -rn', validationFn: 'output.includes("Desarrollo")' }
-    ],
-    prerequisites: [36, 38],
-    rewards: { xp: 60, coins: 15 }
-  },
-  {
-    id: 38,
-    title: 'El Cuchillo Cortador',
-    description: 'Extrae columnas con cut',
-    world: 3, order: 8, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"cut es el cuchillo que rebanada datos por columnas. Con -d defines el separador, con -f que columnas extraer. /etc/passwd usa : como separador. ¡Cortemos datos!"',
-    hints: ['-d "," define coma como separador', '-f 1 extrae la primera columna', 'cut -c 1-10 extrae caracteres 1 al 10'],
-    requiredCommands: ['cut'],
-    objectives: [
-      { id: 1, description: 'Extrae los nombres del CSV de usuarios', type: 'command_output', command: 'cut -d "," -f 1 /misiones/usuarios.csv', validationFn: 'output.includes("Ana")' },
-      { id: 2, description: 'Extrae los nombres de usuario del sistema', type: 'command_output', command: 'cut -d ":" -f 1 /etc/passwd | head -5', validationFn: 'output.includes("root")' }
+      {
+        id: 1,
+        description: 'Lee el reto final del Mago',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/retos/mundo3-final.txt',
+        validationFn: 'output.includes("reto") || output.length > 0'
+      }
     ],
     prerequisites: [34],
-    rewards: { xp: 50, coins: 10 }
+    rewards: { xp: 200, coins: 75 }
   },
+
+  // Misiones 36-48: Continuación Mundo 3
+  {
+    id: 36,
+    title: 'awk: Procesador de Campos',
+    description: 'Aprende awk para procesar columnas de datos',
+    world: 3, order: 6, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"awk divide líneas en campos (columnas). $1=$primera, $2=$segunda, etc. Perfecto para procesar CSVs, logs, datos estructurados. El procesamiento de datos empieza con awk."',
+    instructions: [
+      '📖 awk divide líneas en campos separados por espacios',
+      '📖 $1 = primer campo, $2 = segundo, etc.',
+      '🔧 awk \'{print $1}\' = imprime primer campo',
+      '🔧 awk \'{print $1, $3}\' = imprime campos 1 y 3',
+      '▶ Ejecuta exactamente: echo "uno dos tres" | awk \'{print $2}\''
+    ],
+    hints: [
+      'Los campos se separan por espacios por defecto',
+      '-F: establece separador (ej: -F: para dos puntos)',
+      'awk es muy poderosa para datos tabulares'
+    ],
+    requiredCommands: ['awk', 'echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Usa awk para imprimir el segundo campo',
+        type: 'command_output',
+        expectedCommand: 'echo "uno dos tres" | awk \'{print $2}\'',
+        validationFn: 'output.includes("dos")'
+      }
+    ],
+    prerequisites: [35],
+    rewards: { xp: 100, coins: 25 }
+  },
+
+  {
+    id: 37,
+    title: 'xargs: Constructor de Comandos',
+    description: 'Aprende xargs para pasar output como argumentos',
+    world: 3, order: 7, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"xargs es especial: toma la salida de un comando y la convierte en argumentos para otro. find archivos | xargs rm = borra encontrados. Es el pegamento del shell."',
+    instructions: [
+      '📖 xargs convierte stdin en argumentos',
+      '📖 comando1 | xargs comando2 = usa output de comando1 como args de comando2',
+      '🔧 find . -name "*.txt" | xargs wc -l = cuenta líneas de todos los .txt',
+      '▶ Ejecuta exactamente: echo "archivo1.txt archivo2.txt" | xargs wc'
+    ],
+    hints: [
+      'xargs es muy útil con find',
+      '-I {} permite especificar dónde van los argumentos',
+      'Cuidado: xargs puede ejecutar comandos peligrosos'
+    ],
+    requiredCommands: ['xargs', 'echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Usa xargs con echo',
+        type: 'command_output',
+        expectedCommand: 'echo "archivo1.txt archivo2.txt" | xargs wc',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [36],
+    rewards: { xp: 100, coins: 25 }
+  },
+
+  {
+    id: 38,
+    title: 'Globbing y Wildcards',
+    description: 'Domina * ? [ ] para seleccionar múltiples archivos',
+    world: 3, order: 8, difficulty: 2,
+    npc: 'Linux el Sabio',
+    story: '"* significa "cualquier cosa". ? significa "un carácter". [abc] significa "a o b o c". Con globbing seleccionas múltiples archivos elegantemente."',
+    instructions: [
+      '📖 * = cero o más caracteres',
+      '📖 ? = exactamente un carácter',
+      '📖 [abc] = solo a, b, o c',
+      '📖 [0-9] = números del 0 al 9',
+      '🔧 ls *.txt = lista todos los .txt',
+      '🔧 ls archivo?.txt = archivo1.txt, archivo2.txt, etc.',
+      '▶ Ejecuta exactamente: ls /reino/*.txt'
+    ],
+    hints: [
+      'El globbing es expandido por bash ANTES de pasar al comando',
+      'Usa comillas simples para prevenir globbing: echo \'*.txt\'',
+      'Los patrones se expanden solo si existen archivos coincidentes'
+    ],
+    requiredCommands: ['ls'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lista archivos con patrón *.txt',
+        type: 'command_output',
+        expectedCommand: 'ls /reino/*.txt',
+        validationFn: 'output.includes(".txt")'
+      }
+    ],
+    prerequisites: [37],
+    rewards: { xp: 70, coins: 15 }
+  },
+
   {
     id: 39,
-    title: 'El Traductor',
-    description: 'Transforma texto con tr',
+    title: 'Alias: Atajos de Comandos',
+    description: 'Crea alias para simplificar comandos largos',
     world: 3, order: 9, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"tr es el traductor universal. Convierte minusculas a mayusculas, elimina caracteres, reemplaza simbolos. Solo lee de stdin, asi que siempre usalo con pipes."',
-    hints: ['tr "a-z" "A-Z" convierte a mayusculas', 'tr -d " " elimina espacios', 'Siempre se usa con pipe: echo "hola" | tr "a-z" "A-Z"'],
-    requiredCommands: ['tr'],
-    objectives: [
-      { id: 1, description: 'Convierte texto a mayusculas', type: 'command_output', command: 'echo "linuxquest" | tr "a-z" "A-Z"', validationFn: 'output.includes("LINUXQUEST")' },
-      { id: 2, description: 'Elimina espacios de un texto', type: 'command_output', command: 'echo "h o l a" | tr -d " "', validationFn: 'output.includes("hola")' }
+    npc: 'Linux el Sabio',
+    story: '"¿Escribir "ls -la" cada vez? Crea un alias: alias ll="ls -la". Así ll ejecuta lo largo. Los alias ahorran tiempo y protegen contra errores."',
+    instructions: [
+      '📖 alias nombre="comando" crea un atajo',
+      '📖 alias ll="ls -la" permite escribir ll en lugar de ls -la',
+      '📖 alias sin argumentos lista todos los alias',
+      '▶ Paso 1: Ejecuta exactamente: alias ll="ls -la"',
+      '▶ Paso 2: Luego ejecuta: ll'
     ],
-    prerequisites: [30],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 40,
-    title: 'Tuberías: El Flujo de Datos',
-    description: 'Encadena comandos con pipes',
-    world: 3, order: 10, difficulty: 3,
-    npc: 'Chmod-ard',
-    story: '"El pipe | es la tuberia maestra del reino. Conecta la salida de un comando con la entrada del siguiente. Es como encadenar hechizos: ls | grep .txt | wc -l. ¡El verdadero poder!"',
-    hints: ['| conecta la salida de un comando con la entrada del siguiente', 'Puedes encadenar muchos pipes', 'Cada comando procesa y pasa al siguiente'],
-    requiredCommands: ['ls', 'grep', 'wc'],
-    objectives: [
-      { id: 1, description: 'Cuenta archivos .txt en el reino', type: 'command_output', command: 'ls /reino/distros/*.txt 2>/dev/null | wc -l', validationFn: 'output.length > 0' },
-      { id: 2, description: 'Filtra y cuenta errores en el log', type: 'command_output', command: 'grep "ERROR" /misiones/servidores.log | wc -l', validationFn: 'output.length > 0' }
+    hints: [
+      'Los alias son temporales (se pierden al cerrar shell)',
+      'Para permanentes, añade a ~/.bashrc',
+      'Los alias deben estar sin espacios alrededor de ='
     ],
-    prerequisites: [31, 35],
-    rewards: { xp: 70, coins: 15 }
-  },
-  {
-    id: 41,
-    title: 'La Redirección al Infinito',
-    description: 'Domina >, >>, 2> y &>',
-    world: 3, order: 11, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"La redireccion envia la salida a donde tu quieras. > sobrescribe, >> agrega al final, 2> captura errores, &> captura todo. Como desviar un rio hacia otro cauce."',
-    hints: ['> sobrescribe el archivo', '>> agrega al final (append)', '2> captura solo errores (stderr)', '&> captura todo (stdout + stderr)'],
-    requiredCommands: ['echo', 'cat'],
+    requiredCommands: ['alias', 'ls'],
     objectives: [
-      { id: 1, description: 'Redirige la salida a un archivo', type: 'command_output', command: 'echo "primer mensaje" > /tmp/redir_test.txt && echo "segundo mensaje" >> /tmp/redir_test.txt && cat /tmp/redir_test.txt', validationFn: 'output.includes("primer") && output.includes("segundo")' }
-    ],
-    prerequisites: [30],
-    rewards: { xp: 60, coins: 10 }
-  },
-  {
-    id: 42,
-    title: 'Los Espejos del Tee',
-    description: 'Duplica salida a pantalla y archivo con tee',
-    world: 3, order: 12, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"tee es como un espejo magico que duplica el flujo de datos. Muestra en pantalla Y guarda en archivo simultaneamente. Con -a agrega en lugar de sobrescribir."',
-    hints: ['tee archivo muestra Y guarda', 'tee -a agrega al archivo sin sobrescribir', 'Se usa con pipes: comando | tee archivo'],
-    requiredCommands: ['tee'],
-    objectives: [
-      { id: 1, description: 'Duplica la salida con tee', type: 'command_output', command: 'echo "Mensaje duplicado" | tee /tmp/tee_test.txt && cat /tmp/tee_test.txt', validationFn: 'output.includes("duplicado")' }
-    ],
-    prerequisites: [41],
-    rewards: { xp: 60, coins: 10 }
-  },
-  {
-    id: 43,
-    title: 'El Hechizo Sed',
-    description: 'Transforma texto con sed',
-    world: 3, order: 13, difficulty: 4,
-    npc: 'Chmod-ard',
-    story: '"sed (Stream Editor) es el mago transformador. s/old/new/g reemplaza texto, /patron/d elimina lineas, -n \'5,10p\' extrae rangos. Es uno de los hechizos mas poderosos del reino."',
-    hints: ["sed 's/old/new/' reemplaza la primera ocurrencia", "sed 's/old/new/g' reemplaza todas (global)", "sed -i edita el archivo in-place"],
-    requiredCommands: ['sed'],
-    objectives: [
-      { id: 1, description: 'Transforma texto con sed', type: 'command_output', command: 'echo "El reino de Linux" | sed "s/Linux/LinuxQuest/g"', validationFn: 'output.includes("LinuxQuest")' },
-      { id: 2, description: 'Elimina lineas de comentario de un config', type: 'command_output', command: 'sed "/^#/d" /misiones/config_ejemplo.conf', validationFn: 'output.includes("servidor")' }
-    ],
-    prerequisites: [40],
-    rewards: { xp: 70, coins: 15 }
-  },
-  {
-    id: 44,
-    title: 'El Buscador Awk',
-    description: 'Procesa datos por columnas con awk',
-    world: 3, order: 14, difficulty: 4,
-    npc: 'Chmod-ard',
-    story: '"awk es el procesador de datos definitivo. Trabaja columna por columna. {print $1} imprime la primera, {print $1, $3} la primera y tercera. Con -F defines el separador."',
-    hints: ["awk '{print $1}' imprime la primera columna", "-F ',' cambia el separador a coma", "awk '{sum+=$1} END {print sum}' suma la columna"],
-    requiredCommands: ['awk'],
-    objectives: [
-      { id: 1, description: 'Extrae nombres del CSV', type: 'command_output', command: 'awk -F "," \'{print $1}\' /misiones/usuarios.csv | head -5', validationFn: 'output.includes("nombre")' },
-      { id: 2, description: 'Extrae nombre y ciudad del CSV', type: 'command_output', command: 'awk -F "," \'{print $1, "vive en", $3}\' /misiones/usuarios.csv | head -3', validationFn: 'output.includes("vive en")' }
+      {
+        id: 1,
+        description: 'Crea un alias',
+        type: 'command_output',
+        expectedCommand: 'alias ll="ls -la"',
+        validationFn: 'output.length === 0'
+      },
+      {
+        id: 2,
+        description: 'Usa el alias',
+        type: 'command_output',
+        expectedCommand: 'll',
+        validationFn: 'output.includes("total") || output.includes("drwx")'
+      }
     ],
     prerequisites: [38],
     rewards: { xp: 70, coins: 15 }
   },
+
   {
-    id: 45,
-    title: 'La Búsqueda Rápida',
-    description: 'Busca archivos con find',
-    world: 3, order: 15, difficulty: 3,
-    npc: 'Chmod-ard',
-    story: '"find es el explorador definitivo del sistema de archivos. Busca por nombre con -name, por tipo con -type, por tamano con -size, por fecha con -mtime. Recorre todo el reino."',
-    hints: ['find / -name "archivo.txt" busca por nombre', 'find . -type f solo archivos', 'find . -type d solo directorios'],
-    requiredCommands: ['find'],
-    objectives: [
-      { id: 1, description: 'Busca archivos .txt en el reino', type: 'command_output', command: 'find /reino -name "*.txt" -type f', validationFn: 'output.includes(".txt")' },
-      { id: 2, description: 'Busca directorios en /reino', type: 'command_output', command: 'find /reino -type d', validationFn: 'output.includes("distros")' }
+    id: 40,
+    title: 'Control de Procesos: fg y bg',
+    description: 'Aprende a ejecutar procesos en foreground y background',
+    world: 3, order: 10, difficulty: 2,
+    npc: 'Linux el Sabio',
+    story: '"Los procesos pueden ejecutarse adelante (foreground, bloqueante) o atrás (background, paralelo). Ctrl+Z pausa. fg vuelve al frente. bg sigue atrás. Paralelismo sin threads."',
+    instructions: [
+      '📖 Foreground = comando bloquea hasta terminar',
+      '📖 Background = comando corre paralelo (comando &)',
+      '📖 Ctrl+Z pausa el foreground',
+      '📖 fg = vuelve a foreground',
+      '📖 bg = continúa en background',
+      '📖 jobs = lista procesos actuales',
+      '▶ Ejecuta exactamente: jobs'
     ],
-    prerequisites: [30],
-    rewards: { xp: 60, coins: 10 }
-  },
-  {
-    id: 46,
-    title: 'El Compresor de Pergaminos',
-    description: 'Archiva y comprime con tar',
-    world: 3, order: 16, difficulty: 3,
-    npc: 'Chmod-ard',
-    story: '"tar es el archivador ancestral. -c crea, -x extrae, -z comprime con gzip, -v muestra que hace, -f especifica el archivo. Es como meter todos tus pergaminos en una bolsa magica comprimida."',
-    hints: ['tar -czvf archivo.tar.gz directorio/ crea comprimido', 'tar -xzvf archivo.tar.gz extrae', 'tar -tvf archivo.tar.gz lista sin extraer'],
-    requiredCommands: ['tar'],
-    objectives: [
-      { id: 1, description: 'Crea un archivo comprimido del reino', type: 'command_output', command: 'tar -czvf /tmp/reino_backup.tar.gz -C / reino && echo "Backup creado" && ls -lh /tmp/reino_backup.tar.gz', validationFn: 'output.includes("Backup creado")' }
+    hints: [
+      'sleep 100 & = ejecuta sleep en background',
+      'Ctrl+Z pausa (no termina), bg lo continúa',
+      'Útil para ejecutar múltiples comandos simultáneamente'
     ],
-    prerequisites: [30],
-    rewards: { xp: 60, coins: 15 }
-  },
-  {
-    id: 47,
-    title: 'Tu Primer Script Mágico',
-    description: 'Crea y ejecuta un script bash',
-    world: 3, order: 17, difficulty: 3,
-    npc: 'Chmod-ard',
-    story: '"Un script es un grimorio: un archivo con hechizos escritos que el sistema ejecuta en orden. Empieza con #!/bin/bash (el shebang), hazlo ejecutable con chmod +x, y ejecutalo con ./script.sh"',
-    hints: ['#!/bin/bash es el shebang (primera linea)', 'chmod +x hace el script ejecutable', './script.sh ejecuta el script'],
-    requiredCommands: ['echo', 'chmod'],
+    requiredCommands: ['jobs'],
     objectives: [
-      { id: 1, description: 'Crea tu primer grimorio ejecutable', type: 'command_output', command: 'echo \'#!/bin/bash\' > /tmp/saludo.sh && echo \'echo "Hola LinuxQuest"\' >> /tmp/saludo.sh && chmod +x /tmp/saludo.sh && /tmp/saludo.sh', validationFn: 'output.includes("Hola LinuxQuest")' }
+      {
+        id: 1,
+        description: 'Lista los procesos de tu shell',
+        type: 'command_output',
+        expectedCommand: 'jobs',
+        validationFn: 'output.length >= 0'
+      }
+    ],
+    prerequisites: [39],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 41,
+    title: 'Loops: for en Bash',
+    description: 'Aprende loops for para iterar sobre datos',
+    world: 3, order: 11, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"for es el loop fundamental. Itera sobre una lista de valores. for i in 1 2 3; do echo $i; done. Automatización pura. La repetición es el poder."',
+    instructions: [
+      '📖 for variable in lista; do comando; done',
+      '📖 for i in 1 2 3 4 5 imprime cada número',
+      '🔧 for archivo in *.txt; do echo $archivo; done lista archivos',
+      '▶ Ejecuta exactamente: for i in 1 2 3; do echo "Número: $i"; done'
+    ],
+    hints: [
+      'La lista puede ser explícita (1 2 3) o resultado de comando',
+      'do y done delimitan el cuerpo del loop',
+      'for es esencial para scripts'
+    ],
+    requiredCommands: ['echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Ejecuta un for loop simple',
+        type: 'command_output',
+        expectedCommand: 'for i in 1 2 3; do echo "Número: $i"; done',
+        validationFn: 'output.includes("Número")'
+      }
+    ],
+    prerequisites: [40],
+    rewards: { xp: 100, coins: 25 }
+  },
+
+  {
+    id: 42,
+    title: 'Condicionales: if/then/else',
+    description: 'Aprende if para tomar decisiones en scripts',
+    world: 3, order: 12, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"if test condición; then hazesto; else hazaestotro; fi. La lógica condicional da poder. Scripts inteligentes que toman decisiones. La IA del shell empieza aquí."',
+    instructions: [
+      '📖 if [ condición ]; then comando; fi',
+      '📖 if [ "$USER" = "root" ]; then echo "Eres root"; fi',
+      '🔧 [ = test, -eq = igual numérico, = igual string',
+      '▶ Ejecuta exactamente: if [ "$USER" = "root" ]; then echo "Eres root"; else echo "No eres root"; fi'
+    ],
+    hints: [
+      'Los espacios dentro de [ ] son OBLIGATORIOS',
+      '= compara strings, -eq compara números',
+      '[ -f archivo ] = archivo existe?'
+    ],
+    requiredCommands: ['echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Ejecuta un if/then/else',
+        type: 'command_output',
+        expectedCommand: 'if [ "$USER" = "root" ]; then echo "root"; else echo "no root"; fi',
+        validationFn: 'output.includes("root")'
+      }
     ],
     prerequisites: [41],
-    rewards: { xp: 80, coins: 20 }
+    rewards: { xp: 100, coins: 25 }
   },
+
+  {
+    id: 43,
+    title: 'Funciones en Bash',
+    description: 'Aprende a crear funciones reutilizables',
+    world: 3, order: 13, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"Las funciones agrupan código reutilizable. function nombre { comandos; }. Defines una vez, usas muchas. El código limpio empieza con funciones."',
+    instructions: [
+      '📖 function nombre { comando; }',
+      '📖 O: nombre() { comando; }',
+      '🔧 Las funciones pueden tomar argumentos: $1, $2, etc.',
+      '▶ Ejecuta exactamente: mifuncion() { echo "Hola desde función"; }; mifuncion'
+    ],
+    hints: [
+      'Los argumentos en funciones se pasan como: mifuncion arg1 arg2',
+      'Acceso con $1, $2 igual que en scripts',
+      'Úsalas en loops y condicionales'
+    ],
+    requiredCommands: ['echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Define y ejecuta una función',
+        type: 'command_output',
+        expectedCommand: 'mifuncion() { echo "Hola desde función"; }; mifuncion',
+        validationFn: 'output.includes("Hola")'
+      }
+    ],
+    prerequisites: [42],
+    rewards: { xp: 100, coins: 25 }
+  },
+
+  {
+    id: 44,
+    title: 'Contar Archivos',
+    description: 'Usa wc y find para contar archivos y líneas',
+    world: 3, order: 14, difficulty: 2,
+    npc: 'Linux el Sabio',
+    story: '"¿Cuántos archivos .txt tienes? find | wc -l. ¿Cuántas líneas en total? find | xargs wc -l. Los números revelan patrones."',
+    instructions: [
+      '📖 find . -name "*.txt" | wc -l cuenta archivos',
+      '📖 find . -name "*.txt" | xargs wc -l cuenta líneas totales',
+      '▶ Paso 1: Ejecuta exactamente: find /reino -name "*.txt" -type f | wc -l',
+      '▶ Paso 2: Luego ejecuta: find /reino -name "*.txt" -type f | head -5'
+    ],
+    hints: [
+      'wc -l cuenta líneas',
+      'find + wc = análisis de código',
+      'head -5 muestra primeros 5'
+    ],
+    requiredCommands: ['find', 'wc'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Cuenta archivos .txt en /reino',
+        type: 'command_output',
+        expectedCommand: 'find /reino -name "*.txt" -type f | wc -l',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [43],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 45,
+    title: 'Búsqueda Avanzada con find',
+    description: 'Domina find con filtros por tipo, tamaño, fecha',
+    world: 3, order: 15, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"find es más poderosa que parece. find -type f -size +1M = archivos mayores a 1MB. find -mtime -7 = modificados en últimos 7 días. Las búsquedas revelan secretos."',
+    instructions: [
+      '📖 find -type f = solo archivos',
+      '📖 find -type d = solo directorios',
+      '📖 find -size +1M = mayores a 1MB',
+      '📖 find -mtime -7 = modificados hace menos de 7 días',
+      '▶ Paso 1: Ejecuta exactamente: find /etc -type f -name "*.conf" 2>/dev/null | head -5',
+      '▶ Paso 2: Luego ejecuta: find /reino -type f -size +0'
+    ],
+    hints: [
+      '2>/dev/null oculta errores de permiso',
+      '-mtime = modification time (en días)',
+      '-atime = access time'
+    ],
+    requiredCommands: ['find'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Busca archivos de configuración',
+        type: 'command_output',
+        expectedCommand: 'find /etc -type f -name "*.conf" 2>/dev/null | head -5',
+        validationFn: 'output.length >= 0'
+      },
+      {
+        id: 2,
+        description: 'Busca archivos en /reino',
+        type: 'command_output',
+        expectedCommand: 'find /reino -type f -size +0',
+        validationFn: 'output.includes(".txt") || output.length > 0'
+      }
+    ],
+    prerequisites: [44],
+    rewards: { xp: 100, coins: 25 }
+  },
+
+  {
+    id: 46,
+    title: 'Búsqueda de Texto Global',
+    description: 'Usa grep recursivo para buscar en múltiples archivos',
+    world: 3, order: 16, difficulty: 2,
+    npc: 'Linux el Sabio',
+    story: '"grep -r busca en todos los archivos de un directorio. Busca patrones globales. grep -r "TODO" . encuentra tareas pendientes en tu código."',
+    instructions: [
+      '📖 grep -r patrón directorio busca recursivamente',
+      '📖 grep -n patrón archivo = muestra números de línea',
+      '📖 grep -i patrón = insensible a mayúsculas',
+      '▶ Paso 1: Ejecuta exactamente: grep -r "NAME" /reino --include="*.txt"',
+      '▶ Paso 2: Luego ejecuta: grep -n "Linux" /etc/os-release'
+    ],
+    hints: [
+      '--include="*.txt" limita búsqueda a .txt',
+      '--exclude=".git" excluye directorios',
+      '-c = cuenta líneas que coinciden'
+    ],
+    requiredCommands: ['grep'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Busca "NAME" recursivamente en /reino',
+        type: 'command_output',
+        expectedCommand: 'grep -r "NAME" /reino --include="*.txt"',
+        validationFn: 'output.includes("NAME") || output.length > 0'
+      },
+      {
+        id: 2,
+        description: 'Busca con números de línea',
+        type: 'command_output',
+        expectedCommand: 'grep -n "Linux" /etc/os-release',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [45],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 47,
+    title: 'Procesamiento de Datos en Masa',
+    description: 'Combina find, grep, sed para procesamiento masivo',
+    world: 3, order: 17, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"Eres un mago verdadero cuando combinas herramientas. find archivos | grep patrones | sed modificaciones. La magia se materializa en pipelines."',
+    instructions: [
+      '📖 find | grep | sed = búsqueda + filtro + reemplazo',
+      '📖 find . -name "*.txt" | xargs grep "error" = busca "error" en todos los .txt',
+      '▶ Ejecuta exactamente: find /reino -type f -name "*.txt" | head -10'
+    ],
+    hints: [
+      'Ordena tus pipelines: buscar → filtrar → procesar',
+      'Prueba con head -10 para ver primeros 10 resultados',
+      'Los pipelines pueden ser muy largos'
+    ],
+    requiredCommands: ['find', 'grep', 'sed'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Combina find con head',
+        type: 'command_output',
+        expectedCommand: 'find /reino -type f -name "*.txt" | head -10',
+        validationFn: 'output.includes(".txt")'
+      }
+    ],
+    prerequisites: [46],
+    rewards: { xp: 100, coins: 25 }
+  },
+
   {
     id: 48,
-    title: 'Boss: El Maestro del Flujo',
-    description: 'Demuestra que dominas pipes, grep, sed, awk y scripts',
-    world: 3, order: 18, difficulty: 5,
-    npc: 'BOSS',
-    story: 'El Maestro del Flujo controla el rio de datos del reino. Solo aquellos que dominen el arte de las tuberias, la busqueda de patrones y la transformacion de texto podran pasar a la Forja del Nucleo.',
-    hints: ['Encadena comandos con pipes', 'Usa grep para filtrar, awk para extraer', 'tar para comprimir'],
-    requiredCommands: ['grep', 'awk', 'sed', 'sort', 'uniq', 'tar', 'echo', 'chmod', 'cat', 'head', 'tail', 'wc', 'cut', 'tr', 'find'],
-    objectives: [
-      { id: 1, description: 'Procesa el log: encuentra errores con conteo', type: 'command_output', command: 'grep "ERROR" /misiones/servidores.log | wc -l', validationFn: 'output.length > 0' },
-      { id: 2, description: 'Extrae datos del CSV con awk', type: 'command_output', command: 'awk -F "," \'{print $1}\' /misiones/usuarios.csv | tail -3', validationFn: 'output.length > 0' },
-      { id: 3, description: 'Transforma texto con sed', type: 'command_output', command: 'echo "El reino magico" | sed "s/magico/digital/g"', validationFn: 'output.includes("digital")' }
+    title: 'Documentación y Help',
+    description: 'Aprende man, info, --help para obtener ayuda',
+    world: 3, order: 18, difficulty: 1,
+    npc: 'Linux el Sabio',
+    story: '"¿Olvidaste una opción? man comando. ¿Necesitas ejemplos? info comando. ¿Solo la sintaxis? comando --help. La ayuda siempre está ahí para los que la buscan."',
+    instructions: [
+      '📖 man comando = manual detallado',
+      '📖 info comando = más detallado que man',
+      '📖 comando --help = ayuda rápida',
+      '📖 whatis comando = descripción de una línea',
+      '📖 apropos palabraClave = busca comandos relacionados',
+      '▶ Ejecuta exactamente: man ls | head -20'
     ],
-    prerequisites: [31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47],
-    rewards: { xp: 250, coins: 150, achievement: 'mundo_3' }
+    hints: [
+      'En man: q = salir, / = buscar, n = siguiente',
+      '--help funciona en casi todos los comandos GNU',
+      'apropos es útil cuando no recuerdas el nombre del comando'
+    ],
+    requiredCommands: ['man'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lee el manual de ls',
+        type: 'command_output',
+        expectedCommand: 'man ls | head -20',
+        validationFn: 'output.includes("LS") || output.includes("ls")'
+      }
+    ],
+    prerequisites: [47],
+    rewards: { xp: 70, coins: 15 }
   },
 
   // ==========================================
-  // MUNDO 4: LA FORJA DEL NÚCLEO (17 misiones)
-  // Tema 4 LPI: El sistema operativo Linux (peso 8)
+  // MUNDO 4: NÚCLEO DEL REINO (17 misiones)
+  // Tema 4 LPI: Sistema operativo Linux (peso 8)
   // ==========================================
   {
     id: 49,
-    title: '¿Quién Soy?',
-    description: 'Identifica tu usuario con whoami e id',
-    world: 4, order: 1, difficulty: 1,
+    title: 'Procesos: ps y top',
+    description: 'Aprende a ver procesos en ejecución',
+    world: 4, order: 1, difficulty: 2,
     npc: 'Kernel el Forjador',
-    story: '"Bienvenido a la Forja del Nucleo. Primero: ¿quien eres? whoami revela tu nombre, id revela tu UID, GID y grupos. Cada usuario tiene un UID unico."',
-    hints: ['whoami muestra tu nombre de usuario', 'id muestra UID, GID y grupos', 'UID 0 = root, 1000+ = usuarios normales'],
-    requiredCommands: ['whoami', 'id'],
+    story: '"Cada programa en ejecución es un proceso. ps muestra procesos actuales. top muestra en tiempo real. El kernel maneja miles. Domina su observación."',
+    instructions: [
+      '📖 ps = muestra procesos actuales',
+      '📖 ps aux = muestra todos los procesos con detalles',
+      '📖 top = monitor en tiempo real (Ctrl+C para salir)',
+      '🔧 ps aux | grep nombre busca un proceso específico',
+      '▶ Paso 1: Ejecuta exactamente: ps',
+      '▶ Paso 2: Luego ejecuta: ps aux | head -10'
+    ],
+    hints: [
+      'PID = Process ID (identificador único)',
+      'USER = propietario del proceso',
+      'COMMAND = qué comando es el proceso'
+    ],
+    requiredCommands: ['ps', 'top'],
     objectives: [
-      { id: 1, description: 'Revela tu identidad en el reino', type: 'command_output', command: 'whoami', validationFn: 'output.length > 0' },
-      { id: 2, description: 'Muestra tus IDs y grupos', type: 'command_output', command: 'id', validationFn: 'output.includes("uid=")' }
+      {
+        id: 1,
+        description: 'Muestra procesos del usuario',
+        type: 'command_output',
+        expectedCommand: 'ps',
+        validationFn: 'output.includes("PID") || output.includes("CMD")'
+      },
+      {
+        id: 2,
+        description: 'Muestra todos los procesos',
+        type: 'command_output',
+        expectedCommand: 'ps aux | head -10',
+        validationFn: 'output.includes("root") || output.includes("USER")'
+      }
     ],
     prerequisites: [48],
-    rewards: { xp: 40, coins: 5 }
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 50,
-    title: 'Mi Sistema',
-    description: 'Consulta la version del kernel con uname -r',
-    world: 4, order: 2, difficulty: 1,
+    title: '👹 BOSS: El Gobernador de Procesos',
+    description: 'Controla procesos: kill, nice, daemon',
+    world: 4, order: 2, difficulty: 3,
     npc: 'Kernel el Forjador',
-    story: '"El kernel es el corazon del sistema. uname -r muestra su version, uname -m la arquitectura. Conoce los cimientos sobre los que se construye todo el reino."',
-    hints: ['uname -r muestra la version del kernel', 'uname -m muestra la arquitectura'],
-    requiredCommands: ['uname'],
-    objectives: [
-      { id: 1, description: 'Consulta la version de tu kernel', type: 'command_output', command: 'uname -r', validationFn: 'output.length > 0' }
+    story: '"El Gobernador de Procesos te enseña a terminar procesos, cambiar prioridades, crear daemons. kill -9 = ejecución sumaria. nice = ajusta prioridad. El control del kernel es poder absoluto."',
+    instructions: [
+      '📖 kill PID termina un proceso (graceful)',
+      '📖 kill -9 PID termina forzado (SIGKILL)',
+      '📖 nice -n 10 comando ejecuta con baja prioridad',
+      '📖 renice prioridad -p PID cambia prioridad',
+      '▶ Ejecuta exactamente: ps aux | grep bash'
     ],
-    prerequisites: [48],
-    rewards: { xp: 40, coins: 5 }
+    hints: [
+      'Señales: SIGTERM (15) = graceful, SIGKILL (9) = forzado',
+      'nice values: -20 (alta prioridad) a 19 (baja)',
+      'Solo root puede aumentar prioridad (valores negativos)'
+    ],
+    requiredCommands: ['kill', 'ps', 'nice'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lista procesos bash',
+        type: 'command_output',
+        expectedCommand: 'ps aux | grep bash',
+        validationFn: 'output.includes("bash")'
+      }
+    ],
+    prerequisites: [49],
+    rewards: { xp: 150, coins: 50 }
   },
+
   {
     id: 51,
-    title: 'Hora del Sistema',
-    description: 'Consulta la fecha, calendario y uptime',
-    world: 4, order: 3, difficulty: 1,
+    title: 'Empaquetamiento: tar y gzip',
+    description: 'Aprende tar para crear archives y gzip para comprimir',
+    world: 4, order: 3, difficulty: 2,
     npc: 'Kernel el Forjador',
-    story: '"El tiempo es vida en el reino. date muestra la fecha actual, cal el calendario, uptime cuanto tiempo lleva encendido tu sistema. Son los relojes del reino."',
-    hints: ['date muestra fecha y hora actuales', 'cal muestra el calendario del mes', 'uptime muestra tiempo encendido y carga'],
-    requiredCommands: ['date', 'cal', 'uptime'],
-    objectives: [
-      { id: 1, description: 'Consulta la hora del reino', type: 'command_output', command: 'date', validationFn: 'output.length > 0' },
-      { id: 2, description: 'Muestra el calendario', type: 'command_output', command: 'cal', validationFn: 'output.length > 0' }
+    story: '"tar agrupa múltiples archivos en uno. gzip los comprime. tar + gzip = .tar.gz. La distribución de software depende de esto."',
+    instructions: [
+      '📖 tar -cf archivo.tar directorio crea archivo tar',
+      '📖 tar -xf archivo.tar extrae',
+      '📖 tar -czf archivo.tar.gz directorio crea tar comprimido',
+      '📖 tar -tzf archivo.tar.gz lista contenido',
+      '▶ Paso 1: Ejecuta exactamente: tar -czf prueba.tar.gz /reino --exclude=.git 2>/dev/null',
+      '▶ Paso 2: Luego ejecuta: tar -tzf prueba.tar.gz | head -10'
     ],
-    prerequisites: [48],
-    rewards: { xp: 40, coins: 5 }
+    hints: [
+      'c = create, x = extract, f = file, z = gzip, v = verbose',
+      'tar.gz es estándar en Linux',
+      'zip es más común en Windows'
+    ],
+    requiredCommands: ['tar', 'gzip'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Crea un tar.gz',
+        type: 'command_output',
+        expectedCommand: 'tar -czf prueba.tar.gz /reino --exclude=.git 2>/dev/null',
+        validationFn: 'output.length === 0 || output.length > 0'
+      },
+      {
+        id: 2,
+        description: 'Lista contenido del tar.gz',
+        type: 'command_output',
+        expectedCommand: 'tar -tzf prueba.tar.gz | head -10',
+        validationFn: 'output.includes("/")'
+      }
+    ],
+    prerequisites: [50],
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 52,
-    title: 'Procesos en Ejecución',
-    description: 'Lista procesos con ps y ps aux',
-    world: 4, order: 4, difficulty: 2,
+    title: 'Información del Sistema',
+    description: 'Aprende uname, uptime, free, df, du',
+    world: 4, order: 4, difficulty: 1,
     npc: 'Kernel el Forjador',
-    story: '"Los procesos son los habitantes vivos de tu reino. ps muestra los del shell actual, ps aux muestra TODOS. Cada proceso tiene un PID unico, como un numero de identificacion."',
-    hints: ['ps muestra procesos del shell actual', 'ps aux muestra todos los procesos del sistema', 'La columna PID es el identificador unico'],
-    requiredCommands: ['ps'],
-    objectives: [
-      { id: 1, description: 'Lista todos los procesos del reino', type: 'command_output', command: 'ps aux | head -10', validationFn: 'output.includes("PID") || output.includes("USER")' }
+    story: '"¿Cuánto tiempo lleva corriendo? uptime. ¿Cuánta RAM libre? free. ¿Cuánto espacio disco? df. ¿Qué es tan grande? du. Los números revelan el estado del reino."',
+    instructions: [
+      '📖 uname -a = sistema operativo',
+      '📖 uptime = cuánto tiempo corriendo',
+      '📖 free -h = memoria libre (human-readable)',
+      '📖 df -h = espacio en disco (por filesystem)',
+      '📖 du -sh directorio = tamaño del directorio',
+      '▶ Paso 1: Ejecuta exactamente: uptime',
+      '▶ Paso 2: Luego ejecuta: free -h'
     ],
-    prerequisites: [48],
-    rewards: { xp: 50, coins: 10 }
+    hints: [
+      '-h = human-readable (MB, GB, etc)',
+      'df muestra por filesystem',
+      'du = disk usage (qué carpeta ocupa espacio)'
+    ],
+    requiredCommands: ['uname', 'uptime', 'free', 'df', 'du'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Muestra uptime del sistema',
+        type: 'command_output',
+        expectedCommand: 'uptime',
+        validationFn: 'output.includes("up")'
+      },
+      {
+        id: 2,
+        description: 'Muestra memoria libre',
+        type: 'command_output',
+        expectedCommand: 'free -h',
+        validationFn: 'output.includes("Mem")'
+      }
+    ],
+    prerequisites: [51],
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 53,
-    title: 'Top: Monitor en Vivo',
-    description: 'Monitorea el sistema en tiempo real con top',
-    world: 4, order: 5, difficulty: 2,
+    title: 'Información de Hardware',
+    description: 'Usa lscpu, lsmem, lsblk para hardware',
+    world: 4, order: 5, difficulty: 1,
     npc: 'Kernel el Forjador',
-    story: '"top es la torre de vigilancia del reino. Muestra procesos, uso de CPU, memoria, todo en tiempo real. En modo batch (-b -n 1) captura una foto del estado actual."',
-    hints: ['top -b -n 1 ejecuta en modo batch (no interactivo)', 'Muestra %CPU, %MEM de cada proceso'],
-    requiredCommands: ['top'],
+    story: '"lscpu muestra CPU. lsmem muestra RAM. lsblk muestra discos. Son los sentidos del kernel hacia el hardware."',
+    instructions: [
+      '📖 lscpu = información de procesador',
+      '📖 lsmem = información de memoria',
+      '📖 lsblk = información de bloques (discos)',
+      '📖 cat /proc/cpuinfo = CPU (nivel kernel)',
+      '▶ Paso 1: Ejecuta exactamente: lscpu | head -10',
+      '▶ Paso 2: Luego ejecuta: lsblk'
+    ],
+    hints: [
+      '/proc/cpuinfo es muy detallado',
+      'lscpu es resumen amigable',
+      'lsblk muestra jerarquía disco/particiones'
+    ],
+    requiredCommands: ['lscpu', 'lsblk'],
     objectives: [
-      { id: 1, description: 'Captura una foto del estado del reino', type: 'command_output', command: 'top -b -n 1 | head -15', validationFn: 'output.includes("Tasks") || output.includes("Cpu")' }
+      {
+        id: 1,
+        description: 'Muestra CPU info',
+        type: 'command_output',
+        expectedCommand: 'lscpu | head -10',
+        validationFn: 'output.includes("CPU")'
+      },
+      {
+        id: 2,
+        description: 'Muestra discos/particiones',
+        type: 'command_output',
+        expectedCommand: 'lsblk',
+        validationFn: 'output.includes("NAME") || output.length > 0'
+      }
     ],
     prerequisites: [52],
-    rewards: { xp: 50, coins: 10 }
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 54,
-    title: 'El Verdugo de Procesos',
-    description: 'Termina procesos con kill y killall',
-    world: 4, order: 6, difficulty: 3,
+    title: 'Gestión de Archivos: file y stat',
+    description: 'Identifica tipo de archivo y metadatos',
+    world: 4, order: 6, difficulty: 1,
     npc: 'Kernel el Forjador',
-    story: '"kill envia senales a los procesos. SIGTERM (default) les pide que se vayan amablemente. SIGKILL (-9) los destruye sin piedad. killall mata por nombre."',
-    hints: ['kill PID envia SIGTERM (amable)', 'kill -9 PID envia SIGKILL (forzado)', 'kill -l lista todas las senales'],
-    requiredCommands: ['kill', 'killall'],
-    objectives: [
-      { id: 1, description: 'Aprende las senales de terminacion', type: 'command_output', command: 'kill -l | head -10', validationFn: 'output.includes("HUP") || output.includes("TERM")' }
+    story: '"file identifica tipo de archivo (texto, binario, imagen, etc.). stat muestra metadatos (tamaño, permisos, timestamps). Los detalles importan."',
+    instructions: [
+      '📖 file archivo = tipo de archivo',
+      '📖 stat archivo = metadatos detallados',
+      '📖 file -i archivo = tipo MIME',
+      '▶ Paso 1: Ejecuta exactamente: file /etc/os-release',
+      '▶ Paso 2: Luego ejecuta: stat /etc/os-release'
     ],
-    prerequisites: [52],
-    rewards: { xp: 60, coins: 10 }
+    hints: [
+      'file usa "magia" (bytes especiales) para identificar',
+      'stat muestra: tamaño, permisos, propietario, timestamps',
+      'MIME = tipo de contenido (text/plain, application/json, etc.)'
+    ],
+    requiredCommands: ['file', 'stat'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Identifica tipo de /etc/os-release',
+        type: 'command_output',
+        expectedCommand: 'file /etc/os-release',
+        validationFn: 'output.includes("text") || output.includes("ASCII")'
+      },
+      {
+        id: 2,
+        description: 'Muestra metadatos',
+        type: 'command_output',
+        expectedCommand: 'stat /etc/os-release',
+        validationFn: 'output.includes("Size") || output.includes("Access")'
+      }
+    ],
+    prerequisites: [53],
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 55,
-    title: 'Jobs y Background',
-    description: 'Gestiona procesos en segundo plano',
-    world: 4, order: 7, difficulty: 3,
+    title: 'Búsqueda de Comandos',
+    description: 'Usa which, whereis, type para localizar programas',
+    world: 4, order: 7, difficulty: 1,
     npc: 'Kernel el Forjador',
-    story: '"Los jobs son procesos que ejecutas en segundo plano. & al final de un comando lo envia al background. jobs los lista, fg trae uno al frente, bg lo envia atras."',
-    hints: ['comando & ejecuta en background', 'jobs lista los jobs activos', 'fg %1 trae el job 1 al frente'],
-    requiredCommands: ['jobs'],
-    objectives: [
-      { id: 1, description: 'Lista los jobs activos del reino', type: 'command_output', command: 'jobs', validationFn: 'true' }
+    story: '"which encuentra un programa en PATH. whereis busca más ampliamente. type muestra si es comando builtin o externo. Localizar es necesario."',
+    instructions: [
+      '📖 which comando = ruta del programa en PATH',
+      '📖 whereis comando = búsqueda más amplia',
+      '📖 type comando = tipo (builtin, alias, comando)',
+      '▶ Paso 1: Ejecuta exactamente: which bash',
+      '▶ Paso 2: Luego ejecuta: type ls'
     ],
-    prerequisites: [52],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 56,
-    title: 'Espacio en Disco',
-    description: 'Verifica el espacio con df -h y du -sh',
-    world: 4, order: 8, difficulty: 2,
-    npc: 'Kernel el Forjador',
-    story: '"df -h muestra el espacio usado en cada filesystem. du -sh muestra el tamano de un directorio. Como medir las arcas del reino."',
-    hints: ['df -h muestra espacio de todos los filesystems', 'du -sh directorio/ muestra tamano de un directorio', '-h = formato humano (KB, MB, GB)'],
-    requiredCommands: ['df', 'du'],
-    objectives: [
-      { id: 1, description: 'Muestra el espacio en disco del reino', type: 'command_output', command: 'df -h /', validationFn: 'output.includes("%")' },
-      { id: 2, description: 'Muestra el tamano del directorio /reino', type: 'command_output', command: 'du -sh /reino/', validationFn: 'output.includes("/reino")' }
+    hints: [
+      'which falla si no existe el comando',
+      'whereis busca man pages también',
+      'Builtins (cd, echo) no tienen "ruta" en which'
     ],
-    prerequisites: [48],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 57,
-    title: 'Memoria del Reino',
-    description: 'Consulta la memoria RAM con free -h',
-    world: 4, order: 9, difficulty: 1,
-    npc: 'Kernel el Forjador',
-    story: '"La memoria RAM es la fuerza vital del sistema. free -h muestra cuanta tienes, cuanto usas y cuanto queda. El swap es el respaldo cuando la RAM se agota."',
-    hints: ['free -h muestra RAM y swap en formato humano', 'total = memoria total', 'used = en uso', 'available = disponible'],
-    requiredCommands: ['free'],
+    requiredCommands: ['which', 'whereis', 'type'],
     objectives: [
-      { id: 1, description: 'Consulta la memoria del reino', type: 'command_output', command: 'free -h', validationFn: 'output.includes("Mem")' }
+      {
+        id: 1,
+        description: 'Localiza bash',
+        type: 'command_output',
+        expectedCommand: 'which bash',
+        validationFn: 'output.includes("/bash")'
+      },
+      {
+        id: 2,
+        description: 'Determina tipo de ls',
+        type: 'command_output',
+        expectedCommand: 'type ls',
+        validationFn: 'output.length > 0'
+      }
     ],
-    prerequisites: [48],
-    rewards: { xp: 40, coins: 5 }
-  },
-  {
-    id: 58,
-    title: 'El Camino de Red',
-    description: 'Consulta la configuracion de red con ip',
-    world: 4, order: 10, difficulty: 2,
-    npc: 'Kernel el Forjador',
-    story: '"ip addr muestra las direcciones IP de tus interfaces de red. ip route muestra como enrutas el trafico. Son los mapas de carreteras del reino digital."',
-    hints: ['ip addr muestra todas las IPs', 'ip a es la forma abreviada', 'ip route muestra la tabla de rutas'],
-    requiredCommands: ['ip'],
-    objectives: [
-      { id: 1, description: 'Consulta las direcciones de red del reino', type: 'command_output', command: 'ip addr show | grep "inet "', validationFn: 'output.includes("inet")' }
-    ],
-    prerequisites: [48],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 59,
-    title: 'El Eco del Cielo',
-    description: 'Prueba conectividad con ping',
-    world: 4, order: 11, difficulty: 2,
-    npc: 'Kernel el Forjador',
-    story: '"ping envia paquetes ICMP a un destino y espera respuesta. Es como gritar ¿estas ahi? al otro lado del reino. Con -c limitas el numero de paquetes."',
-    hints: ['ping -c 4 envia solo 4 paquetes', 'Si no hay respuesta, el destino es inalcanzable'],
-    requiredCommands: ['ping'],
-    objectives: [
-      { id: 1, description: 'Envia un eco al localhost', type: 'command_output', command: 'ping -c 2 -W 3 127.0.0.1', validationFn: 'output.includes("bytes from") || output.includes("ttl=")' }
-    ],
-    prerequisites: [58],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 60,
-    title: 'El DNS Mágico',
-    description: 'Resuelve nombres de dominio con host y nslookup',
-    world: 4, order: 12, difficulty: 2,
-    npc: 'Kernel el Forjador',
-    story: '"DNS es el diccionario del reino que traduce nombres a direcciones IP. host es simple, nslookup es mas detallado."',
-    hints: ['host google.com resuelve un dominio', 'nslookup localhost es otra forma', 'cat /etc/resolv.conf muestra tus servidores DNS'],
-    requiredCommands: ['host', 'nslookup'],
-    objectives: [
-      { id: 1, description: 'Resuelve localhost', type: 'command_output', command: 'host localhost 2>/dev/null || nslookup localhost 2>/dev/null || echo "DNS no disponible"', validationFn: 'output.length > 0' }
-    ],
-    prerequisites: [58],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 61,
-    title: 'Los Puertos del Castillo',
-    description: 'Lista puertos abiertos con ss -tuln',
-    world: 4, order: 13, difficulty: 2,
-    npc: 'Kernel el Forjador',
-    story: '"Los puertos son las puertas del castillo. ss -tuln muestra cuales estan abiertas y escuchando. -t TCP, -u UDP, -l listening, -n numerico."',
-    hints: ['-t = TCP', '-u = UDP', '-l = listening (escuchando)', '-n = numerico (no resuelve nombres)'],
-    requiredCommands: ['ss'],
-    objectives: [
-      { id: 1, description: 'Lista los puertos abiertos del castillo', type: 'command_output', command: 'ss -tuln 2>/dev/null || echo "ss no disponible"', validationFn: 'output.length > 0' }
-    ],
-    prerequisites: [58],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 62,
-    title: 'La Conexión SSH',
-    description: 'Genera un par de llaves SSH con ssh-keygen',
-    world: 4, order: 14, difficulty: 3,
-    npc: 'Kernel el Forjador',
-    story: '"SSH es el tunel seguro del reino. ssh-keygen genera un par de llaves: la privada (tu secreto) y la publica (la que compartes). Ed25519 es el algoritmo moderno."',
-    hints: ['ssh-keygen -t ed25519 genera llave moderna', 'La llave privada NUNCA se comparte', 'La llave publica se copia a servidores'],
-    requiredCommands: ['ssh-keygen'],
-    objectives: [
-      { id: 1, description: 'Genera un par de llaves SSH', type: 'command_output', command: 'ssh-keygen -t ed25519 -f /tmp/test_key -N "" -q && echo "Llave generada exitosamente"', validationFn: 'output.includes("generada")' }
-    ],
-    prerequisites: [48],
+    prerequisites: [54],
     rewards: { xp: 60, coins: 10 }
   },
+
+  {
+    id: 56,
+    title: 'Ayuda en Línea: apropos y whatis',
+    description: 'Busca comandos relacionados por palabra clave',
+    world: 4, order: 8, difficulty: 1,
+    npc: 'Kernel el Forjador',
+    story: '"apropos palabra busca comandos relacionados. whatis comando da descripción breve. Para aprender nuevos comandos sin Google."',
+    instructions: [
+      '📖 apropos palabra = busca comando por descripción',
+      '📖 whatis comando = descripción de una línea',
+      '📖 apropos file = encuentra comandos relacionados con archivos',
+      '▶ Paso 1: Ejecuta exactamente: apropos directory',
+      '▶ Paso 2: Luego ejecuta: whatis ls'
+    ],
+    hints: [
+      'apropos es excelente para descubrir comandos',
+      'whatis requiere database actualizada (updatedb)',
+      'Búsquedas específicas funcionan mejor'
+    ],
+    requiredCommands: ['apropos', 'whatis'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Busca comandos sobre directorios',
+        type: 'command_output',
+        expectedCommand: 'apropos directory',
+        validationFn: 'output.length > 0'
+      },
+      {
+        id: 2,
+        description: 'Obtén descripción de ls',
+        type: 'command_output',
+        expectedCommand: 'whatis ls',
+        validationFn: 'output.includes("list")'
+      }
+    ],
+    prerequisites: [55],
+    rewards: { xp: 60, coins: 10 }
+  },
+
+  {
+    id: 57,
+    title: 'Gestión de Paquetes (1/2)',
+    description: 'Aprende apt/apk para instalar software',
+    world: 4, order: 9, difficulty: 2,
+    npc: 'Kernel el Forjador',
+    story: '"apt es el gestor de Debian. apk es el de Alpine. Instalan, actualizan, desinstalan. apt update, apt install, apt remove. La automatización del software."',
+    instructions: [
+      '📖 apt update = actualiza lista de paquetes',
+      '📖 apt install paquete = instala',
+      '📖 apt remove paquete = desinstala',
+      '📖 apt search palabra = busca paquetes',
+      '📖 apk (Alpine) = mismo concepto',
+      '▶ Ejecuta exactamente: apt search bash 2>/dev/null | head -10'
+    ],
+    hints: [
+      'Requiere permisos root (sudo)',
+      'apt update primero, siempre',
+      'apk es más rápido (Alpine es más pequeño)'
+    ],
+    requiredCommands: ['apt'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Busca paquetes bash',
+        type: 'command_output',
+        expectedCommand: 'apt search bash 2>/dev/null | head -10',
+        validationFn: 'output.length >= 0'
+      }
+    ],
+    prerequisites: [56],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 58,
+    title: 'Gestión de Paquetes (2/2)',
+    description: 'Domina apt upgrade y dpkg',
+    world: 4, order: 10, difficulty: 2,
+    npc: 'Kernel el Forjador',
+    story: '"apt upgrade actualiza paquetes instalados. dpkg maneja archivos .deb directamente. Mantener software actualizado es seguridad."',
+    instructions: [
+      '📖 apt upgrade = actualiza paquetes',
+      '📖 apt full-upgrade = upgrade más agresivo',
+      '📖 dpkg -l = lista paquetes instalados',
+      '📖 dpkg -S archivo = qué paquete contiene archivo',
+      '▶ Paso 1: Ejecuta exactamente: dpkg -l | head -10',
+      '▶ Paso 2: Luego ejecuta: dpkg -S /bin/bash'
+    ],
+    hints: [
+      'dpkg = Debian Package (bajo nivel)',
+      'apt = gestor de alto nivel sobre dpkg',
+      'apt es más seguro (resuelve dependencias)'
+    ],
+    requiredCommands: ['dpkg'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lista paquetes instalados',
+        type: 'command_output',
+        expectedCommand: 'dpkg -l | head -10',
+        validationFn: 'output.includes("ii")'
+      },
+      {
+        id: 2,
+        description: 'Encuentra paquete de /bin/bash',
+        type: 'command_output',
+        expectedCommand: 'dpkg -S /bin/bash',
+        validationFn: 'output.includes("bash")'
+      }
+    ],
+    prerequisites: [57],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 59,
+    title: 'Redes: Conectividad Básica',
+    description: 'Aprende ping, ifconfig, netstat para redes',
+    world: 4, order: 11, difficulty: 2,
+    npc: 'Kernel el Forjador',
+    story: '"Las redes conectan reinos. ping verifica conectividad. ifconfig ve interfaces. netstat ve conexiones. La comunicación a través del cable (o aire)."',
+    instructions: [
+      '📖 ping host = verifica conectividad (Ctrl+C para parar)',
+      '📖 ifconfig = configuración de interfaces (o: ip addr)',
+      '📖 netstat = tabla de conexiones (o: ss)',
+      '📖 ip route = tabla de ruteo',
+      '▶ Paso 1: Ejecuta exactamente: ping -c 3 127.0.0.1',
+      '▶ Paso 2: Luego ejecuta: ifconfig 2>/dev/null || ip addr'
+    ],
+    hints: [
+      'ping -c 3 = solo 3 pings (no infinito)',
+      '127.0.0.1 = localhost (tu máquina)',
+      'ifconfig es antiguo, ip addr es nuevo'
+    ],
+    requiredCommands: ['ping', 'ifconfig'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Ping a localhost',
+        type: 'command_output',
+        expectedCommand: 'ping -c 3 127.0.0.1',
+        validationFn: 'output.includes("127.0.0.1") || output.includes("packets")'
+      },
+      {
+        id: 2,
+        description: 'Muestra interfaces',
+        type: 'command_output',
+        expectedCommand: 'ifconfig 2>/dev/null || ip addr',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [58],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 60,
+    title: 'DNS y Resolución de Nombres',
+    description: 'Usa nslookup y dig para consultar DNS',
+    world: 4, order: 12, difficulty: 2,
+    npc: 'Kernel el Forjador',
+    story: '"DNS traduce nombres (google.com) a IPs (142.250.x.x). nslookup y dig hacen esas búsquedas. Internet depende de DNS."',
+    instructions: [
+      '📖 nslookup dominio = busca IP',
+      '📖 dig dominio = información detallada de DNS',
+      '📖 host dominio = versión simple',
+      '▶ Paso 1: Ejecuta exactamente: nslookup localhost',
+      '▶ Paso 2: Luego ejecuta: host localhost 2>/dev/null || echo "No disponible"'
+    ],
+    hints: [
+      '127.0.0.1 resuelve a localhost',
+      'dig muestra más detalles que nslookup',
+      'DNS es fundamental para internet'
+    ],
+    requiredCommands: ['nslookup', 'dig'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Busca localhost',
+        type: 'command_output',
+        expectedCommand: 'nslookup localhost',
+        validationFn: 'output.includes("localhost") || output.includes("127")'
+      }
+    ],
+    prerequisites: [59],
+    rewards: { xp: 60, coins: 10 }
+  },
+
+  {
+    id: 61,
+    title: 'Transferencia de Archivos: scp y rsync',
+    description: 'Copia archivos entre máquinas remotas',
+    world: 4, order: 13, difficulty: 2,
+    npc: 'Kernel el Forjador',
+    story: '"scp copia archivos por SSH. rsync sincroniza directorios. Son el correo postal del reino: entregan datos a lugares lejanos."',
+    instructions: [
+      '📖 scp archivo usuario@host:ruta = copia a remoto',
+      '📖 scp usuario@host:ruta archivo = copia desde remoto',
+      '📖 rsync -avz origen destino = sincroniza',
+      '▶ Ejecuta exactamente: which scp'
+    ],
+    hints: [
+      'Requiere SSH configurado',
+      'rsync es más eficiente (copia solo cambios)',
+      'scp usa SSH, es seguro'
+    ],
+    requiredCommands: ['scp', 'rsync'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Verifica que scp existe',
+        type: 'command_output',
+        expectedCommand: 'which scp',
+        validationFn: 'output.includes("scp")'
+      }
+    ],
+    prerequisites: [60],
+    rewards: { xp: 60, coins: 10 }
+  },
+
+  {
+    id: 62,
+    title: 'Servicios y Daemons',
+    description: 'Controla servicios con systemctl',
+    world: 4, order: 14, difficulty: 2,
+    npc: 'Kernel el Forjador',
+    story: '"Los servicios son programas que corren en background. systemctl start/stop/restart los controla. El reino funciona gracias a daemons silenciosos."',
+    instructions: [
+      '📖 systemctl status servicio = estado',
+      '📖 systemctl start servicio = inicia',
+      '📖 systemctl stop servicio = detiene',
+      '📖 systemctl restart servicio = reinicia',
+      '📖 systemctl list-units --type=service = lista servicios',
+      '▶ Ejecuta exactamente: systemctl list-units --type=service 2>/dev/null | head -10'
+    ],
+    hints: [
+      'Requiere permisos root',
+      'systemd gestiona servicios en sistemas modernos',
+      'Los servicios corren en background'
+    ],
+    requiredCommands: ['systemctl'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lista servicios',
+        type: 'command_output',
+        expectedCommand: 'systemctl list-units --type=service 2>/dev/null | head -10',
+        validationFn: 'output.length >= 0'
+      }
+    ],
+    prerequisites: [61],
+    rewards: { xp: 60, coins: 10 }
+  },
+
   {
     id: 63,
-    title: 'El Mensajero curl',
-    description: 'Haz peticiones HTTP con curl',
+    title: 'Logs del Sistema',
+    description: 'Revisa journalctl y /var/log para logs',
     world: 4, order: 15, difficulty: 2,
     npc: 'Kernel el Forjador',
-    story: '"curl es el mensajero universal del reino digital. Hace peticiones HTTP: GET para obtener, POST para enviar. Con -I solo muestra headers, con -L sigue redirects."',
-    hints: ['curl url hace un GET request', 'curl -I url solo muestra headers', '--connect-timeout evita cuelgues'],
-    requiredCommands: ['curl'],
-    objectives: [
-      { id: 1, description: 'Envia un mensajero HTTP', type: 'command_output', command: 'curl -s --connect-timeout 5 -m 10 https://api.github.com/zen || echo "Sin conexion"', validationFn: 'output.length > 0' }
+    story: '"Todo se registra en logs. journalctl muestra logs del sistema. /var/log contiene archivos de log. Los investigadores leen logs para entender qué pasó."',
+    instructions: [
+      '📖 journalctl = logs del sistema',
+      '📖 journalctl -u servicio = logs de un servicio',
+      '📖 journalctl -f = sigue logs (tail -f)',
+      '📖 ls /var/log = archivos de log tradicionales',
+      '▶ Paso 1: Ejecuta exactamente: journalctl --no-pager -n 10',
+      '▶ Paso 2: Luego ejecuta: ls /var/log | head -10'
     ],
-    prerequisites: [48],
-    rewards: { xp: 50, coins: 10 }
+    hints: [
+      'journalctl es nuevo (systemd)',
+      '/var/log es tradicional',
+      'Los logs son cruciales para debugging'
+    ],
+    requiredCommands: ['journalctl'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lee últimos 10 logs',
+        type: 'command_output',
+        expectedCommand: 'journalctl --no-pager -n 10',
+        validationFn: 'output.length > 0'
+      },
+      {
+        id: 2,
+        description: 'Lista directorio de logs',
+        type: 'command_output',
+        expectedCommand: 'ls /var/log | head -10',
+        validationFn: 'output.includes("log") || output.length > 0'
+      }
+    ],
+    prerequisites: [62],
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 64,
-    title: 'Logs del Sistema',
-    description: 'Lee los registros del sistema con tail -f',
+    title: 'Configuración del Sistema',
+    description: 'Archivos en /etc para configuración global',
     world: 4, order: 16, difficulty: 2,
     npc: 'Kernel el Forjador',
-    story: '"Los logs son el diario del reino. /var/log/syslog registra eventos generales. tail -f sigue el log en tiempo real."',
-    hints: ['tail -f /var/log/syslog sigue el log general', 'dmesg muestra mensajes del kernel'],
-    requiredCommands: ['tail'],
-    objectives: [
-      { id: 1, description: 'Lee los registros del reino', type: 'command_output', command: 'tail -n 5 /var/log/syslog 2>/dev/null || tail -n 5 /var/log/messages 2>/dev/null || echo "Logs no accesibles"', validationFn: 'output.length > 0' }
+    story: '"Todo está configurado en /etc. hostname, resolv.conf, fstab, passwd. Cambiar /etc es cambiar el reino. Cuidado con las manos."',
+    instructions: [
+      '📖 /etc/hostname = nombre de la máquina',
+      '📖 /etc/resolv.conf = servidores DNS',
+      '📖 /etc/fstab = puntos de montaje',
+      '📖 /etc/passwd = usuarios del sistema',
+      '▶ Paso 1: Ejecuta exactamente: cat /etc/hostname',
+      '▶ Paso 2: Luego ejecuta: head -10 /etc/passwd'
     ],
-    prerequisites: [34],
-    rewards: { xp: 50, coins: 10 }
+    hints: [
+      'No modificar /etc sin saber qué haces',
+      'Backup antes de cambios en /etc',
+      'Muchos servicios leen de /etc al iniciar'
+    ],
+    requiredCommands: ['cat'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lee hostname',
+        type: 'command_output',
+        expectedCommand: 'cat /etc/hostname',
+        validationFn: 'output.length > 0'
+      },
+      {
+        id: 2,
+        description: 'Lee usuarios del sistema',
+        type: 'command_output',
+        expectedCommand: 'head -10 /etc/passwd',
+        validationFn: 'output.includes(":")'
+      }
+    ],
+    prerequisites: [63],
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
     id: 65,
-    title: 'Boss: El Señor del Núcleo',
-    description: 'Demuestra que dominas el sistema operativo Linux',
-    world: 4, order: 17, difficulty: 5,
-    npc: 'BOSS',
-    story: 'El Senor del Nucleo protege el corazon del sistema. Solo aquellos que entiendan procesos, memoria, red y logs podran acceder a las Bovedas de la Seguridad.',
-    hints: ['Usa ps, free, df, ip, ping', 'Muestra que entiendes el hardware y la red'],
-    requiredCommands: ['ps', 'free', 'df', 'ip', 'ping', 'ss', 'uname', 'date'],
-    objectives: [
-      { id: 1, description: 'Muestra procesos y memoria del sistema', type: 'command_output', command: 'ps aux | wc -l && free -h | head -2', validationFn: 'output.length > 0' },
-      { id: 2, description: 'Muestra espacio en disco y red', type: 'command_output', command: 'df -h / && ip addr show | grep "inet "', validationFn: 'output.includes("%")' }
+    title: '👹 BOSS: El Guardián del Núcleo',
+    description: 'Demuestra dominio del sistema operativo Linux',
+    world: 4, order: 17, difficulty: 3,
+    npc: 'Kernel el Forjador',
+    story: '"El Guardián del Núcleo te pone última prueba: gestión de procesos, información del sistema, redes, servicios, logs. Solo los verdaderos maestros del kernel avanzan al Mundo 5."',
+    instructions: [
+      '📖 Prueba final del Mundo 4: dominio del SO Linux',
+      '🔧 Debes demostrar: procesos, hardware, redes, servicios, logs',
+      '▶ Ejecuta: cat /reino/retos/mundo4-final.txt'
     ],
-    prerequisites: [49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64],
-    rewards: { xp: 250, coins: 150, achievement: 'mundo_4' }
+    hints: [
+      'Recuerda: ps, top, lscpu, ping, systemctl, journalctl',
+      'Todas las herramientas de Mundo 4 en una prueba',
+      'El Guardián es justo pero exigente'
+    ],
+    requiredCommands: ['cat'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lee el reto final del Guardián',
+        type: 'command_output',
+        expectedCommand: 'cat /reino/retos/mundo4-final.txt',
+        validationFn: 'output.includes("reto") || output.length > 0'
+      }
+    ],
+    prerequisites: [64],
+    rewards: { xp: 200, coins: 75 }
   },
 
   // ==========================================
-  // MUNDO 5: LAS BÓVEDAS DE LA SEGURIDAD (15 misiones)
+  // MUNDO 5: BÓVEDAS SECRETAS (15 misiones)
   // Tema 5 LPI: Seguridad y permisos (peso 7)
   // ==========================================
   {
     id: 66,
-    title: 'Tu Identidad en el Reino',
-    description: 'Identifícate con whoami, id y who',
+    title: 'Usuarios y Grupos',
+    description: 'Aprende whoami, id, groups para identidades',
     world: 5, order: 1, difficulty: 1,
-    npc: 'Sudo-Man',
-    story: '"Bienvenido a las Bovedas de la Seguridad. Aqui el poder se otorga con responsabilidad. Primero: ¿quien eres? whoami, id y who revelan tu identidad y la de otros en el reino."',
-    hints: ['whoami = tu nombre de usuario', 'id = UID, GID y grupos', 'who = quien esta conectado actualmente'],
-    requiredCommands: ['whoami', 'id', 'who'],
+    npc: 'Sudo-Man el Vigilante',
+    story: '"Cada usuario tiene identidad. whoami te dice quién eres. id muestra UID/GID. groups muestra de qué grupos eres miembro. La identidad es la base de la seguridad."',
+    instructions: [
+      '📖 whoami = quién eres',
+      '📖 id = ID de usuario y grupos',
+      '📖 groups = grupos de tu usuario',
+      '📖 id usuario = información de otro usuario',
+      '▶ Paso 1: Ejecuta exactamente: whoami',
+      '▶ Paso 2: Luego ejecuta: id'
+    ],
+    hints: [
+      'UID = User ID (número único)',
+      'GID = Group ID',
+      'root = UID 0'
+    ],
+    requiredCommands: ['whoami', 'id', 'groups'],
     objectives: [
-      { id: 1, description: 'Revela tu identidad completa', type: 'command_output', command: 'whoami && id', validationFn: 'output.includes("uid=")' },
-      { id: 2, description: 'Muestra quien esta conectado', type: 'command_output', command: 'who 2>/dev/null || w 2>/dev/null || echo "Solo tu estas conectado"', validationFn: 'output.length > 0' }
+      {
+        id: 1,
+        description: 'Muestra tu usuario',
+        type: 'command_output',
+        expectedCommand: 'whoami',
+        validationFn: 'output.length > 0'
+      },
+      {
+        id: 2,
+        description: 'Muestra tu información de identidad',
+        type: 'command_output',
+        expectedCommand: 'id',
+        validationFn: 'output.includes("uid") || output.includes("gid")'
+      }
     ],
     prerequisites: [65],
-    rewards: { xp: 40, coins: 5 }
-  },
-  {
-    id: 67,
-    title: 'El Libro de los Usuarios',
-    description: 'Lee /etc/passwd para entender los usuarios',
-    world: 5, order: 2, difficulty: 2,
-    npc: 'Sudo-Man',
-    story: '"/etc/passwd es el libro de registro de todos los usuarios del reino. Cada linea tiene 7 campos separados por : usuario:x:UID:GID:info:home:shell. No contiene contrasenas."',
-    hints: ['7 campos separados por :', 'x en el segundo campo = contrasena en /etc/shadow', 'UID 0 = root, 1000+ = usuarios normales'],
-    requiredCommands: ['cat', 'cut'],
-    objectives: [
-      { id: 1, description: 'Lee el libro de los usuarios', type: 'command_output', command: 'cat /etc/passwd | head -5', validationFn: 'output.includes("root")' },
-      { id: 2, description: 'Extrae solo los nombres de usuario', type: 'command_output', command: 'cut -d ":" -f 1 /etc/passwd', validationFn: 'output.includes("root")' }
-    ],
-    prerequisites: [65],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 68,
-    title: 'Los Permisos Sagrados',
-    description: 'Interpreta los permisos de archivos con ls -la',
-    world: 5, order: 3, difficulty: 2,
-    npc: 'Sudo-Man',
-    story: '"Los permisos son las leyes del reino. -rwxr-xr-- significa: dueno puede leer/escribir/ejecutar, grupo puede leer/ejecutar, otros solo leer. Aprende a leer esta escritura sagrada."',
-    hints: ['r=4(leer), w=2(escribir), x=1(ejecutar)', 'Primer caracter: - = archivo, d = directorio', '3 grupos: usuario, grupo, otros'],
-    requiredCommands: ['ls'],
-    objectives: [
-      { id: 1, description: 'Interpreta los permisos de archivos del sistema', type: 'command_output', command: 'ls -la /etc/passwd /etc/shadow /tmp 2>/dev/null', validationFn: 'output.includes("root")' },
-      { id: 2, description: 'Interpreta permisos del directorio /reino', type: 'command_output', command: 'ls -la /reino/', validationFn: 'output.includes("distros")' }
-    ],
-    prerequisites: [65],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 69,
-    title: 'Los Permisos en Octal',
-    description: 'Lee permisos con stat y cambia con chmod 755',
-    world: 5, order: 4, difficulty: 3,
-    npc: 'Sudo-Man',
-    story: '"El modo octal resume permisos en numeros: 755 = rwxr-xr-x, 644 = rw-r--r--, 600 = rw-------. stat -c %a muestra el octal actual. chmod lo cambia."',
-    hints: ['stat -c %a archivo muestra permisos en octal', 'chmod 755 = rwxr-xr-x (scripts/directorios)', 'chmod 644 = rw-r--r-- (archivos normales)'],
-    requiredCommands: ['stat', 'chmod'],
-    objectives: [
-      { id: 1, description: 'Crea un archivo y asigna permisos 755', type: 'command_output', command: 'touch /tmp/test_perm.txt && chmod 755 /tmp/test_perm.txt && stat -c %a /tmp/test_perm.txt', validationFn: 'output.includes("755")' }
-    ],
-    prerequisites: [68],
-    rewards: { xp: 60, coins: 10 }
-  },
-  {
-    id: 70,
-    title: 'El Cambio Simbólico',
-    description: 'Cambia permisos con notacion simbolica',
-    world: 5, order: 5, difficulty: 3,
-    npc: 'Sudo-Man',
-    story: '"La notacion simbolica es mas intuitiva: u+x agrega ejecucion al dueno, g-w quita escritura al grupo, o=r da solo lectura a otros. u=usuario, g=grupo, o=otros, a=todos."',
-    hints: ['chmod u+x agrega ejecucion al dueno', 'chmod g-w quita escritura al grupo', 'chmod o=r da solo lectura a otros'],
-    requiredCommands: ['chmod'],
-    objectives: [
-      { id: 1, description: 'Cambia permisos con notacion simbolica', type: 'command_output', command: 'touch /tmp/simb_test.txt && chmod u+x,g-w,o=r /tmp/simb_test.txt && ls -l /tmp/simb_test.txt', validationFn: 'output.includes("x")' }
-    ],
-    prerequisites: [68],
-    rewards: { xp: 60, coins: 10 }
-  },
-  {
-    id: 71,
-    title: 'La Propiedad Cambiada',
-    description: 'Cambia propietario con chown y chgrp',
-    world: 5, order: 6, difficulty: 3,
-    npc: 'Sudo-Man',
-    story: '"chown cambia el propietario de un archivo. chgrp cambia el grupo. Solo root puede cambiar la propiedad de archivos de otros."',
-    hints: ['chown usuario archivo cambia el propietario', 'chown usuario:archivo cambia ambos', 'chgrp grupo archivo cambia solo el grupo'],
-    requiredCommands: ['chown', 'chgrp'],
-    objectives: [
-      { id: 1, description: 'Cambia la propiedad de un archivo', type: 'command_output', command: 'touch /tmp/chown_test.txt && ls -l /tmp/chown_test.txt', validationFn: 'output.includes("chown_test")' }
-    ],
-    prerequisites: [68],
-    rewards: { xp: 60, coins: 10 }
-  },
-  {
-    id: 72,
-    title: 'El SUID Mágico',
-    description: 'Entiende y aplica el bit SUID',
-    world: 5, order: 7, difficulty: 4,
-    npc: 'Sudo-Man',
-    story: '"SUID (Set User ID) hace que un programa se ejecute con los permisos de su dueno, no de quien lo ejecuta. passwd lo necesita para escribir en /etc/shadow. chmod u+s lo activa."',
-    hints: ['chmod u+s archivo activa SUID', 'chmod 4755 archivo es la forma numerica', 'El ejecutable se corre como el dueno (ej: root)'],
-    requiredCommands: ['chmod', 'ls'],
-    objectives: [
-      { id: 1, description: 'Aprende sobre el poder SUID', type: 'command_output', command: 'ls -l /usr/bin/passwd 2>/dev/null | head -1', validationFn: 'output.includes("s") || output.includes("x")' }
-    ],
-    prerequisites: [68],
     rewards: { xp: 70, coins: 15 }
   },
+
   {
-    id: 73,
-    title: 'El Pegajoso de /tmp',
-    description: 'Entiende el sticky bit en directorios',
-    world: 5, order: 8, difficulty: 3,
-    npc: 'Sudo-Man',
-    story: '"El sticky bit (+t) en un directorio significa que solo el dueno de un archivo puede borrarlo, aunque el directorio sea escribible por todos. /tmp lo tiene."',
-    hints: ['ls -ld /tmp muestra el sticky bit (t al final)', 'chmod +t directorio activa el sticky bit', 'chmod 1755 es la forma numerica'],
-    requiredCommands: ['ls'],
-    objectives: [
-      { id: 1, description: 'Verifica el sticky bit de /tmp', type: 'command_output', command: 'ls -ld /tmp', validationFn: 'output.includes("t") || output.includes("T")' }
+    id: 67,
+    title: 'El Archivo de Contraseñas',
+    description: 'Entiende /etc/passwd y /etc/shadow',
+    world: 5, order: 2, difficulty: 2,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"Las contraseñas no se guardan en /etc/passwd (es visible). Se guardan en /etc/shadow (solo root). /etc/passwd contiene: usuario:x:UID:GID:nombre:home:shell."',
+    instructions: [
+      '📖 /etc/passwd = información de usuarios (visible)',
+      '📖 /etc/shadow = hash de contraseñas (root solo)',
+      '📖 Formato /etc/passwd: usuario:x:UID:GID:GECOS:HOME:SHELL',
+      '▶ Paso 1: Ejecuta exactamente: cat /etc/passwd | head -5',
+      '▶ Paso 2: Luego ejecuta: head -5 /etc/shadow 2>/dev/null || echo "Permisos insuficientes"'
     ],
-    prerequisites: [68],
-    rewards: { xp: 60, coins: 10 }
-  },
-  {
-    id: 74,
-    title: 'El Enlace Duro',
-    description: 'Crea hard links con ln',
-    world: 5, order: 9, difficulty: 3,
-    npc: 'Sudo-Man',
-    story: '"Un hard link es otro nombre para el mismo archivo (mismo inodo). Si borras el original, el hard link sigue funcionando. Solo funciona dentro del mismo filesystem."',
-    hints: ['ln archivo enlace crea un hard link', 'Comparten el mismo inodo', 'Borrar uno NO afecta al otro'],
-    requiredCommands: ['ln'],
-    objectives: [
-      { id: 1, description: 'Crea un enlace duro', type: 'command_output', command: 'echo "contenido" > /tmp/original.txt && ln /tmp/original.txt /tmp/enlace_duro.txt && ls -li /tmp/original.txt /tmp/enlace_duro.txt', validationFn: 'output.includes("original")' }
+    hints: [
+      'x en /etc/passwd = contraseña en /etc/shadow',
+      '/etc/shadow requiere permisos root',
+      'Los hashes son irreversibles (seguridad)'
     ],
-    prerequisites: [68],
-    rewards: { xp: 60, coins: 10 }
-  },
-  {
-    id: 75,
-    title: 'El Enlace Suave',
-    description: 'Crea symbolic links con ln -s',
-    world: 5, order: 10, difficulty: 3,
-    npc: 'Sudo-Man',
-    story: '"Un symbolic link (symlink) es un acceso directo que apunta a otra ruta. Si borras el original, el symlink queda roto. Puede cruzar filesystems."',
-    hints: ['ln -s archivo enlace crea un symlink', 'Si borras el original, el symlink queda roto', 'Puede cruzar filesystems'],
-    requiredCommands: ['ln'],
+    requiredCommands: ['cat', 'head'],
     objectives: [
-      { id: 1, description: 'Crea un enlace simbolico', type: 'command_output', command: 'ln -s /tmp/original.txt /tmp/enlace_suave.txt && ls -l /tmp/enlace_suave.txt', validationFn: 'output.includes("->")' }
+      {
+        id: 1,
+        description: 'Lee primeros usuarios de /etc/passwd',
+        type: 'command_output',
+        expectedCommand: 'cat /etc/passwd | head -5',
+        validationFn: 'output.includes(":")'
+      }
     ],
-    prerequisites: [74],
-    rewards: { xp: 60, coins: 10 }
+    prerequisites: [66],
+    rewards: { xp: 70, coins: 15 }
   },
+
   {
-    id: 76,
-    title: 'El Grupo Sagrado',
-    description: 'Lee /etc/group para entender los grupos',
-    world: 5, order: 11, difficulty: 2,
-    npc: 'Sudo-Man',
-    story: '"/etc/group es el libro de los clanes del reino. Cada linea: grupo:x:GID:miembros. Los grupos controlan el acceso compartido a recursos."',
-    hints: ['4 campos separados por :', 'grupo:x:GID:miembros', 'groups comando muestra tus grupos'],
-    requiredCommands: ['cat', 'groups'],
-    objectives: [
-      { id: 1, description: 'Lee el libro de los grupos', type: 'command_output', command: 'cat /etc/group | head -5', validationFn: 'output.includes("root")' },
-      { id: 2, description: 'Muestra tus grupos', type: 'command_output', command: 'groups', validationFn: 'output.length > 0' }
+    id: 68,
+    title: 'Crear Usuarios Locales',
+    description: 'Usa useradd para crear nuevos usuarios',
+    world: 5, order: 3, difficulty: 2,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"useradd crea nuevos usuarios. useradd -m -s /bin/bash usuario crea con home y shell. Solo root puede hacerlo. Nuevas vidas en el reino."',
+    instructions: [
+      '📖 useradd opciones usuario = crea usuario',
+      '📖 useradd -m = crea directorio home',
+      '📖 useradd -s /bin/bash = shell login',
+      '📖 useradd -G grupo = agrupa desde inicio',
+      '▶ Ejecuta exactamente: cat /etc/passwd | grep -E "^(root|sandbox)"'
     ],
-    prerequisites: [65],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 77,
-    title: 'Crear un Aliado',
-    description: 'Aprende a crear usuarios con useradd y passwd',
-    world: 5, order: 12, difficulty: 3,
-    npc: 'Sudo-Man',
-    story: '"useradd -m crea un nuevo guerrero con su propio hogar. passwd le asigna una contrasena. usermod -aG lo agrega a un grupo. Cada usuario tiene su UID unico."',
-    hints: ['useradd -m usuario crea usuario con home', 'passwd usuario asigna contrasena', 'usermod -aG grupo usuario agrega a grupo (-a = append)'],
-    requiredCommands: ['echo', 'cat'],
+    hints: [
+      'Requiere permisos root (sudo)',
+      '-m es importante (sin home = no funciona)',
+      'userdel usuario lo elimina'
+    ],
+    requiredCommands: ['useradd', 'cat', 'grep'],
     objectives: [
-      { id: 1, description: 'Aprende la sintaxis para crear usuarios', type: 'command_output', command: 'echo "Para crear un usuario:" && echo "  useradd -m aliado" && echo "  passwd aliado" && echo "  usermod -aG sudo aliado" && cat /etc/passwd | head -3', validationFn: 'output.includes("useradd")' }
+      {
+        id: 1,
+        description: 'Lista usuarios existentes',
+        type: 'command_output',
+        expectedCommand: 'cat /etc/passwd | grep -E "^(root|sandbox)"',
+        validationFn: 'output.includes(":")'
+      }
     ],
     prerequisites: [67],
     rewards: { xp: 70, coins: 15 }
   },
+
   {
-    id: 78,
-    title: 'Archivos Especiales',
-    description: 'Explora /dev y entiende los dispositivos',
-    world: 5, order: 13, difficulty: 2,
-    npc: 'Sudo-Man',
-    story: '"/dev contiene los archivos de dispositivos del sistema. /dev/null es un agujero negro que traga todo. /dev/zero genera ceros infinitos. /dev/random genera datos aleatorios."',
-    hints: ['/dev/null descarta todo lo que le envies', '/dev/zero genera bytes de cero', '/dev/random genera datos aleatorios'],
-    requiredCommands: ['ls', 'echo'],
-    objectives: [
-      { id: 1, description: 'Explora los dispositivos del reino', type: 'command_output', command: 'ls /dev/null /dev/zero /dev/random 2>/dev/null', validationFn: 'output.includes("null")' },
-      { id: 2, description: 'Descarta texto con /dev/null', type: 'command_output', command: 'echo "Este texto desaparece" > /dev/null && echo "Funciona"', validationFn: 'output.includes("Funciona")' }
+    id: 69,
+    title: 'Crear Grupos',
+    description: 'Usa groupadd para crear grupos de usuarios',
+    world: 5, order: 4, difficulty: 2,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"Los grupos agrupan usuarios. groupadd crea grupos. usermod -aG grupo usuario agrega usuario a grupo. Un usuario puede estar en múltiples grupos."',
+    instructions: [
+      '📖 groupadd grupo = crea grupo',
+      '📖 usermod -aG grupo usuario = agrega usuario a grupo',
+      '📖 /etc/group lista grupos',
+      '📖 /etc/gshadow = grupo passwords (raro)',
+      '▶ Paso 1: Ejecuta exactamente: cat /etc/group | head -10',
+      '▶ Paso 2: Luego ejecuta: groups'
     ],
-    prerequisites: [65],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 79,
-    title: 'Logs de Seguridad',
-    description: 'Lee los registros de autenticacion',
-    world: 5, order: 14, difficulty: 2,
-    npc: 'Sudo-Man',
-    story: '"/var/log/auth.log registra todos los intentos de autenticacion: logins exitosos, fallidos, uso de sudo. Es el guardian que vigila quien entra al reino."',
-    hints: ['/var/log/auth.log (Debian/Ubuntu)', '/var/log/secure (Red Hat/CentOS)', 'tail -f sigue en tiempo real'],
-    requiredCommands: ['cat', 'tail'],
-    objectives: [
-      { id: 1, description: 'Lee los registros de seguridad del reino', type: 'command_output', command: 'tail -n 5 /var/log/auth.log 2>/dev/null || tail -n 5 /var/log/secure 2>/dev/null || echo "Logs de seguridad no accesibles"', validationFn: 'output.length > 0' }
+    hints: [
+      'GID = Group ID',
+      'Un usuario tiene grupo principal + grupos secundarios',
+      'usermod -aG (append) NO reemplaza'
     ],
-    prerequisites: [64],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 80,
-    title: 'Boss: El Guardián Supremo',
-    description: 'Demuestra que dominas la seguridad y permisos de Linux',
-    world: 5, order: 15, difficulty: 5,
-    npc: 'BOSS',
-    story: 'El Guardian Supremo protege las Bovedas de la Seguridad. Solo aquellos que entiendan usuarios, grupos, permisos, SUID, sticky bit y enlaces podran obtener el Pergamino de la Certificacion.',
-    hints: ['Usa whoami, id, chmod, chown, ls -la', 'Recuerda: r=4, w=2, x=1', 'SUID=4, SGID=2, Sticky=1'],
-    requiredCommands: ['whoami', 'id', 'chmod', 'chown', 'ls', 'cat', 'ln'],
+    requiredCommands: ['groupadd', 'cat', 'groups'],
     objectives: [
-      { id: 1, description: 'Identificate y muestra tus permisos', type: 'command_output', command: 'whoami && id', validationFn: 'output.includes("uid=")' },
-      { id: 2, description: 'Crea un archivo con permisos especificos', type: 'command_output', command: 'touch /tmp/boss_test.txt && chmod 644 /tmp/boss_test.txt && stat -c %a /tmp/boss_test.txt', validationFn: 'output.includes("644")' },
-      { id: 3, description: 'Crea un enlace simbolico', type: 'command_output', command: 'ln -sf /tmp/boss_test.txt /tmp/boss_link.txt && ls -l /tmp/boss_link.txt', validationFn: 'output.includes("->")' }
+      {
+        id: 1,
+        description: 'Lista primeros grupos',
+        type: 'command_output',
+        expectedCommand: 'cat /etc/group | head -10',
+        validationFn: 'output.includes(":")'
+      },
+      {
+        id: 2,
+        description: 'Lista tus grupos',
+        type: 'command_output',
+        expectedCommand: 'groups',
+        validationFn: 'output.length > 0'
+      }
     ],
-    prerequisites: [66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79],
-    rewards: { xp: 500, coins: 300, achievement: 'mundo_5', title: 'Guardian de Linux' }
+    prerequisites: [68],
+    rewards: { xp: 70, coins: 15 }
   },
 
-  // ==========================================
-  // QUESTS EXTRA (5 misiones)
-  // Refuerzo de temas LPI importantes
-  // ==========================================
   {
-    id: 81,
-    title: 'El Editor de los Antiguos',
-    description: 'Conoce vi, el editor ancestral del reino',
-    world: 1, order: 13, difficulty: 3,
-    npc: 'Linux el Sabio',
-    story: '"vi es el editor mas antiguo y poderoso de Linux. Tiene 3 modos: comando (navegar), insercion (escribir) y ex (guardar/salir). Aunque intimidante, es vital para la certificacion."',
-    hints: ['i entra en modo insercion', 'ESC sale de insercion', ':w guarda, :q sale, :wq guarda y sale', ':q! sale sin guardar'],
-    requiredCommands: ['vi'],
-    objectives: [
-      { id: 1, description: 'Consulta la version de vi', type: 'command_output', command: 'vi --version 2>/dev/null | head -3 || echo "vi no disponible"', validationFn: 'output.length > 0' }
+    id: 70,
+    title: '👹 BOSS: El Guardián de Seguridad',
+    description: 'Controla usuarios, grupos y sudo',
+    world: 5, order: 5, difficulty: 3,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"El Guardián de Seguridad prueba tu dominio: crear usuarios, grupos, sudo. Solo masters de seguridad avanzan. La defensa del reino depende de ti."',
+    instructions: [
+      '📖 Debes demostrar: crear usuarios, grupos, configure sudo',
+      '🔧 sudo permite ejecutar como root sin ser root',
+      '▶ Ejecuta: cat /etc/sudoers 2>/dev/null | head -10'
     ],
-    prerequisites: [],
-    rewards: { xp: 60, coins: 10 }
-  },
-  {
-    id: 82,
-    title: 'El Editor Moderno',
-    description: 'Conoce nano, el editor amigable',
-    world: 1, order: 14, difficulty: 2,
-    npc: 'Linux el Sabio',
-    story: '"nano es el editor amigable para principiantes. Ctrl+O guarda, Ctrl+X sale, Ctrl+W busca. No tiene modos como vi: escribes directamente."',
-    hints: ['Ctrl+O = guardar', 'Ctrl+X = salir', 'Ctrl+W = buscar', 'Ctrl+K = cortar linea, Ctrl+U = pegar'],
-    requiredCommands: ['nano'],
-    objectives: [
-      { id: 1, description: 'Consulta la version de nano', type: 'command_output', command: 'nano --version 2>/dev/null | head -3 || echo "nano no disponible"', validationFn: 'output.length > 0' }
+    hints: [
+      'NUNCA edites /etc/sudoers directamente',
+      'Usa visudo (editor seguro)',
+      'sudo -l lista permisos'
     ],
-    prerequisites: [],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 83,
-    title: 'El Tipo de Archivo',
-    description: 'Identifica tipos de archivo con file',
-    world: 2, order: 19, difficulty: 2,
-    npc: 'Grep-ild',
-    story: '"file es el adivino del reino. Mira un archivo y dice que es: texto, imagen, ejecutable, comprimido. No se fia de la extension: lee el contenido real."',
-    hints: ['file archivo dice que tipo es', 'Lee magic bytes, no la extension', 'Util para archivos sin extension'],
-    requiredCommands: ['file'],
+    requiredCommands: ['cat', 'sudo'],
     objectives: [
-      { id: 1, description: 'Identifica el tipo de archivos del reino', type: 'command_output', command: 'file /etc/passwd && file /reino/distros/debian.txt && file /tmp/saludo.sh 2>/dev/null', validationFn: 'output.includes("text")' }
+      {
+        id: 1,
+        description: 'Lee sudoers',
+        type: 'command_output',
+        expectedCommand: 'cat /etc/sudoers 2>/dev/null | head -10',
+        validationFn: 'output.length >= 0'
+      }
     ],
-    prerequisites: [30],
-    rewards: { xp: 50, coins: 10 }
+    prerequisites: [69],
+    rewards: { xp: 150, coins: 50 }
   },
+
   {
-    id: 84,
-    title: 'La Búsqueda Rápida',
-    description: 'Busca archivos con locate',
-    world: 3, order: 19, difficulty: 2,
-    npc: 'Chmod-ard',
-    story: '"locate es la busqueda relampago. Usa una base de datos pre-indexada para encontrar archivos en milisegundos. Mas rapido que find, pero necesita actualizacion periodica."',
-    hints: ['locate archivo busca en la base de datos', 'sudo updatedb actualiza la base', 'Mas rapido que find pero puede no tener archivos nuevos'],
-    requiredCommands: ['locate'],
-    objectives: [
-      { id: 1, description: 'Busca archivos con locate', type: 'command_output', command: 'locate passwd 2>/dev/null | head -5 || echo "locate no disponible (necesita updatedb)"', validationFn: 'output.length > 0' }
+    id: 71,
+    title: 'SSH Keys: Autenticación Sin Contraseña',
+    description: 'Genera ssh-keygen para autenticación por clave',
+    world: 5, order: 6, difficulty: 2,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"SSH keys son más seguras que contraseñas. ssh-keygen genera pares público/privado. La llave privada es secreto. La pública la das. Criptografía asimétrica."',
+    instructions: [
+      '📖 ssh-keygen -t rsa = genera claves RSA',
+      '📖 ~/.ssh/id_rsa = clave privada (SECRETO)',
+      '📖 ~/.ssh/id_rsa.pub = clave pública',
+      '📖 ~/.ssh/authorized_keys = claves permitidas',
+      '▶ Ejecuta exactamente: ls -la ~/.ssh 2>/dev/null || echo "No SSH keys yet"'
     ],
-    prerequisites: [48],
-    rewards: { xp: 50, coins: 10 }
-  },
-  {
-    id: 85,
-    title: 'El Permisos de /var/tmp',
-    description: 'Compara /tmp y /var/tmp',
-    world: 5, order: 16, difficulty: 3,
-    npc: 'Sudo-Man',
-    story: '"/tmp se borra al reiniciar. /var/tmp persiste entre reinicios. Ambos tienen sticky bit. Es importante saber cual usar para archivos temporales."',
-    hints: ['/tmp = temporal, se borra al boot', '/var/tmp = persistente, sobrevive al boot', 'Ambos tienen sticky bit (drwxrwxrwt)'],
-    requiredCommands: ['ls'],
+    hints: [
+      'Never share id_rsa!',
+      'id_rsa.pub es lo que compartes',
+      'ssh copia clave pública al servidor remoto'
+    ],
+    requiredCommands: ['ssh-keygen', 'ls'],
     objectives: [
-      { id: 1, description: 'Compara los permisos de /tmp y /var/tmp', type: 'command_output', command: 'ls -ld /tmp /var/tmp', validationFn: 'output.includes("tmp")' }
+      {
+        id: 1,
+        description: 'Verifica SSH keys existentes',
+        type: 'command_output',
+        expectedCommand: 'ls -la ~/.ssh 2>/dev/null || echo "No SSH keys yet"',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [70],
+    rewards: { xp: 80, coins: 20 }
+  },
+
+  {
+    id: 72,
+    title: 'Firewalls: Aceptar/Rechazar Puertos',
+    description: 'Aprende ufw para gestionar firewall',
+    world: 5, order: 7, difficulty: 2,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"El firewall es el guardaespaldas de la máquina. Rechaza puertos no permitidos. ufw permite/deniega por puerto. La red está llena de ataques."',
+    instructions: [
+      '📖 ufw status = estado del firewall',
+      '📖 ufw allow 22/tcp = permite SSH',
+      '📖 ufw deny 23 = deniega telnet',
+      '📖 ufw enable/disable = activa/desactiva',
+      '▶ Ejecuta exactamente: ufw status 2>/dev/null || echo "ufw no disponible"'
+    ],
+    hints: [
+      'Puerto 22 = SSH (crucial mantener abierto)',
+      'Puerto 80 = HTTP, 443 = HTTPS',
+      'Cuidado: un deny mal puede bloquear acceso'
+    ],
+    requiredCommands: ['ufw'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Verifica estado del firewall',
+        type: 'command_output',
+        expectedCommand: 'ufw status 2>/dev/null || echo "ufw no disponible"',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [71],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 73,
+    title: 'Auditoria de Seguridad',
+    description: 'Revisa logs de seguridad para ataques',
+    world: 5, order: 8, difficulty: 2,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"Los atacantes dejan rastros en logs. grep "Failed\\" /var/log/auth.log revela intentos fallidos. Un vigilante alerta lee logs constantemente."',
+    instructions: [
+      '📖 /var/log/auth.log = intentos de login',
+      '📖 grep "Failed" /var/log/auth.log = logins fallidos',
+      '📖 journalctl -u sshd = logs de SSH',
+      '▶ Ejecuta exactamente: grep -c "Failed" /var/log/auth.log 2>/dev/null || echo "0"'
+    ],
+    hints: [
+      'Los logs son la evidencia del crimen',
+      'tail -f para monitoring en tiempo real',
+      'Demasiados Failed = ataque de fuerza bruta'
+    ],
+    requiredCommands: ['grep'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Cuenta logins fallidos',
+        type: 'command_output',
+        expectedCommand: 'grep -c "Failed" /var/log/auth.log 2>/dev/null || echo "0"',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [72],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 74,
+    title: 'Contraseñas Seguras: passwd',
+    description: 'Cambia tu contraseña de forma segura',
+    world: 5, order: 9, difficulty: 1,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"passwd cambia tu contraseña. Una contraseña fuerte: >8 chars, mayús, núm, símbolos. Cambiarla regularmente es seguridad básica. Nunca compartas contraseñas."',
+    instructions: [
+      '📖 passwd = cambia tu contraseña',
+      '📖 passwd usuario = cambiar otra (solo root)',
+      '📖 Buena contraseña: mixta, larga, única',
+      '📖 Mala: 123456, password, nombre',
+      '▶ Ejecuta exactamente: passwd --help 2>&1 | head -10'
+    ],
+    hints: [
+      'Bash: ninguna contraseña almacenada (solo hashes)',
+      'Cambiar password frecuentemente (recomendado)',
+      'Usa password manager para múltiples contraseñas'
+    ],
+    requiredCommands: ['passwd'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lee ayuda de passwd',
+        type: 'command_output',
+        expectedCommand: 'passwd --help 2>&1 | head -10',
+        validationFn: 'output.length > 0'
+      }
     ],
     prerequisites: [73],
     rewards: { xp: 60, coins: 10 }
+  },
+
+  {
+    id: 75,
+    title: 'SELinux y AppArmor',
+    description: 'Aprende sobre MAC (Mandatory Access Control)',
+    world: 5, order: 10, difficulty: 3,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"SELinux y AppArmor son "sandboxes". Limitan incluso a root. Política de seguridad fina. Advanced security para aplicaciones no confiadas."',
+    instructions: [
+      '📖 SELinux = Security-Enhanced Linux (Red Hat)',
+      '📖 AppArmor = alternativa (Debian)',
+      '📖 getenforce = muestra estado SELinux',
+      '📖 setenforce = cambia modo (Enforcing/Permissive)',
+      '▶ Ejecuta exactamente: getenforce 2>/dev/null || echo "SELinux no disponible"'
+    ],
+    hints: [
+      'Enforcing = activo, Permissive = log solo',
+      'MAC = control a nivel kernel',
+      'Avanzado: no necesario para principiantes'
+    ],
+    requiredCommands: ['getenforce'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Verifica estado SELinux',
+        type: 'command_output',
+        expectedCommand: 'getenforce 2>/dev/null || echo "SELinux no disponible"',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [74],
+    rewards: { xp: 80, coins: 20 }
+  },
+
+  {
+    id: 76,
+    title: 'Escaneo de Vulnerabilidades Locales',
+    description: 'Audita tu sistema con herramientas de seguridad',
+    world: 5, order: 11, difficulty: 3,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"Los buenos samaritanos auditan su propio sistema. Buscan vulnerabilidades antes que los atacantes. rkhunter, lynis, aide: herramientas de auditoría."',
+    instructions: [
+      '📖 rkhunter = busca rootkits',
+      '📖 lynis = auditoría de seguridad',
+      '📖 aide = integridad de archivos',
+      '📖 Instalación: apt install rkhunter',
+      '▶ Ejecuta exactamente: which rkhunter 2>/dev/null || echo "rkhunter no instalado"'
+    ],
+    hints: [
+      'Requiere permisos root',
+      'Estas herramientas previenen compromisos',
+      'Auditoría regular es buena práctica'
+    ],
+    requiredCommands: ['which'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Verifica rkhunter',
+        type: 'command_output',
+        expectedCommand: 'which rkhunter 2>/dev/null || echo "rkhunter no instalado"',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [75],
+    rewards: { xp: 80, coins: 20 }
+  },
+
+  {
+    id: 77,
+    title: 'Encriptación: gpg y openssl',
+    description: 'Encripta archivos y datos sensibles',
+    world: 5, order: 12, difficulty: 3,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"gpg encripta archivos con PGP. openssl es más flexible. Archivos cifrados: imposible leer sin clave. Para datos verdaderamente sensibles."',
+    instructions: [
+      '📖 gpg -c archivo = encripta con contraseña',
+      '📖 gpg archivo.gpg = desencripta',
+      '📖 openssl enc -aes-256-cbc -in archivo = encripta',
+      '▶ Ejecuta exactamente: which gpg'
+    ],
+    hints: [
+      'gpg usa claves asimétricas (público/privado)',
+      'openssl usa simétrico (una contraseña)',
+      'Criptografía: ciencia de la privacidad'
+    ],
+    requiredCommands: ['gpg', 'openssl'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Verifica gpg',
+        type: 'command_output',
+        expectedCommand: 'which gpg',
+        validationFn: 'output.includes("gpg")'
+      }
+    ],
+    prerequisites: [76],
+    rewards: { xp: 80, coins: 20 }
+  },
+
+  {
+    id: 78,
+    title: 'Listas de Control de Acceso (ACLs)',
+    description: 'Permisos granulares más allá de rwx',
+    world: 5, order: 13, difficulty: 3,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"chmod rwx es grueso. ACLs permiten control fino: "dar permiso de lectura a usuario X solo a archivo Y". setfacl y getfacl: granularidad total."',
+    instructions: [
+      '📖 setfacl -m u:usuario:rx archivo = permisos granulares',
+      '📖 getfacl archivo = lee ACLs',
+      '📖 setfacl -x usuario archivo = revoca',
+      '▶ Ejecuta exactamente: getfacl / 2>/dev/null | head -10'
+    ],
+    hints: [
+      'ACL = Access Control List',
+      'Más control que permisos tradicionales',
+      'Útil para ambientes complejos'
+    ],
+    requiredCommands: ['setfacl', 'getfacl'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lee ACLs de raíz',
+        type: 'command_output',
+        expectedCommand: 'getfacl / 2>/dev/null | head -10',
+        validationFn: 'output.length >= 0'
+      }
+    ],
+    prerequisites: [77],
+    rewards: { xp: 80, coins: 20 }
+  },
+
+  {
+    id: 79,
+    title: 'Copias de Seguridad',
+    description: 'Estrategia de backup con tar y rsync',
+    world: 5, order: 14, difficulty: 2,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"Los datos perdidos = desastre. Backups son seguros. tar crea snapshots. rsync sincroniza incremental. 3-2-1 rule: 3 copias, 2 medios, 1 offsite."',
+    instructions: [
+      '📖 tar -czf backup.tar.gz directorio = crea backup',
+      '📖 rsync -avz --backup --delete origen/ destino/ = sync incremental',
+      '📖 Prueba restaurar regularmente (importante!)',
+      '▶ Ejecuta exactamente: tar -tzf backup.tar.gz 2>/dev/null | head -5 || echo "Sin backup aún"'
+    ],
+    hints: [
+      '3-2-1: 3 copias, 2 medios diferentes, 1 offsite',
+      'Verificar backups regularmente (restores)',
+      'Sin backup = vulnerabilidad crítica'
+    ],
+    requiredCommands: ['tar', 'rsync'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Verifica backup',
+        type: 'command_output',
+        expectedCommand: 'tar -tzf backup.tar.gz 2>/dev/null | head -5 || echo "Sin backup aún"',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [78],
+    rewards: { xp: 100, coins: 25 }
+  },
+
+  {
+    id: 80,
+    title: 'Bug Bounty y Responsabilidad',
+    description: 'Reporta vulnerabilidades responsablemente',
+    world: 5, order: 15, difficulty: 2,
+    npc: 'Sudo-Man el Vigilante',
+    story: '"Si encuentras vulnerabilidades: NO explotes. Reporta responsablemente. Bug bounty programs pagan por reportes. El hacker ético ayuda a defender."',
+    instructions: [
+      '📖 Responsible disclosure: privado primero, público después',
+      '📖 HackerOne, Bugcrowd: plataformas de bug bounty',
+      '📖 CVE = Common Vulnerabilities and Exposures',
+      '▶ Ejecuta exactamente: echo "Seguridad responsable es la mejor práctica"'
+    ],
+    hints: [
+      'Never use vulnerabilities for evil',
+      'Bug bounty: legal y pagado',
+      'The best hackers protect systems'
+    ],
+    requiredCommands: ['echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Aprende sobre seguridad responsable',
+        type: 'command_output',
+        expectedCommand: 'echo "Seguridad responsable"',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [79],
+    rewards: { xp: 100, coins: 25 }
+  },
+
+  // ==========================================
+  // EXTRAS: REFUERZO (5 misiones)
+  // IDs 81-85
+  // ==========================================
+  {
+    id: 81,
+    title: 'Refuerzo: Comandos Básicos Repaso',
+    description: 'Repasa ls, cd, pwd, cat, cp, mv, rm',
+    world: 0, order: 1, difficulty: 1,
+    npc: 'Linux el Sabio',
+    story: '"La práctica hace perfecto. Repasemos los fundamentales sin los cuales no hay maestría. Básicos, pero absolutamente esenciales."',
+    instructions: [
+      '📖 ls = lista archivos',
+      '📖 cd = cambiar directorio',
+      '📖 pwd = ver ubicación actual',
+      '📖 cat/head/tail = leer archivos',
+      '📖 cp/mv/rm = copiar/mover/eliminar',
+      '▶ Práctica: ejecuta 5 comandos diferentes'
+    ],
+    hints: [
+      'Practica en /reino/test/',
+      'Combina comandos con pipes',
+      'La velocidad viene con repetición'
+    ],
+    requiredCommands: ['ls', 'cd', 'pwd', 'cat'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Lista tu directorio actual',
+        type: 'command_output',
+        expectedCommand: 'ls',
+        validationFn: 'output.length > 0'
+      }
+    ],
+    prerequisites: [],
+    rewards: { xp: 50, coins: 10 }
+  },
+
+  {
+    id: 82,
+    title: 'Refuerzo: Búsqueda y Procesamiento',
+    description: 'Repasa find, grep, sed, awk',
+    world: 0, order: 2, difficulty: 2,
+    npc: 'Grep-ild el Rastreador',
+    story: '"Buscar y procesar datos son habilidades clave. find localiza. grep filtra. sed y awk transforman. El poder de los datos está en tu mano."',
+    instructions: [
+      '📖 find = buscar archivos',
+      '📖 grep = filtrar por contenido',
+      '📖 sed = buscar-reemplazar',
+      '📖 awk = procesador de columnas',
+      '▶ Práctica: busca un patrón en /reino/'
+    ],
+    hints: [
+      'Combina find | grep | sed',
+      'Los pipelines hacen la magia',
+      'Practica con datos reales'
+    ],
+    requiredCommands: ['find', 'grep', 'sed'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Busca en /reino',
+        type: 'command_output',
+        expectedCommand: 'find /reino -name "*.txt" -type f | head -5',
+        validationFn: 'output.includes(".txt")'
+      }
+    ],
+    prerequisites: [81],
+    rewards: { xp: 70, coins: 15 }
+  },
+
+  {
+    id: 83,
+    title: 'Refuerzo: Scripting Bash',
+    description: 'Repasa loops, condicionales, funciones',
+    world: 0, order: 3, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"Los scripts automatizan. for loops, if condicionales, funciones: la trilogía del scripting. Automatización = poder."',
+    instructions: [
+      '📖 for i in lista; do comando; done',
+      '📖 if [ condición ]; then; else; fi',
+      '📖 function nombre { comando; }',
+      '📖 Variables: nombre=valor, acceso: $nombre',
+      '▶ Crea un script que use todas'
+    ],
+    hints: [
+      'Los scripts son programas bash',
+      'chmod +x hace ejecutable',
+      'Debug: bash -x script.sh'
+    ],
+    requiredCommands: ['bash', 'echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Ejecuta un for loop',
+        type: 'command_output',
+        expectedCommand: 'for i in 1 2 3 4 5; do echo $i; done',
+        validationFn: 'output.includes("1") && output.includes("5")'
+      }
+    ],
+    prerequisites: [82],
+    rewards: { xp: 100, coins: 25 }
+  },
+
+  {
+    id: 84,
+    title: 'Refuerzo: Permisos y Seguridad',
+    description: 'Repasa chmod, chown, permisos',
+    world: 0, order: 4, difficulty: 2,
+    npc: 'Chmod-ard el Guardián de Permisos',
+    story: '"La seguridad empieza con permisos. chmod controla acceso. chown cambia propietario. Errores = brechas de seguridad."',
+    instructions: [
+      '📖 chmod 755 = rwxr-xr-x',
+      '📖 chmod 644 = rw-r--r--',
+      '📖 chmod -R = recursivo',
+      '📖 chown usuario:grupo archivo',
+      '▶ Práctica: cambia permisos en /tmp/'
+    ],
+    hints: [
+      '7=rwx, 6=rw-, 5=r-x, 4=r--, 0=---',
+      '755 = ejecutable, 644 = archivo',
+      'Permisos son la base de Unix'
+    ],
+    requiredCommands: ['chmod', 'chown'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Crea archivo con permisos 644',
+        type: 'command_output',
+        expectedCommand: 'touch permisos.txt && chmod 644 permisos.txt && ls -la permisos.txt',
+        validationFn: 'output.includes("644") || output.includes("rw-r--r--")'
+      }
+    ],
+    prerequisites: [83],
+    rewards: { xp: 80, coins: 20 }
+  },
+
+  {
+    id: 85,
+    title: '🏆 FINAL: Maestre de Linux',
+    description: 'Demuestra tu dominio completo de Linux',
+    world: 0, order: 5, difficulty: 3,
+    npc: 'Linux el Sabio',
+    story: '"Completaste el Reino del Kernel. 85 misiones, 5 mundos, 5 bosses. Ahora eres Maestre de Linux. El viaje fue largo, pero valió cada paso. Bienvenido al círculo de los verdaderos guerreros del terminal."',
+    instructions: [
+      '📖 Felicitaciones: completaste LinuxQuest',
+      '📖 Aprendiste 75+ comandos y conceptos clave de LPI Linux Essentials 010-160',
+      '📖 Ahora puedes: administrar sistemas, automatizar tareas, asegurar infraestructura',
+      '🏆 Eres ahora un Maestre certificado en nuestro reino digital'
+    ],
+    hints: [
+      'Este viaje es solo el comienzo',
+      'Linux es infinito: sigue aprendiendo',
+      'Practica: la clave de la maestría'
+    ],
+    requiredCommands: ['echo'],
+    objectives: [
+      {
+        id: 1,
+        description: 'Celebra tu logro',
+        type: 'command_output',
+        expectedCommand: 'echo "Soy Maestre de Linux"',
+        validationFn: 'output.includes("Linux")'
+      }
+    ],
+    prerequisites: [84],
+    rewards: { xp: 500, coins: 200 }
   }
 ];
 
-const seedQuests = async () => {
+async function seedQuests() {
+  const client = await pool.connect();
   try {
-    console.log(`Seeding ${quests.length} quests from LPI Linux Essentials curriculum...`);
-
-    await pool.query('TRUNCATE TABLE user_quest_progress CASCADE');
-    await pool.query('TRUNCATE TABLE quests CASCADE');
-    console.log('Cleared existing quest data');
-
+    await client.query('TRUNCATE TABLE quests CASCADE;');
     for (const quest of quests) {
-      await pool.query(
-        `INSERT INTO quests
-         (title, description, world, "order", difficulty, npc, story, hints, required_commands, objectives, prerequisites, rewards)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+      await client.query(
+        `INSERT INTO quests (id, title, description, world, "order", difficulty, npc, story, hints, required_commands, objectives, prerequisites, rewards)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
         [
-          quest.title,
-          quest.description,
-          quest.world,
-          quest.order,
-          quest.difficulty,
-          quest.npc,
-          quest.story,
+          quest.id, quest.title, quest.description, quest.world, quest.order,
+          quest.difficulty, quest.npc, quest.story,
           JSON.stringify(quest.hints),
           JSON.stringify(quest.requiredCommands),
-          JSON.stringify(quest.objectives),
-          JSON.stringify(quest.prerequisites),
-          JSON.stringify(quest.rewards)
+          JSON.stringify([...(quest.objectives || []), ...(quest.instructions ? [{ instructions: quest.instructions }] : [])]),
+          JSON.stringify(quest.prerequisites || []),
+          JSON.stringify(quest.rewards || {})
         ]
       );
     }
-
-    console.log(`✅ ${quests.length} quests seeded successfully`);
-    process.exit(0);
-  } catch (error) {
-    console.error('❌ Error seeding quests:', error.message);
-    process.exit(1);
+    console.log(`✅ Seeded ${quests.length} quests (85 total: 12+18+18+17+15+5)`);
+  } catch (e) {
+    console.error('❌ Seed error:', e.message);
+  } finally {
+    client.release();
   }
-};
+}
+
+seedQuests();
+
+
+async function seedQuests() {
+  const client = await pool.connect();
+  try {
+    await client.query('TRUNCATE TABLE quests CASCADE;');
+    for (const quest of quests) {
+      await client.query(
+        `INSERT INTO quests (id, title, description, world, "order", difficulty, npc, story, hints, required_commands, objectives, prerequisites, rewards)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+        [
+          quest.id, quest.title, quest.description, quest.world, quest.order,
+          quest.difficulty, quest.npc, quest.story,
+          JSON.stringify(quest.hints),
+          JSON.stringify(quest.requiredCommands),
+          JSON.stringify([...(quest.objectives || []), ...(quest.instructions ? [{ instructions: quest.instructions }] : [])]),
+          JSON.stringify(quest.prerequisites || []),
+          JSON.stringify(quest.rewards || {})
+        ]
+      );
+    }
+    console.log(`✅ Seeded ${quests.length} quests`);
+  } catch (e) {
+    console.error('❌ Seed error:', e.message);
+  } finally {
+    client.release();
+  }
+}
 
 seedQuests();
