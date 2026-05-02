@@ -3094,5 +3094,3 @@ async function seedQuests() {
 }
 
 seedQuests();
-
-seedQuests();
