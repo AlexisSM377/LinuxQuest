@@ -6,6 +6,7 @@ import XpNotification from '../components/XpNotification';
 import AchievementsPanel from '../components/AchievementsPanel';
 import GameNav from '../components/game/GameNav';
 import GameTutorial from '../components/GameTutorial';
+import IntroOverlay from '../components/IntroOverlay';
 import { useAuthStore } from '../store/authStore';
 import { useGameStore } from '../store/gameStore';
 
@@ -30,7 +31,8 @@ export default function GamePage() {
   } = useGameStore();
   const [notification, setNotification] = useState(null);
   const [showAchievements, setShowAchievements] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(() => !localStorage.getItem('lq-tutorial-done'));
+  const [introDone, setIntroDone] = useState(() => !!localStorage.getItem('lq-intro-shown'));
+  const [showTutorial, setShowTutorial] = useState(false);
   const [canComplete, setCanComplete] = useState(false);
   const [activeTab, setActiveTab] = useState('quest');
   const battleRef = useRef(null);
@@ -227,6 +229,13 @@ export default function GamePage() {
         </div>
       )}
 
+      {!introDone && (
+        <IntroOverlay onComplete={() => {
+          setIntroDone(true);
+          setTimeout(() => setShowTutorial(!localStorage.getItem('lq-tutorial-done')), 500);
+        }} />
+      )}
+
       {notification && (
         <XpNotification {...notification} onClose={() => setNotification(null)} />
       )}
@@ -239,7 +248,7 @@ export default function GamePage() {
         />
       )}
 
-      {showTutorial && (
+      {showTutorial && introDone && (
         <GameTutorial onComplete={() => setShowTutorial(false)} />
       )}
     </div>

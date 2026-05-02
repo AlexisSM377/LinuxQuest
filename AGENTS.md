@@ -22,7 +22,7 @@ cd backend && npm run init-db && npm run seed-quests && npm run seed-achievement
 | Dev backend | `npm run dev` (in `backend/`, uses nodemon) |
 | Dev frontend | `npm run dev` (in `frontend/`, Vite) |
 | Init DB | `npm run init-db` (backend, creates tables) |
-| Seed quests | `npm run seed-quests` (backend, 95 missions) |
+| Seed quests | `npm run seed-quests` (backend, 85 missions) |
 | Seed achievements | `npm run seed-achievements` (backend) |
 | Lint frontend | `npm run lint` (in `frontend/`, ESLint) |
 | Build frontend | `npm run build` (in `frontend/`) |
@@ -92,7 +92,7 @@ Logs written to `/tmp/linuxquest-audit/` (commands.log, security-threats.log, et
 ## Deployment
 
 - **Frontend**: Vercel — auto-detects Vite, root dir = `frontend/`, set `VITE_API_URL` env var
-- **Backend**: Fly.io — `fly deploy` from `backend/`, uses Dockerfile (Alpine + 21 system packages + 22 mock scripts)
+- **Backend**: Fly.io — `fly deploy` from `backend/`, uses Dockerfile (Alpine + 21 system packages + 35 mock scripts)
 - **Backend runs as non-root user** (`sandbox`, UID 1001) inside Docker
 - Mock scripts in `backend/sandbox-bin/` are installed to `/usr/local/bin/` in the container for educational command responses (journalctl, sudo, etc.)
 - Command preprocessor converts interactive commands to non-interactive and rewrites system paths to sandbox-local
@@ -108,7 +108,7 @@ backend/src/
   security/securityConfig.js — Blacklists, dangerous patterns, limits, DEFAULT_ALLOWED_COMMANDS
   security/sandboxValidator.js — Path traversal, arg validation
   security/auditLogger.js — File-based audit logging
-  config/questCommands.js — Per-quest allowed commands (95 quests, IDs 1-95)
+  config/questCommands.js — Per-quest allowed commands (85 quests, IDs 1-90)
   config/achievementsConfig.js — 14 achievements (primer_paso, mundo_1-5, nivel_5/10/20, etc)
   config/npcConfig.js     — 5 NPCs (one per world, matches seed-quests.js)
   config/enemiesConfig.js — 15 enemies + 5 bosses (one boss per world)
@@ -119,7 +119,7 @@ backend/src/
   middleware/errorHandler.js — Error handling middleware
 
 backend/scripts/
-  seed-quests.js          — 95 quests (15+20+15+20+20+5), every quest has a real command
+  seed-quests.js          — 85 quests (12+18+18+17+15+5), every quest has a real command
   seed-achievements.js    — Seeds 14 achievements from achievementsConfig.js
 
 frontend/src/
@@ -129,16 +129,18 @@ frontend/src/
   store/gameStore.js     — Quests, progress, achievements, NPCs, enemies
   store/toastStore.js    — Toast notifications
   config/gameConfig.js   — DIFF_MAP, WORLD_COLORS (shared constants)
-  components/Terminal.jsx — xterm.js + Socket.io terminal
-  components/Quest.jsx   — Quest panel with world expansion
+  components/Terminal.jsx — xterm.js + Socket.io terminal + world unlock interludes
+  components/Quest.jsx   — Quest panel with world expansion + data-tutorial attrs
   components/BattleSystem.jsx — Boss battle (ref-based comm with Terminal)
+  components/IntroOverlay.jsx — Full-screen lore intro with typing effect
+  components/GameTutorial.jsx — 5-step spotlight overlay tutorial
   components/ErrorBoundary.jsx — React error boundary
-  pages/GamePage.jsx     — Main game layout
+  pages/GamePage.jsx     — Main game layout (orchestrates intro → tutorial → game)
 ```
 
 ## Quest System Structure
 
-- **95 quests** across 5 worlds (15+20+15+20+20) + 5 extras (91-95)
+- **85 quests** across 5 worlds (12+18+18+17+15) + 5 extras (91-95)
 - Every quest has a **real, executable Linux command** (no placeholder `pwd` for understanding quests)
 - Quest IDs are sequential: World 1 (1-15), World 2 (16-35), World 3 (36-50), World 4 (51-70), World 5 (71-90), Extras (91-95)
 - `questCommands.js` maps each quest ID to allowed commands, flags, and dangerous patterns

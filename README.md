@@ -4,9 +4,9 @@
 
 [![Estado](https://img.shields.io/badge/estado-LISTO%20PRODUCCI%C3%93N-brightgreen)](docs/roadmap.md)
 [![Seguridad](https://img.shields.io/badge/seguridad-8%20CAPAS-blue)](docs/SECURITY-HARDENED.md)
-[![Misiones](https://img.shields.io/badge/misiones-95%20quests-blue)](docs/LINUXQUEST_CONTENT.md)
+[![Misiones](https://img.shields.io/badge/misiones-85%20quests-blue)](docs/LINUXQUEST_CONTENT.md)
 
-**Estado Actual:** ✅ **SEMANAS 1-12 COMPLETADAS** | Listo para deployment en Vercel
+**Estado Actual:** ✅ **SEMANAS 1-17 COMPLETADAS** | Listo para deployment en Vercel
 
 ---
 
@@ -30,7 +30,7 @@ cd frontend && npm install && npm run dev
 
 ## 📦 Qué Incluye
 
-**5 Mundos de Aprendizaje | 95 Misiones Linux | 20 Niveles de Progresión | 12 Logros**
+**5 Mundos de Aprendizaje | 85 Misiones Linux | 20 Niveles de Progresión | 14 Logros**
 
 ### Mundo 1: Fundamentos Linux (15 misiones)
 - Conceptos: `uname`, `/etc/os-release`, familias de distros
@@ -101,9 +101,21 @@ cd frontend && npm install && npm run dev
 - Mecánicas de derrota/reintento con persistencia
 
 ### 🧑‍💼 Sistema de NPCs
-- **9 NPCs Temáticos** con personalidades únicas
-- Cada mundo tiene personajes que ofrecen misiones (Archivista, Guardián de Permisos, Maestro de Procesos, etc.)
-- Perfiles de NPC con saludos y especialidades
+- **5 NPCs Guardianes** con personalidades y lore profundo
+- Linux el Sabio, Grep-ild, Chmod-ard, Kernel el Forjador, Sudo-Man
+- Narrativa coherente "El Reino del Kernel"
+- Diálogos contextuales por misión
+
+### 📖 Lore y Narrativa
+- **Intro cinematográfica** — pantalla completa con efecto typing
+- **Interludios entre mundos** — narrativa al desbloquear cada mundo
+- **Contenido educativo interactivo** — archivos de lore en `/reino/` dentro del sandbox
+- Historia de Linux, distribuciones, licencias, software libre
+
+### 🎓 Tutorial Interactivo
+- **Spotlight overlay** que enfoca cada elemento de la UI
+- **5 pasos** explicando: Nav, Misiones, Terminal, Barra, Detalle
+- Se muestra solo la primera vez (skippable con ESC)
 
 ---
 
@@ -359,11 +371,11 @@ user_id, achievement_id, earned_at (timestamp)
 | Métrica | Cantidad |
 |---------|----------|
 | Mundos de Aprendizaje | 5 |
-| Misiones | 95 |
+| Misiones | 85 |
 | Niveles de Progresión | 20 |
-| Badges de Logros | 12 |
-| Personajes NPC | 9 |
-| Encuentros de Jefe | 6 |
+| Badges de Logros | 14 |
+| Personajes NPC | 5 |
+| Encuentros de Jefe | 5 |
 | Endpoints API | 16+ |
 | Capas de Seguridad | 9 |
 | Archivos de Auditoría | 4 |
@@ -412,21 +424,22 @@ Todas las tablas: CREADAS
 
 ---
 
-## ✅ Estado de Completación Semanas 1-12
+## ✅ Estado de Completación Semanas 1-17
 
 - ✅ **Semanas 1-4:** Setup + Frontend + Backend + Autenticación
 - ✅ **Semana 5:** Sistema de Misiones + Ejecución de Comandos
 - ✅ **Semana 6:** Validación Sandbox + Seguridad (8 capas)
 - ✅ **Semana 7:** Sistema XP + Progresión de Niveles (20 niveles)
-- ✅ **Semana 8:** Desbloqueo de Quests + Sistema de Logros (12 badges)
+- ✅ **Semana 8:** Desbloqueo de Quests + Sistema de Logros (14 badges)
 - ✅ **Semana 9:** Sistema de NPCs + Polish de UI
 - ✅ **Semana 10:** Sistema de Combate + Batallas de Jefes
 - ✅ **Semana 11:** Tabla de Clasificación + Página de Estadísticas
 - ✅ **Semana 12:** Endurecimiento de Seguridad + Listo para Producción
 - ✅ **Semana 13:** Pixel Art Design System
-- ✅ **Semana 14:** Sandbox Hardening + Mocks Educativos
+- ✅ **Semana 14:** Sandbox Hardening + Mocks Educativos (35 mocks)
 - ✅ **Semana 15:** Terminal Themes + Responsive
 - ✅ **Semana 17:** Terminal/Sandbox Overhaul (preprocessor + sandbox enriquecido)
+- ✅ **Semana 18:** Reorganización LPI (85 misiones) + Lore + Intro + Tutorial
 
 **Estado:** 🟢 LISTO PARA PRODUCCIÓN
 

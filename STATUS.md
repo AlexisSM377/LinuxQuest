@@ -1,4 +1,4 @@
-# LinuxQuest - Status (2026-04-30) - 🟢 PRODUCTION READY
+# LinuxQuest - Status (2026-05-02) - 🟢 PRODUCTION READY
 
 ## ✅ WEEKS 1-6 COMPLETED
 
@@ -617,3 +617,82 @@ All tables: CREATED
 - [x] Fork bombs siguen bloqueadas
 - [x] Frontend build: OK (sin errores nuevos)
 - [x] Backend modules: OK (todos cargan correctamente)
+
+### Session 2026-05-02 — Reorganización LPI + Lore + Tutorial
+
+**Reorganización de 95 → 85 misiones alineadas con LPI Linux Essentials:**
+- [x] `seed-quests.js` — 85 misiones reescritas (12+18+18+17+15+5 extras)
+- [x] `questCommands.js` — 85 configs de allowedCommands actualizadas
+- [x] `achievementsConfig.js` — count 95→85, guerrero_persistente 80→70
+- [x] `enemiesConfig.js` — boss questIds 12,30,48,65,80 (ya correctos)
+- [x] `levelSystem.js` — comentario actualizado a 85 quests
+- [x] `Menu.jsx` — textos "85 misiones"
+
+**Lore medieval-fantástico "El Reino del Kernel":**
+- [x] 5 NPCs con backstory profundo en `npcConfig.js`
+- [x] Historia por mundo: Castillo, Senderos, Torres, Forja, Bovedas
+- [x] Misiones con narrativa coherente (cada comando tiene sentido en la historia)
+- [x] Bosses con questIds sincronizados con enemiesConfig.js
+
+**Contenido educativo en sandbox (`/reino/`):**
+- [x] `sandboxService.js` — +200 líneas de archivos educativos
+- [x] `/reino/historia/` — origen.txt, linus.txt, stallman.txt, gnu.txt, git.txt, futuro.txt
+- [x] `/reino/distros/` — familias.txt, debian.txt, redhat.txt, arch.txt, suse.txt, embebidos.txt
+- [x] `/reino/licencias/` — gpl.txt, mit.txt, bsd.txt, apache.txt
+- [x] `/reino/software/` — escritorio.txt, servidores.txt, lenguajes.txt, escritorios.txt, seguridad.txt
+- [x] `/misiones/` — servidores.log, usuarios.csv, config_ejemplo.conf
+
+**Misiones dinámicas e interactivas:**
+- [x] Misiones teóricas usan `ls /reino/` y `cat /reino/...` para explorar
+- [x] Misiones de procesamiento usan `/misiones/servidores.log` y `/misiones/usuarios.csv`
+- [x] Cada misión tiene sentido narrativo (no solo "ejecuta este comando")
+- [x] Historia guía al usuario hacia la solución
+
+**Intro narrativa (pantalla completa):**
+- [x] `IntroOverlay.jsx` — componente nuevo, pantalla completa con efecto typing
+- [x] Lore se escribe letra por letra (18-50ms por carácter)
+- [x] "PRESIONA ENTER PARA CONTINUAR" al finalizar
+- [x] Se muestra solo la primera vez (localStorage `lq-intro-shown`)
+
+**Tutorial interactivo (spotlight):**
+- [x] `GameTutorial.jsx` — componente nuevo con overlay + spotlight
+- [x] 5 pasos: Nav, Detalle misión, Lista misiones, Barra terminal, Terminal
+- [x] Retry logic: intenta 15 veces encontrar el elemento antes de saltar
+- [x] ENTER/ESPACIO avanza, ESC salta
+- [x] Se muestra después de la intro (no al mismo tiempo)
+
+**Interludios narrativos entre mundos:**
+- [x] Al completar boss quest → evento `world:unlock` → narrativa en terminal
+- [x] 4 interludios: Mundo 2 (Grep-ild), Mundo 3 (Chmod-ard), Mundo 4 (Kernel), Mundo 5 (Sudo-Man)
+- [x] Efecto typing en la terminal del juego
+
+**Dockerfile:**
+- [x] Agregado paquete `file` (para comando `file` en misiones)
+
+**Documentación actualizada:**
+- [x] `REORGANIZATION_PLAN.md` — plan final con 85 misiones
+- [x] `LINUXQUEST_CONTENT.md` — distribución actualizada
+- [x] `GUIA_ESTUDIO_LINUX_ESSENTIALS.md` — link a LinuxQuest
+
+**Archivos nuevos:**
+- `frontend/src/components/IntroOverlay.jsx`
+- `frontend/src/components/GameTutorial.jsx`
+
+**Archivos modificados:**
+- `backend/scripts/seed-quests.js` (85 misiones)
+- `backend/src/config/questCommands.js` (85 configs)
+- `backend/src/config/achievementsConfig.js` (count 85)
+- `backend/src/services/sandboxService.js` (archivos educativos)
+- `backend/Dockerfile` (paquete file)
+- `backend/src/utils/levelSystem.js` (comentario)
+- `frontend/src/components/Terminal.jsx` (quitado intro, interludios)
+- `frontend/src/components/Quest.jsx` (data-tutorial attrs)
+- `frontend/src/components/GameTutorial.jsx` (spotlight fix)
+- `frontend/src/pages/GamePage.jsx` (intro + tutorial integration)
+- `frontend/src/components/Menu.jsx` (85 misiones)
+- `docs/REORGANIZATION_PLAN.md`
+- `docs/LINUXQUEST_CONTENT.md`
+- `docs/GUIA_ESTUDIO_LINUX_ESSENTIALS.md`
+
+**PROJECT STATUS: 🟢 PRODUCTION READY**
+**PENDIENTE: commitear cambios y hacer npm run seed-quests**
