@@ -732,3 +732,32 @@ feat: complete mobile responsiveness overhaul
 - **100% audit logging** - Complete security trails
 
 **SIGUIENTE PASO:** Iniciar servidor de desarrollo y verificar mobile en navegadores reales
+
+### Session 2026-05-02 (3) — Seed Scripts Debugging & Fixes ✅
+
+**Problemas encontrados y resueltos:**
+1. ✅ seed-quests.js — Función `seedQuests` declarada dos veces (duplicada)
+   - Fix: Removida la segunda declaración
+2. ✅ seed-quests.js — Instructions siendo mezcladas con objectives
+   - Fix: Separadas `instructions` de `objectives` en el INSERT
+3. ✅ seed-quests.js — TRUNCATE TABLE no estaba limpiando correctamente
+   - Fix: Cambiado a DELETE FROM con manejo de foreign keys
+4. ✅ Creado script reset-db.js para limpiar completamente la BD
+   - Agrega comando `npm run reset-db` a package.json
+
+**Secuencia correcta para inicializar:**
+```bash
+cd backend
+npm run reset-db      # Elimina todas las tablas
+npm run init-db       # Recrea tablas vacías
+npm run seed-quests   # Carga 85 misiones
+npm run seed-achievements  # Carga 12 logros
+```
+
+**Commits realizados:**
+- `dba9c8f` fix: remove duplicate seedQuests() call causing duplicate key errors
+- `a12316e` fix: use DELETE instead of TRUNCATE in seed-quests for reliability
+- `6925963` fix: remove instructions from objectives array in seed
+- `143f5b4` fix: remove duplicate seedQuests function in seed-quests.js
+
+**STATUS:** ✅ Seeds funcionando correctamente, BD poblada con 85 misiones + 12 logros

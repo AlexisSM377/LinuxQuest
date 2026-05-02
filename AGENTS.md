@@ -22,6 +22,7 @@ cd backend && npm run init-db && npm run seed-quests && npm run seed-achievement
 | Dev backend | `npm run dev` (in `backend/`, uses nodemon) |
 | Dev frontend | `npm run dev` (in `frontend/`, Vite) |
 | Init DB | `npm run init-db` (backend, creates tables) |
+| Reset DB | `npm run reset-db` (backend, drops all tables) |
 | Seed quests | `npm run seed-quests` (backend, 85 missions) |
 | Seed achievements | `npm run seed-achievements` (backend) |
 | Lint frontend | `npm run lint` (in `frontend/`, ESLint) |
@@ -147,6 +148,31 @@ frontend/src/
 - `DEFAULT_ALLOWED_COMMANDS` in `securityConfig.js` contains 100+ commands available globally
 - Boss quests (15, 35, 50, 70, 90) require completing all previous quests in the world
 - Understanding-type quests use related commands (e.g., `cat /etc/os-release` for distribution concepts, `which` for software concepts)
+
+## Database Setup & Seeding
+
+**First time setup:**
+```bash
+cd backend
+npm run init-db        # Create all tables
+npm run seed-quests    # Load 85 missions
+npm run seed-achievements  # Load 12 achievements
+```
+
+**Reset everything and start fresh:**
+```bash
+cd backend
+npm run reset-db       # Drop all tables
+npm run init-db        # Recreate tables
+npm run seed-quests    # Reload 85 missions
+npm run seed-achievements  # Reload 12 achievements
+```
+
+**Important notes:**
+- `reset-db` uses DROP TABLE CASCADE, so all data is lost
+- `seed-quests` and `seed-achievements` use DELETE to clear before inserting
+- Seeds are idempotent (safe to run multiple times)
+- Connection requires DATABASE_URL in backend/.env pointing to Neon PostgreSQL
 
 ## Mobile Responsiveness (100% complete) ✅
 
