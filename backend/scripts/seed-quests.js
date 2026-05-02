@@ -3076,7 +3076,7 @@ async function seedQuests() {
           quest.difficulty, quest.npc, quest.story,
           JSON.stringify(quest.hints),
           JSON.stringify(quest.requiredCommands),
-          JSON.stringify([...(quest.objectives || []), ...(quest.instructions ? [{ instructions: quest.instructions }] : [])]),
+          JSON.stringify(quest.objectives || []),
           JSON.stringify(quest.prerequisites || []),
           JSON.stringify(quest.rewards || {})
         ]
