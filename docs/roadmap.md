@@ -1,6 +1,8 @@
-# Roadmap LinuxQuest - 14 Semanas (COMPLETADAS) ✅
+# Roadmap LinuxQuest - 18+ Semanas
 
-**Status: 🟢 PRODUCTION READY (HARDENED) - All 14 weeks completed**
+**Status: 🟢 PRODUCTION READY - Semanas 1-18 completadas**
+
+## Semanas 1-17: Ver ROADMAP histórico abajo ↓
 
 ## Semana 1: Setup ✅
 - [x] Instalar Claude Code, Git, Node
@@ -146,47 +148,66 @@
 ---
 
 ## Progreso General
-**Completadas:** Semanas 1-15 ✅ (Setup → Sandbox Hardening → Terminal Themes → Responsive)
+**Completadas:** Semanas 1-18 ✅ (Setup → Lore + Tutorial + 85 Misiones LPI)
 **Staged (pendiente):** Semana 16 — Email Verification con Resend
-**Próxima:** Semana 17 (Localización / Polish)
+**Próxima:** Semana 19 (Localización / Polish / Testing)
 **Stack Completo:** React + Vite + Zustand + xterm.js ↔ Node + Express + Socket.io + PostgreSQL (Neon)
 
-## Contenido Seeded - 95 Quests Distribuidas
+## Contenido Seeded - 85 Quests Distribuidas (LPI Linux Essentials 010-160)
 ```
-Mundo 1: Fundamentos Linux (15 quests)
-  ├─ Conceptos: uname, /etc/os-release, familias de distros
-  ├─ Software Libre: FSF, OSI, GPL vs MIT
-  ├─ Alternativas: Office, diseño, desarrollo
-  └─ Servidores: Apache, Nginx, MySQL, Postfix
+Mundo 1: La Comunidad Linux (12 quests) — Boss ID 12
+  ├─ Linus Torvalds y la historia del kernel
+  ├─ Software libre y las 4 libertades de RMS
+  ├─ GNU, FSF, OSI y licencias (GPL, MIT, BSD)
+  └─ Kernel: qué es, qué hace, por qué importa
 
-Mundo 2: Archivos & Permisos (20 quests) ← Semana 9
-  ├─ Navegación: ls, pwd, cd, mkdir, rmdir
-  ├─ Manipulación: cp, mv, rm, touch, cat
-  ├─ Permisos: chmod, chown, umask, ACLs
-  └─ Búsqueda: find, locate, grep
+Mundo 2: Encontrando el camino (18 quests) — Boss ID 30
+  ├─ Navegación: ls, pwd, cd, mkdir, rmdir, tree
+  ├─ Manipulación: cp, mv, rm, touch, cat, head, tail
+  ├─ Búsqueda: find, grep, wc, sort, uniq, tr, cut
+  └─ Permisos: chmod, chown, umask
 
-Mundo 3: Procesos & Usuarios (15 quests) ← Semana 10
-  ├─ Procesos: ps, top, htop, kill, nice
-  ├─ Servicios: systemctl, service, init
-  ├─ Usuarios: useradd, userdel, groups, sudo
-  └─ Logs: journalctl, tail, dmesg
+Mundo 3: El poder de la línea de comandos (18 quests) — Boss ID 48
+  ├─ Editors: vi, nano, redirección (>, >>, 2>)
+  ├─ Pipes: |, xargs, awk, sed
+  ├─ Variables: $USER, $HOME, PATH, alias, export
+  └─ Comillas: simples vs dobles vs backticks
 
-Mundo 4: Redes (20 quests) ← Semana 11
-  ├─ Configuración: ifconfig, ip, route
-  ├─ Diagnostico: ping, traceroute, netstat, ss
-  ├─ Servicios de red: ssh, ftp, curl, wget
-  └─ Firewall y seguridad: iptables, ufw
+Mundo 4: El sistema operativo (17 quests) — Boss ID 65
+  ├─ Procesos: ps, top, kill, bg, fg, jobs, nohup
+  ├─ Archivos: file, tar, gzip, locate, updatedb
+  ├─ Info: uname, uptime, free, df, du, lscpu, lsblk
+  └─ Búsqueda: apropos, whatis, type, which
 
-Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
-  ├─ Bash: variables, operadores, estructuras
-  ├─ Funciones: definir, parámetros, retorno
-  ├─ Loops: for, while, until
-  ├─ Avanzado: sed, awk, regex, pipes
-  └─ Proyectos: cron, background jobs, logging
+Mundo 5: Seguridad y permisos (15 quests) — Boss ID 80
+  ├─ Usuarios: whoami, id, who, w, last, su, sudo
+  ├─ Grupos: groups, groupadd, useradd, usermod
+  └─ Permisos avanzados: ACLs, setuid, setgid, sticky
+
+Extras: Refuerzo (5 quests, IDs 91-95)
+  └─ Comandos variados de los 5 mundos
 ```
 
-## Cambios Recientes (2026-04-30)
-- ✅ Semana 7 COMPLETADA: XP system con 20 niveles + nivel-up notifications
+## Cambios Recientes (2026-05-02)
+- ✅ Semana 18 COMPLETADA: Reorganización LPI + Lore + Intro + Tutorial
+  - 85 misiones reescritas alineadas con LPI Linux Essentials 010-160
+  - Lore medieval-fantástico "El Reino del Kernel" en todas las misiones
+  - 5 NPCs con backstory profundo (Linux el Sabio, Grep-ild, Chmod-ard, Kernel, Sudo-Man)
+  - 200+ líneas de archivos educativos en sandbox (`/reino/`)
+  - IntroOverlay: pantalla completa con efecto typing (lore del reino)
+  - GameTutorial: 5 pasos spotlight overlay con retry logic
+  - Interludios narrativos al desbloquear mundos (typing en terminal)
+  - 13 nuevos mock scripts (total: 35)
+  - Dockerfile: paquete `file` agregado
+  - Docs actualizados: REORGANIZATION_PLAN, LINUXQUEST_CONTENT, GUIA_ESTUDIO
+  - Pendiente: npm run seed-quests + commit
+- ✅ Semana 17 COMPLETADA: Terminal/Sandbox Overhaul
+  - Command preprocessor: interactive→non-interactive, path rewriting
+  - Sandbox enriquecido con /etc, /var/log, /dev simulados
+  - 5 nuevos mocks (finger, newgrp, groupdel, userdel, chage)
+- ✅ Semana 15 COMPLETADA: Terminal Themes + Responsive
+- ✅ Semana 14 COMPLETADA: Sandbox Hardening + 22 Mocks Educativos
+- ✅ Semana 13 COMPLETADA: Pixel Art Design System
 - ✅ Semana 8 COMPLETADA: Quest unlock system + 12 achievements
 - ✅ Semana 9 COMPLETADA: NPC system + Quest card redesign
 - ✅ Semana 10 COMPLETADA: Combat System + Boss Battles
@@ -348,7 +369,7 @@ Mundo 5: Scripts & Automatización (25 quests) ← Semana 11
 ### Nuevos mocks educativos
 - [x] finger, newgrp, groupdel, userdel, chage (5 nuevos, total: 22)
 
-## Semana 18+ (opcional): Localización & Polish
+## Semana 19+ (opcional): Localización & Polish
 - [ ] Traducir UI frontend al español (PRIORIDAD ALTA)
   - [ ] Componentes React: textos, placeholders, botones, etiquetas
   - [ ] Mensajes de error y validación

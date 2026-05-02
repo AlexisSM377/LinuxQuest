@@ -22,13 +22,20 @@
 3. Hooks funcionales (no clases)
 4. Tailwind para CSS
 5. Validar inputs
+6. No git commits (el usuario los hace manualmente)
+7. Todo debe ser emulable en sandbox (Alpine Docker)
+8. 85 misiones alineadas con LPI Linux Essentials 010-160
 
 ## Archivos de referencia
-- STATUS.md: progreso actual
-- docs/roadmap.md: plan 12 semanas
+- STATUS.md: progreso actual (sesiones, fixes pendientes)
+- AGENTS.md: Quick start + architecture + conventions
+- docs/roadmap.md: plan por semanas
+- docs/REORGANIZATION_PLAN.md: estructura de 85 misiones LPI
+- docs/LINUXQUEST_CONTENT.md: referencia educativa completa
 
 ## Al iniciar sesión
-1. Lee STATUS.md
-2. Pregunta qué vamos a trabajar hoy
-3. Propón 2-3 tareas del día
-4. Confirma con usuario antes de ejecutar
+1. Lee STATUS.md para ver última sesión y qué falta
+2. Lee AGENTS.md para contexto de arquitectura
+3. Pregunta qué vamos a trabajar hoy
+4. Propón 2-3 tareas del día
+5. Confirma con usuario antes de ejecutar

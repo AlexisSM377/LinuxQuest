@@ -19,53 +19,6 @@ const writeChar = (term, text, speed = 18) =>
     }, speed);
   });
 
-const INTRO_LINES = [
-  { text: '', color: '', delay: 300 },
-  { text: '═══════════════════════════════════════════════════════════════', color: '\x1b[93m', delay: 80 },
-  { text: '', color: '', delay: 100 },
-  { text: '                    LINUXQUEST', color: '\x1b[93m', delay: 200, typing: true, speed: 50 },
-  { text: '              El Reino del Kernel', color: '\x1b[90m', delay: 150, typing: true, speed: 35 },
-  { text: '', color: '', delay: 400 },
-  { text: '═══════════════════════════════════════════════════════════════', color: '\x1b[93m', delay: 80 },
-  { text: '', color: '', delay: 500 },
-  { text: '  En el principio, solo existia el Caos Binario.', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  Ceros y unos vagaban sin proposito por el vacio', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  digital.', color: '\x1b[97m', delay: 300, typing: true, speed: 22 },
-  { text: '', color: '', delay: 400 },
-  { text: '  Entonces, un joven herrero finlandes llamado Linus', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  forjo el Primer Kernel — un corazon de codigo que', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  daria vida a todo un reino.', color: '\x1b[97m', delay: 400, typing: true, speed: 22 },
-  { text: '', color: '', delay: 300 },
-  { text: '  Pero el codigo solo no bastaba. Richard el Sabio', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  creo las Cuatro Libertades, leyes sagradas que', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  permitirian a todo ser digital copiar, estudiar,', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  modificar y compartir el conocimiento.', color: '\x1b[97m', delay: 400, typing: true, speed: 22 },
-  { text: '', color: '', delay: 300 },
-  { text: '  Asi nacio el Reino del Kernel.', color: '\x1b[93m', delay: 500, typing: true, speed: 30 },
-  { text: '', color: '', delay: 500 },
-  { text: '  Cinco guardianes protegen los cinco dominios:', color: '\x1b[96m', delay: 100, typing: true, speed: 22 },
-  { text: '', color: '', delay: 200 },
-  { text: '    I.   Linux el Sabio     — El Castillo del Conocimiento', color: '\x1b[93m', delay: 120, typing: true, speed: 18 },
-  { text: '    II.  Grep-ild           — Los Senderos del Sistema', color: '\x1b[92m', delay: 120, typing: true, speed: 18 },
-  { text: '    III. Chmod-ard          — Las Torres del Procesamiento', color: '\x1b[94m', delay: 120, typing: true, speed: 18 },
-  { text: '    IV.  Kernel el Forjador — La Forja del Nucleo', color: '\x1b[95m', delay: 120, typing: true, speed: 18 },
-  { text: '    V.   Sudo-Man           — Las Bovedas de la Seguridad', color: '\x1b[91m', delay: 300, typing: true, speed: 18 },
-  { text: '', color: '', delay: 500 },
-  { text: '  Pero las fuerzas del Caos Propietario acechan.', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  Virus textuales, procesos zombies y permisos', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  corruptos amenazan el reino.', color: '\x1b[97m', delay: 400, typing: true, speed: 22 },
-  { text: '', color: '', delay: 300 },
-  { text: '  Tu, joven Aprendiz del Codigo, debes dominar los', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  comandos sagrados para convertirte en Maestro Linux', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
-  { text: '  y obtener el Pergamino de la Certificacion LPI.', color: '\x1b[97m', delay: 400, typing: true, speed: 22 },
-  { text: '', color: '', delay: 300 },
-  { text: '═══════════════════════════════════════════════════════════════', color: '\x1b[93m', delay: 80 },
-  { text: '', color: '', delay: 200 },
-  { text: '  Domina los comandos. Obtén la certificación.', color: '\x1b[90m', delay: 100, typing: true, speed: 25 },
-  { text: '  Escribe "help" para ver tus comandos disponibles.', color: '\x1b[90m', delay: 100, typing: true, speed: 25 },
-  { text: '', color: '', delay: 300 },
-];
-
 const WORLD_INTERLUDES = {
   2: {
     title: 'MUNDO 2 DESBLOQUEADO',
@@ -451,20 +404,9 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
             auth: { token: authToken },
           });
 
-          socketRef.current.on('connect', async () => {
+          socketRef.current.on('connect', () => {
             setConnectionStatus('connected');
             if (term) {
-              const introShown = localStorage.getItem('lq-intro-shown');
-              if (!introShown) {
-                for (const line of INTRO_LINES) {
-                  if (line.typing) {
-                    await writeChar(term, (line.color || '') + line.text + '\x1b[0m', line.speed || 22);
-                  } else {
-                    await writeLine(term, (line.color || '') + line.text + '\x1b[0m', line.delay || 0);
-                  }
-                }
-                localStorage.setItem('lq-intro-shown', '1');
-              }
               term.write('\x1b[92m● CONECTADO AL SERVIDOR\x1b[0m\r\n');
               term.write('\x1b[94m$\x1b[0m ');
             }
