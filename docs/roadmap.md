@@ -369,6 +369,51 @@ Extras: Refuerzo (5 quests, IDs 91-95)
 ### Nuevos mocks educativos
 - [x] finger, newgrp, groupdel, userdel, chage (5 nuevos, total: 22)
 
+## Semana 18: Complete Mobile Responsiveness Overhaul ✅ (2026-05-02)
+
+### Mobile Terminal Input
+- [x] Input proxy invisible captura teclado virtual en iOS/Android
+- [x] Barra de teclas rápidas: Tab, Enter (↵), Ctrl+C (C⃗), Esc, ↑, ↓, ←, →
+- [x] Terminal focus automático al tocar el área
+
+### Hamburger Menu (Menu.jsx)
+- [x] Estado `menuOpen` controla visibilidad
+- [x] Botón `☰/✕` aparece solo en <768px
+- [x] Dropdown nav-menu con XP, NIV, y opciones
+- [x] Cierra automáticamente al navegar
+
+### Touch Targets (WCAG Accessibility)
+- [x] Todos los botones/inputs: `min-height: 44px`
+- [x] PixelInput.jsx — minHeight 44px + padding mejorado
+- [x] QuestCard.jsx — minHeight 44px + center alignment
+- [x] LoginPage/RegisterPage — error boxes 44px
+
+### Responsive Styles (index.css)
+- [x] Hamburger menu styles + dropdown positioning
+- [x] Mobile keys bar styles + button sizing
+- [x] Media queries @768px (tablet) y @480px (móvil)
+- [x] iOS smooth scrolling: `-webkit-overflow-scrolling: touch`
+
+### Components Updated
+- [x] Menu.jsx — hamburger + dropdown nav
+- [x] Terminal.jsx — input proxy ya hecho en Semana 15
+- [x] IntroOverlay.jsx — separadores dinámicos ya hecho en Semana 15
+- [x] PixelInput.jsx — touch target sizing
+- [x] QuestCard.jsx — touch target sizing
+- [x] LoginPage.jsx — error box sizing
+- [x] RegisterPage.jsx — error box sizing
+
+### Testing Mobile
+- [x] Terminal funciona con teclado virtual
+- [x] Menú hamburguesa funciona en < 768px
+- [x] Todos los botones/inputs >= 44px
+- [x] Texto legible sin zoom
+- [x] Scroll suave en iOS
+
+### Commits
+- `feat: complete mobile responsiveness overhaul` — Hamburger menu + touch targets
+- `docs: update STATUS.md with mobile responsiveness completion`
+
 ## Semana 19+ (opcional): Localización & Polish
 - [ ] Traducir UI frontend al español (PRIORIDAD ALTA)
   - [ ] Componentes React: textos, placeholders, botones, etiquetas
