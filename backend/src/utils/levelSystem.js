@@ -1,5 +1,5 @@
 // Sistema de niveles: 20 niveles con XP acumulativo progresivo
-// 95 quests con ~75 XP promedio = ~7500 XP máximo
+// 85 quests con ~69 XP promedio = ~5830 XP máximo
 
 const XP_LEVELS = [
   0,      // Nivel 1: 0 XP

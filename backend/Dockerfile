@@ -26,6 +26,7 @@ RUN apk add --no-cache \
     mandoc \
     man-pages \
     usbutils \
+    file \
     su-exec \
     tini
 
@@ -64,7 +65,20 @@ RUN cp /app/sandbox-bin/* /usr/local/bin/ && \
               /usr/local/bin/htop \
               /usr/local/bin/finger \
               /usr/local/bin/newgrp \
-              /usr/local/bin/chage
+              /usr/local/bin/chage \
+              /usr/local/bin/which \
+              /usr/local/bin/locate \
+              /usr/local/bin/lscpu \
+              /usr/local/bin/lsblk \
+              /usr/local/bin/hostnamectl \
+              /usr/local/bin/free \
+              /usr/local/bin/apropos \
+              /usr/local/bin/whatis \
+              /usr/local/bin/host \
+              /usr/local/bin/nslookup \
+              /usr/local/bin/last \
+              /usr/local/bin/lastlog \
+              /usr/local/bin/groups
 
 # Crear usuario sandbox sin privilegios para ejecutar Node
 RUN addgroup -S linuxquest -g 1001 && \

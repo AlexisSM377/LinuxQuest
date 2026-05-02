@@ -8,7 +8,7 @@ function HeroTerminal() {
     { prompt: true, cmd: 'whoami', delay: 400 },
     { output: 'aprendiz_de_kernel', delay: 200 },
     { prompt: true, cmd: 'cat /etc/linuxquest', delay: 600 },
-    { output: 'NIVEL: 4 / 95\nXP: 245   RACHA: 7d', delay: 200 },
+    { output: 'NIVEL: 4 / 85\nXP: 245   RACHA: 7d', delay: 200 },
     { prompt: true, cmd: './iniciar.sh', delay: 700 },
     { output: '> Cargando misión "La búsqueda perdida"...', delay: 300 },
   ];
@@ -86,7 +86,7 @@ const FEATURES = [
   {
     icon: '⌨',
     title: 'TERMINAL REAL',
-    body: '95 misiones diseñadas para que aprendas usando comandos reales en un entorno seguro.',
+    body: '85 misiones diseñadas para que aprendas usando comandos reales en un entorno seguro.',
   },
   {
     icon: '⬡',
@@ -167,7 +167,7 @@ export default function Menu({ onNewGame, onContinue }) {
             PIXEL A PIXEL
           </h1>
           <p className="vt vt-lg" style={{ maxWidth: 520, marginBottom: 32, color: 'var(--parchment-2)' }}>
-            95 misiones, 5 mundos y un pingüino pixelado que cree en ti.
+            85 misiones, 5 mundos y un pingüino pixelado que cree en ti.
             Desde <code>pwd</code> hasta <code>awk</code> — sin instalar nada.
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>

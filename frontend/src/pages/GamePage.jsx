@@ -5,6 +5,7 @@ import Quest from '../components/Quest';
 import XpNotification from '../components/XpNotification';
 import AchievementsPanel from '../components/AchievementsPanel';
 import GameNav from '../components/game/GameNav';
+import GameTutorial from '../components/GameTutorial';
 import { useAuthStore } from '../store/authStore';
 import { useGameStore } from '../store/gameStore';
 
@@ -29,6 +30,7 @@ export default function GamePage() {
   } = useGameStore();
   const [notification, setNotification] = useState(null);
   const [showAchievements, setShowAchievements] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(() => !localStorage.getItem('lq-tutorial-done'));
   const [canComplete, setCanComplete] = useState(false);
   const [activeTab, setActiveTab] = useState('quest');
   const battleRef = useRef(null);
@@ -123,20 +125,24 @@ export default function GamePage() {
   }, [handleCommandExec]);
 
   const questPanel = (
-    <Quest
-      onCompleteClick={handleQuestComplete}
-      battleRef={battleRef}
-      canComplete={canComplete}
-      onGoToTerminal={isMobile ? () => setActiveTab('terminal') : undefined}
-    />
+    <div data-tutorial="quest-panel" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Quest
+        onCompleteClick={handleQuestComplete}
+        battleRef={battleRef}
+        canComplete={canComplete}
+        onGoToTerminal={isMobile ? () => setActiveTab('terminal') : undefined}
+      />
+    </div>
   );
 
   const terminalPanel = (
-    <Terminal
-      questId={currentQuestId}
-      userLevel={userStats?.level || 1}
-      onCommandExec={isMobile ? handleCommandExecMobile : handleCommandExec}
-    />
+    <div data-tutorial="terminal" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Terminal
+        questId={currentQuestId}
+        userLevel={userStats?.level || 1}
+        onCommandExec={isMobile ? handleCommandExecMobile : handleCommandExec}
+      />
+    </div>
   );
 
   return (
@@ -148,7 +154,9 @@ export default function GamePage() {
       background: 'var(--bg)',
       overflow: 'hidden',
     }}>
-      <GameNav onShowAchievements={() => setShowAchievements(true)} />
+      <div data-tutorial="nav">
+        <GameNav onShowAchievements={() => setShowAchievements(true)} />
+      </div>
 
       {/* Main content */}
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', minHeight: 0 }}>
@@ -229,6 +237,10 @@ export default function GamePage() {
           userAchievements={userAchievements}
           onClose={() => setShowAchievements(false)}
         />
+      )}
+
+      {showTutorial && (
+        <GameTutorial onComplete={() => setShowTutorial(false)} />
       )}
     </div>
   );

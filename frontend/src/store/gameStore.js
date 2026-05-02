@@ -211,6 +211,11 @@ export const useGameStore = create((set, get) => ({
         });
         const bonusMsg = data.achievementBonusXp > 0 ? ` (+${data.achievementBonusXp} logro)` : '';
         showSuccess(`Misión completada (+${data.xpGained || 0} XP${bonusMsg})`);
+
+        const BOSS_IDS = { 12: 2, 30: 3, 48: 4, 65: 5, 80: 6 };
+        if (BOSS_IDS[questId]) {
+          window.dispatchEvent(new CustomEvent('world:unlock', { detail: { world: BOSS_IDS[questId] } }));
+        }
       }
       return data;
     } catch (error) {

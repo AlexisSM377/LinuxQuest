@@ -1,15 +1,15 @@
 export const ENEMIES = {
-  // MUNDO 1: Enemigos de conocimiento
+  // MUNDO 1: Enemigos del conocimiento
   distro_desconocida: {
     id: 'distro_desconocida',
     name: 'Distro Desconocida',
     world: 1,
-    description: 'Una distribución misteriosa que oculta su identidad',
-    avatar: '❓',
+    description: 'Una distribucion misteriosa que oculta su identidad',
+    avatar: '\u2753',
     hp: 40,
     difficulty: 1,
-    weakness: ['uname -a', 'cat /etc/os-release', 'lsb_release -a'],
-    defeatMessage: '¡Identificaste la distribución! El conocimiento es poder.',
+    weakness: ['uname -a', 'cat /etc/os-release', 'which'],
+    defeatMessage: 'Identificaste la distribucion! El conocimiento es poder.',
     questId: null
   },
   licencia_encriptada: {
@@ -17,25 +17,25 @@ export const ENEMIES = {
     name: 'Licencia Encriptada',
     world: 1,
     description: 'Una licencia cifrada que oculta sus condiciones',
-    avatar: '🔐',
+    avatar: '\u{1F510}',
     hp: 60,
     difficulty: 2,
-    weakness: ['gpg --version', 'ls /usr/share/doc/', 'cat /usr/share/doc/*/copyright'],
-    defeatMessage: '¡Descifraste la licencia! El software libre prevalece.',
+    weakness: ['cat /usr/share/doc/*/copyright', 'echo'],
+    defeatMessage: 'Descifraste la licencia! El software libre prevalece.',
     questId: null
   },
   guardian_conocimiento: {
     id: 'guardian_conocimiento',
-    name: 'Guardián del Conocimiento',
+    name: 'Guardian del Conocimiento',
     world: 1,
     description: 'Boss del Mundo 1 - Protege los secretos de la historia Linux',
-    avatar: '🏰',
+    avatar: '\u{1F3F0}',
     hp: 100,
     difficulty: 3,
     isBoss: true,
-    weakness: ['uname -a', 'cat /etc/os-release', 'which apt || which dnf', 'curl -s https://api.github.com/zen'],
-    defeatMessage: '¡VICTORIA! ¡Derrotaste al Guardián del Conocimiento! El Mundo 2 te espera.',
-    questId: null
+    weakness: ['uname -a', 'cat /etc/os-release', 'which', 'curl'],
+    defeatMessage: 'VICTORIA! Derrotaste al Guardian del Conocimiento! El Mundo 2 te espera.',
+    questId: 12
   },
 
   // MUNDO 2: Enemigos de archivos
@@ -44,37 +44,37 @@ export const ENEMIES = {
     name: 'Archivo Fantasma',
     world: 2,
     description: 'Un archivo oculto que se mueve entre directorios',
-    avatar: '👻',
+    avatar: '\u{1F47B}',
     hp: 50,
     difficulty: 1,
-    weakness: ['ls -a', 'find . -name "*"', 'ls -la'],
-    defeatMessage: '¡Encontraste el archivo fantasma! La exploración prevalece.',
+    weakness: ['ls -a', 'find', 'ls -la'],
+    defeatMessage: 'Encontraste el archivo fantasma! La exploracion prevalece.',
     questId: null
   },
   directorio_ciclico: {
     id: 'directorio_ciclico',
-    name: 'Directorio Cíclico',
+    name: 'Directorio Ciclico',
     world: 2,
     description: 'Un laberinto de directorios que nunca termina',
-    avatar: '🔄',
+    avatar: '\u{1F504}',
     hp: 75,
     difficulty: 2,
-    weakness: ['pwd', 'cd ..', 'ls -la', 'find . -maxdepth 3'],
-    defeatMessage: '¡Escapaste del laberinto! La navegación es tu arma.',
+    weakness: ['pwd', 'cd ..', 'ls -la', 'find'],
+    defeatMessage: 'Escapaste del laberinto! La navegacion es tu arma.',
     questId: null
   },
   guardian_caminos: {
     id: 'guardian_caminos',
-    name: 'Guardián de los Caminos',
+    name: 'Guardian de los Caminos',
     world: 2,
-    description: 'Boss del Mundo 2 - Domina la navegación y archivos',
-    avatar: '🛤️',
+    description: 'Boss del Mundo 2 - Domina la navegacion y archivos',
+    avatar: '\u{1F6E4}\uFE0F',
     hp: 120,
     difficulty: 4,
     isBoss: true,
     weakness: ['ls -la', 'mkdir -p', 'cp -r', 'mv', 'rm', 'find'],
-    defeatMessage: '¡VICTORIA! ¡Dominaste los caminos! Las Torres te esperan.',
-    questId: null
+    defeatMessage: 'VICTORIA! Dominaste los caminos! Las Torres te esperan.',
+    questId: 30
   },
 
   // MUNDO 3: Enemigos de procesamiento
@@ -82,24 +82,24 @@ export const ENEMIES = {
     id: 'virus_textual',
     name: 'Virus Textual',
     world: 3,
-    description: 'Un patrón malicioso que contamina archivos de texto',
-    avatar: '🦠',
+    description: 'Un patron malicioso que contamina archivos de texto',
+    avatar: '\u{1F9A0}',
     hp: 60,
     difficulty: 2,
-    weakness: ['grep -v "malicious"', 'sed "s/malicious//g"', 'awk "{print}"'],
-    defeatMessage: '¡Purificaste el texto! El procesamiento es tu escudo.',
+    weakness: ['grep -v', 'sed', 'awk'],
+    defeatMessage: 'Purificaste el texto! El procesamiento es tu escudo.',
     questId: null
   },
   pipe_roto: {
     id: 'pipe_roto',
     name: 'Pipe Roto',
     world: 3,
-    description: 'Una tubería que desvía el flujo de datos',
-    avatar: '🔧',
+    description: 'Una tuberia que desvia el flujo de datos',
+    avatar: '\u{1F527}',
     hp: 80,
     difficulty: 3,
     weakness: ['ls | grep', 'cat | sort | uniq', 'echo | tee'],
-    defeatMessage: '¡Reparaste el pipe! El flujo de datos fluye libremente.',
+    defeatMessage: 'Reparaste el pipe! El flujo de datos fluye libremente.',
     questId: null
   },
   pipemaster: {
@@ -107,13 +107,13 @@ export const ENEMIES = {
     name: 'Mago Pipemaster',
     world: 3,
     description: 'Boss del Mundo 3 - Maestro del procesamiento de texto',
-    avatar: '🧙‍♂️',
+    avatar: '\u{1F9D9}\u200D\u2642\uFE0F',
     hp: 150,
     difficulty: 4,
     isBoss: true,
-    weakness: ['grep -r', 'sed "s/old/new/g"', 'awk "{print $1}"', 'sort | uniq -c', 'cut -d, -f1'],
-    defeatMessage: '¡VICTORIA! ¡Dominaste el arte del procesamiento! El Núcleo te espera.',
-    questId: null
+    weakness: ['grep -r', 'sed', 'awk', 'sort | uniq -c', 'cut'],
+    defeatMessage: 'VICTORIA! Dominaste el arte del procesamiento! El Nucleo te espera.',
+    questId: 48
   },
 
   // MUNDO 4: Enemigos de sistema
@@ -121,12 +121,12 @@ export const ENEMIES = {
     id: 'proceso_zombie',
     name: 'Proceso Zombie',
     world: 4,
-    description: 'Un proceso muerto que aún camina entre los vivos',
-    avatar: '🧟',
+    description: 'Un proceso muerto que aun camina entre los vivos',
+    avatar: '\u{1F9DF}',
     hp: 50,
     difficulty: 1,
     weakness: ['ps aux | grep Z', 'kill -9', 'ps -elf'],
-    defeatMessage: '¡Eliminaste el zombie! El sistema está más limpio.',
+    defeatMessage: 'Eliminaste el zombie! El sistema esta mas limpio.',
     questId: null
   },
   demonio_descontrolado: {
@@ -134,25 +134,25 @@ export const ENEMIES = {
     name: 'Demonio Descontrolado',
     world: 4,
     description: 'Un daemon que consume todos los recursos',
-    avatar: '👹',
+    avatar: '\u{1F479}',
     hp: 80,
     difficulty: 3,
     weakness: ['top -b -n 1', 'ps aux --sort=-%cpu', 'kill -9'],
-    defeatMessage: '¡Detuviste al demonio! Los recursos están liberados.',
+    defeatMessage: 'Detuviste al demonio! Los recursos estan liberados.',
     questId: null
   },
   nucleo_roto: {
     id: 'nucleo_roto',
-    name: 'El Núcleo Roto',
+    name: 'El Nucleo Roto',
     world: 4,
-    description: 'Boss del Mundo 4 - El corazón del sistema está corrupto',
-    avatar: '💔',
+    description: 'Boss del Mundo 4 - El corazon del sistema esta corrupto',
+    avatar: '\u{1F494}',
     hp: 180,
     difficulty: 5,
     isBoss: true,
     weakness: ['dmesg | tail', 'free -h', 'df -h', 'ip addr', 'ping -c 4 127.0.0.1'],
-    defeatMessage: '¡VICTORIA! ¡Salvaste el núcleo! Las Bóvedas Secretas te esperan.',
-    questId: null
+    defeatMessage: 'VICTORIA! Salvaste el nucleo! Las Bovedas te esperan.',
+    questId: 65
   },
 
   // MUNDO 5: Enemigos de seguridad
@@ -161,37 +161,37 @@ export const ENEMIES = {
     name: 'Permiso Invasor',
     world: 5,
     description: 'Un permiso incorrecto que compromete la seguridad',
-    avatar: '⚠️',
+    avatar: '\u26A0\uFE0F',
     hp: 60,
     difficulty: 2,
     weakness: ['chmod 755', 'chmod 644', 'ls -la', 'whoami && id'],
-    defeatMessage: '¡Corregiste los permisos! La seguridad está restaurada.',
+    defeatMessage: 'Corregiste los permisos! La seguridad esta restaurada.',
     questId: null
   },
   root_falso: {
     id: 'root_falso',
     name: 'Root Falso',
     world: 5,
-    description: 'Un usuario que finge ser root para engañarte',
-    avatar: '🎭',
+    description: 'Un usuario que finge ser root para enganarte',
+    avatar: '\u{1F3AD}',
     hp: 90,
     difficulty: 3,
-    weakness: ['whoami', 'id', 'sudo -l', 'cat /etc/passwd'],
-    defeatMessage: '¡Expones al impostor! La identidad está verificada.',
+    weakness: ['whoami', 'id', 'cat /etc/passwd'],
+    defeatMessage: 'Expones al impostor! La identidad esta verificada.',
     questId: null
   },
   guardian_supremo: {
     id: 'guardian_supremo',
-    name: 'Guardián Supremo',
+    name: 'Guardian Supremo',
     world: 5,
-    description: 'Boss Final - El último obstáculo antes de la certificación',
-    avatar: '🐉',
+    description: 'Boss Final - El ultimo obstaculo antes de la certificacion',
+    avatar: '\u{1F409}',
     hp: 200,
     difficulty: 5,
     isBoss: true,
-    weakness: ['whoami && id', 'chmod 755', 'chown', 'ls -la /etc/passwd', 'ssh-keygen -t rsa'],
-    defeatMessage: '¡¡¡VICTORIA ÉPICA!!! ¡¡Derrotaste al Guardián Supremo!! ¡Eres un Maestro Linux!',
-    questId: null
+    weakness: ['whoami && id', 'chmod 755', 'chown', 'ls -la /etc/passwd', 'ssh-keygen'],
+    defeatMessage: 'VICTORIA EPICA! Derrotaste al Guardian Supremo! Eres un Maestro Linux!',
+    questId: 80
   }
 };
 

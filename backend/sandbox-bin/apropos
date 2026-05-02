@@ -1,0 +1,78 @@
+#!/bin/sh
+# Mock educativo de apropos - Busca en manuales por palabra clave
+# Simula resultados de apropos para comandos comunes
+
+if [ -z "$1" ]; then
+  echo "apropos: what option are you looking for?"
+  echo "Usage: apropos KEYWORD..."
+  echo ""
+  echo "Search the manual page names and descriptions."
+  echo "Example: apropos copy"
+  exit 1
+fi
+
+keyword=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')
+
+echo "Results for: $1"
+echo ""
+
+case "$keyword" in
+  copy|cp)
+    echo "cp (1)              - copy files and directories"
+    echo "cpio (1)            - copy files to and from archives"
+    echo "rsync (1)           - a fast, versatile, remote (and local) file-copying tool"
+    ;;
+  move|mv)
+    echo "mv (1)              - move (rename) files"
+    echo "rename (1)          - rename files"
+    ;;
+  list|ls)
+    echo "ls (1)              - list directory contents"
+    echo "lsblk (8)           - list block devices"
+    echo "lscpu (1)           - display information about the CPU architecture"
+    echo "lsusb (8)           - list USB devices"
+    ;;
+  find|search)
+    echo "find (1)            - search for files in a directory hierarchy"
+    echo "locate (1)          - find files by name"
+    echo "grep (1)            - print lines that match patterns"
+    ;;
+  file)
+    echo "file (1)            - determine file type"
+    echo "find (1)            - search for files in a directory hierarchy"
+    ;;
+  disk|df|du)
+    echo "df (1)              - report file system disk space usage"
+    echo "du (1)              - estimate file space usage"
+    echo "fdisk (8)           - manipulate disk partition table"
+    ;;
+  process|ps|top)
+    echo "ps (1)              - report a snapshot of the current processes"
+    echo "top (1)             - display Linux processes"
+    echo "kill (1)            - terminate a process"
+    echo "killall (1)         - kill processes by name"
+    ;;
+  network|ip|net)
+    echo "ip (8)              - show / manipulate routing, devices, policy routing"
+    echo "ping (8)            - send ICMP ECHO_REQUEST to network hosts"
+    echo "ss (8)              - another utility to investigate sockets"
+    echo "host (1)            - DNS lookup utility"
+    ;;
+  user|passwd|useradd)
+    echo "passwd (1)          - change user password"
+    echo "useradd (8)         - create a new user"
+    echo "usermod (8)         - modify a user account"
+    echo "userdel (8)         - delete a user account"
+    ;;
+  perm|chmod|chown)
+    echo "chmod (1)           - change file mode bits"
+    echo "chown (1)           - change file owner and group"
+    echo "chgrp (1)           - change group ownership"
+    ;;
+  *)
+    echo "apropos: no results found for '$1'"
+    echo "Try: apropos copy, apropos ls, apropos file, apropos process"
+    ;;
+esac
+
+exit 0

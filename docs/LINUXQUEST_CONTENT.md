@@ -246,7 +246,7 @@ organizaciones:
 - Tor
 - Encriptación (GPG, PGP)
 
-### Misiones Mundo 1 (15 misiones):
+### Misiones Mundo 1 (12 misiones):
 
 ```yaml
 mision_1_1:
@@ -561,7 +561,7 @@ ls [abc]*                # Empieza con a, b, o c
 ls archivo[1-9]          # archivo1 a archivo9
 ```
 
-### Misiones Mundo 2 (20 misiones):
+### Misiones Mundo 2 (18 misiones):
 
 ```yaml
 mision_2_1:
@@ -965,7 +965,7 @@ Ctrl+K          # Cortar línea
 Ctrl+U          # Pegar
 ```
 
-### Misiones Mundo 3 (20 misiones):
+### Misiones Mundo 3 (18 misiones):
 
 ```yaml
 mision_3_1:
@@ -1326,7 +1326,7 @@ ssh-keygen                  # Generar llaves
 ssh-copy-id user@server     # Copiar llave pública
 ```
 
-### Misiones Mundo 4 (20 misiones):
+### Misiones Mundo 4 (17 misiones):
 
 ```yaml
 mision_4_1:
@@ -1665,7 +1665,7 @@ ls -l                       # 'l' al inicio = symlink
 readlink enlace             # Dónde apunta
 ```
 
-### Misiones Mundo 5 (20 misiones):
+### Misiones Mundo 5 (15 misiones):
 
 ```yaml
 mision_5_1:
@@ -1911,7 +1911,7 @@ logros:
     
   certificado:
     nombre: "Linux Master"
-    descripcion: "Completa todas las 95 misiones"
+    descripcion: "Completa todas las 85 misiones"
     icono: "🏆"
 ```
 
@@ -1922,22 +1922,26 @@ logros:
 ### Lore central:
 
 ```
-Hace mucho tiempo, el Reino Digital fue creado por Linus Torvalds, 
-un sabio programador que decidió compartir su creación con el mundo. 
-Su filosofía de libertad, código abierto y colaboración dio nacimiento 
-a un universo donde el conocimiento es poder y la curiosidad la mayor virtud.
+En el principio, solo existía el Caos Binario. Ceros y unos vagaban sin 
+propósito por el vacío digital. Entonces, un joven herrero finlandés llamado 
+Linus forjó el Primer Kernel — un corazón de código que daría vida a todo 
+un reino.
 
-Pero hace algunos años, las fuerzas del Caos Propietario invadieron 
-el reino. Los enemigos del software libre intentan corromper el sistema, 
-borrar archivos críticos y limitar las libertades digitales.
+Pero el código solo no bastaba. Richard el Sabio creó las Cuatro Libertades, 
+leyes sagradas que permitirían a todo ser digital copiar, estudiar, modificar 
+y compartir el conocimiento. Así nació el Reino del Kernel.
 
-Tú, joven aventurero, has sido elegido para restaurar el orden. 
-Cada NPC del reino te enseñará un aspecto fundamental del poder Linux. 
-A través de 5 mundos, dominarás los comandos, entenderás los sistemas 
-y al final, tendrás el conocimiento de un verdadero administrador Linux.
+Cinco guardianes protegen los cinco dominios del conocimiento:
+- Linux el Sabio custodia la Historia (Mundo 1)
+- Grep-ild el Explorador mapea los Caminos (Mundo 2)  
+- Chmod-ard el Tejedor controla el Flujo (Mundo 3)
+- Kernel el Forjador mantiene el Núcleo (Mundo 4)
+- Sudo-Man el Guardián defiende la Seguridad (Mundo 5)
 
-Tu misión: completar los 5 mundos y obtener el Pergamino de la 
-Certificación, que prueba que has dominado los Linux Essentials.
+Pero las fuerzas del Caos Propietario acechan. Virus textuales, procesos 
+zombies y permisos corruptos amenazan el reino. Tú, joven Aprendiz del 
+Código, debes dominar los comandos sagrados para convertirte en Maestro 
+Linux y obtener el Pergamino de la Certificación LPI.
 ```
 
 ### Tonos de diálogo:
@@ -2145,34 +2149,35 @@ preguntas_finales:
 ### Cuando uses este documento:
 
 ```
-1. ESTRUCTURA: 5 mundos × 15-20 misiones = 75-100 misiones totales
+1. ESTRUCTURA: 5 mundos × 12-18 misiones + 5 extras = 85 misiones totales
 2. PROGRESIÓN: Dificultad incremental
 3. NPCs: Cada mundo tiene su NPC con personalidad propia
-4. NARRATIVA: Hilo conductor de "salvar el reino digital"
-5. APRENDIZAJE: Cada misión debe enseñar UN concepto específico
+4. NARRATIVA: Hilo conductor de "El Reino del Kernel"
+5. APRENDIZAJE: Cada misión enseña UN concepto LPI específico
 6. VALIDACIÓN: Sistema robusto de verificar comandos
-7. RECOMPENSAS: Balanceadas (xp, items, bits)
-8. BOSS BATTLES: Al final de cada mundo
+7. RECOMPENSAS: Balanceadas (xp, coins)
+8. BOSS BATTLES: Al final de cada mundo (quests 12, 30, 48, 65, 80)
 9. EXAMEN FINAL: Boss del mundo 5 = simulación examen LPI
 
-PRIORIDAD DE IMPLEMENTACIÓN:
-Semana 7: Mundo 1 + boss
-Semana 8: Mundo 2 + boss
-Semana 9: Mundo 3 + boss
-Semana 10: Mundo 4 + boss
-Semana 11: Mundo 5 + boss final + examen
+DISTRIBUCIÓN:
+- Mundo 1: 12 misiones (Tema 1 LPI, peso 7)
+- Mundo 2: 18 misiones (Tema 2 LPI, peso 9 — MÁS IMPORTANTE)
+- Mundo 3: 18 misiones (Tema 3 LPI, peso 9)
+- Mundo 4: 17 misiones (Tema 4 LPI, peso 8)
+- Mundo 5: 15 misiones (Tema 5 LPI, peso 7)
+- Extras: 5 misiones (refuerzo)
 
 CADA MISIÓN DEBE INCLUIR:
-- ID único
-- Nombre épico (en español, medieval-cibernético)
+- ID único (1-85)
+- Nombre épico (medieval-fantástico + Linux)
 - NPC que la otorga
 - Mundo al que pertenece
-- Objetivo de aprendizaje
-- Comando(s) Linux a ejecutar
-- Validación robusta
-- Recompensa balanceada
-- Pista (opcional, costo 10 bits)
-- Conexión con la narrativa principal
+- Objetivo de aprendizaje LPI
+- Comando(s) Linux REALES ejecutables
+- Validación robusta (validationFn)
+- Recompensa balanceada (xp + coins)
+- Hints (pistas para el jugador)
+- Conectación con la narrativa del Reino del Kernel
 ```
 
 ---
@@ -2185,18 +2190,19 @@ LinuxQuest = RPG educativo + Linux Essentials LPI 010-160
 Cobertura:
 ✅ 5 temas oficiales LPI = 5 mundos
 ✅ 19 secciones LPI = misiones organizadas
-✅ 89+ comandos Linux cubiertos
+✅ 85+ comandos Linux cubiertos
 ✅ Conceptos de licencias, hardware, redes, seguridad
 ✅ Boss battles para reforzar aprendizaje
 ✅ Examen final = simulación real LPI
 
 Progresión:
-- 95+ misiones totales
-- 50 niveles de jugador
-- Sistema de XP, bits, items
-- Logros y achievements
-- 5 NPCs únicos
-- Narrativa épica medieval-cibernética
+- 85 misiones totales (12+18+18+17+15+5 extras)
+- 20 niveles de jugador
+- Sistema de XP y coins
+- 14 logros (achievements)
+- 5 NPCs con lore medieval-fantástico
+- Narrativa épica "El Reino del Kernel"
+- 15 enemigos + 5 bosses
 
 Resultado para el usuario:
 - Aprende Linux Essentials de forma divertida

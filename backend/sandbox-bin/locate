@@ -1,0 +1,29 @@
+#!/bin/sh
+# Mock educativo de locate - Busca archivos en base de datos pre-indexada
+# En el sandbox simulamos una búsqueda básica con find
+
+if [ -z "$1" ]; then
+  echo "locate: missing argument"
+  echo "Usage: locate PATTERN..."
+  echo ""
+  echo "Search for files in a pre-compiled database."
+  echo "Example: locate passwd"
+  exit 1
+fi
+
+pattern="$1"
+
+# Sanitizar input
+safe_pattern=$(printf '%s' "$pattern" | tr -cd 'a-zA-Z0-9._-')
+if [ -z "$safe_pattern" ]; then
+  echo "locate: invalid pattern"
+  exit 1
+fi
+
+echo "NOTE: Using sandbox file search (locate database not available)"
+echo "---"
+find /tmp -name "*${safe_pattern}*" -type f 2>/dev/null | head -20
+find /home -name "*${safe_pattern}*" -type f 2>/dev/null | head -10
+find /etc -name "*${safe_pattern}*" 2>/dev/null | head -10
+
+exit 0

@@ -1,0 +1,47 @@
+#!/bin/sh
+# Mock educativo de host - Resolución de nombres DNS
+# Simula la salida de host para dominios comunes
+
+if [ -z "$1" ]; then
+  echo "Host usage: host [-aCdlnrsTwv] [-c class] [-N ndots] [-R number]"
+  echo "              [-t type] [-W time] [-4] [-6] {name} [server]"
+  exit 1
+fi
+
+domain=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')
+
+# Sanitizar
+safe_domain=$(printf '%s' "$domain" | tr -cd 'a-z0-9.-')
+if [ -z "$safe_domain" ]; then
+  echo "Host: invalid domain name"
+  exit 1
+fi
+
+case "$safe_domain" in
+  localhost)
+    echo "localhost has address 127.0.0.1"
+    echo "localhost has IPv6 address ::1"
+    ;;
+  google.com)
+    echo "google.com has address 142.250.80.46"
+    echo "google.com mail is handled by 10 smtp.google.com."
+    ;;
+  github.com)
+    echo "github.com has address 140.82.121.3"
+    echo "github.com mail is handled by 1 aspmx.l.google.com."
+    ;;
+  example.com)
+    echo "example.com has address 93.184.216.34"
+    ;;
+  *)
+    # Intentar resolver con /etc/hosts
+    if grep -q "$safe_domain" /etc/hosts 2>/dev/null; then
+      grep "$safe_domain" /etc/hosts | head -1 | awk '{print $1 " has address " $2}'
+    else
+      echo "Host $safe_domain not found: 3(NXDOMAIN)"
+      echo "NOTE: DNS resolution requires network access"
+    fi
+    ;;
+esac
+
+exit 0

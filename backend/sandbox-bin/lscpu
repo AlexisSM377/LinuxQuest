@@ -1,0 +1,44 @@
+#!/bin/sh
+# Mock educativo de lscpu - Información de la CPU
+# Simula la salida de lscpu con datos de ejemplo
+
+cat << 'EOF'
+Architecture:           x86_64
+CPU op-mode(s):         32-bit, 64-bit
+Address sizes:          46 bits physical, 48 bits virtual
+Byte Order:             Little Endian
+CPU(s):                 4
+On-line CPU(s) list:    0-3
+Vendor ID:              GenuineIntel
+Model name:             Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
+CPU family:             6
+Model:                  158
+Thread(s) per core:     2
+Core(s) per socket:     2
+Socket(s):              1
+Stepping:               10
+CPU MHz:                2208.000
+CPU max MHz:            4100.0000
+CPU min MHz:            800.0000
+BogoMIPS:               4416.00
+Flags:                  fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm
+L1d cache:              64 KiB
+L1i cache:              64 KiB
+L2 cache:               512 KiB
+L3 cache:               9216 KiB
+NUMA node(s):           1
+NUMA node0 CPU(s):      0-3
+Vulnerability Itlb multihit:     KVM: Mitigation: VMX unsupported
+Vulnerability L1tf:              Mitigation; PTE Inversion
+Vulnerability Mds:               Mitigation; Clear CPU buffers; SMT vulnerable
+Vulnerability Meltdown:          Mitigation; PTI
+Vulnerability Mmio stale data:   Mitigation; Clear CPU buffers; SMT vulnerable
+Vulnerability Retbleed:          Mitigation; IBRS
+Vulnerability Spec store bypass: Mitigation; Speculative Store Bypass disabled via prctl
+Vulnerability Spectre v1:        Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:        Mitigation; IBRS, IBPB conditional, STIBP conditional, RSB filling, PBRSB-eIBRS Not affected
+Vulnerability Srbds:             Not affected
+Vulnerability Tsx async abort:   Not affected
+EOF
+
+exit 0

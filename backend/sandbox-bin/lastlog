@@ -1,0 +1,19 @@
+#!/bin/sh
+# Mock educativo de lastlog - Último login de cada usuario
+# Simula la salida de lastlog con datos de ejemplo
+
+cat << 'EOF'
+Username         Port     From             Latest
+root             pts/1    10.0.2.2         Wed Apr 30 18:45:23 -0500 2026
+sandbox          pts/0    10.0.2.2         Thu May  1 10:23:45 -0500 2026
+admin            pts/0    192.168.1.100    Tue Apr 29 09:15:12 -0500 2026
+daemon                                     **Never logged in**
+bin                                        **Never logged in**
+sys                                        **Never logged in**
+nobody                                     **Never logged in**
+systemd-times                              **Never logged in**
+systemd-network                            **Never logged in**
+systemd-resolve                            **Never logged in**
+EOF
+
+exit 0

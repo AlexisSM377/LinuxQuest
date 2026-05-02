@@ -1,0 +1,24 @@
+#!/bin/sh
+# Mock educativo de which - Localiza comandos en PATH
+# En BusyBox, which requiere argumento. Este mock lo maneja correctamente.
+
+if [ -z "$1" ]; then
+  echo "which: missing argument"
+  echo "Usage: which COMMAND..."
+  echo ""
+  echo "Locate a command in the user's PATH."
+  echo "Example: which ls"
+  exit 1
+fi
+
+for cmd in "$@"; do
+  # Buscar en PATH usando command -v (POSIX)
+  found=$(command -v "$cmd" 2>/dev/null)
+  if [ -n "$found" ]; then
+    echo "$found"
+  else
+    echo "which: no $cmd in ($PATH)"
+  fi
+done
+
+exit 0

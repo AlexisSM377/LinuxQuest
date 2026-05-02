@@ -79,7 +79,7 @@ export const ACHIEVEMENTS = {
   completista: {
     id: 'completista',
     title: 'Completista',
-    description: 'Completa las 95 quests del curso LPI',
+    description: 'Completa las 85 quests del curso LPI Linux Essentials',
     icon: '🏆',
     xp_bonus: 1000
   },
@@ -93,7 +93,7 @@ export const ACHIEVEMENTS = {
   guerrero_persistente: {
     id: 'guerrero_persistente',
     title: 'Guerrero Persistente',
-    description: 'Completa 80 o más quests',
+    description: 'Completa 70 o más quests',
     icon: '⚔️',
     xp_bonus: 250
   }

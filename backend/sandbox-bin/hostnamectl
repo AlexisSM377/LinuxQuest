@@ -1,0 +1,23 @@
+#!/bin/sh
+# Mock educativo de hostnamectl - Información del hostname y sistema
+# Simula la salida de hostnamectl (requiere systemd en real)
+
+cat << 'EOF'
+ Static hostname: linuxquest-sandbox
+       Icon name: computer-vm
+         Chassis: vm
+      Machine ID: a1b2c3d4e5f6789012345678
+         Boot ID: 12345678-abcd-efgh-ijkl-123456789abc
+  Virtualization: docker
+Operating System: Alpine Linux v3.18
+     CPE OS Name: cpe:/o:alpinelinux:alpine:3.18
+          Kernel: Linux 6.1.0-container
+    Architecture: x86_64
+ Hardware Vendor: QEMU
+  Hardware Model: Standard PC (Q35 + ICH9, 2009)
+Firmware Version: unknown
+   Firmware Date: Thu 2024-01-01
+    Firmware Age: 2y 3month 2w 5d
+EOF
+
+exit 0
