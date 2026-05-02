@@ -104,6 +104,7 @@ export default function Menu({ onNewGame, onContinue }) {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuthStore();
   const { userStats, fetchUserStats } = useGameStore();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) fetchUserStats();
@@ -113,21 +114,24 @@ export default function Menu({ onNewGame, onContinue }) {
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
 
       {/* Nav */}
-      <nav className="nav">
+      <nav className="nav" style={{ position: 'relative' }}>
         <div className="nav-item active" style={{ cursor: 'default' }}>
           <span>INICIO</span>
         </div>
-        {isAuthenticated && (
-          <>
-            <div className="nav-item">
-              <span>XP: {userStats.xp}</span>
-            </div>
-            <div className="nav-item" style={{ cursor: 'pointer' }} onClick={() => navigate('/stats')}>
-              <span>NIV: {String(userStats.level).padStart(2, '0')}</span>
-              <span className="arrow">↗</span>
-            </div>
-          </>
-        )}
+
+        <div className={`nav-menu ${menuOpen ? 'nav-menu-open' : ''}`} style={{ display: menuOpen ? 'flex' : 'none' }}>
+          {isAuthenticated && (
+            <>
+              <div className="nav-item">
+                <span>XP: {userStats.xp}</span>
+              </div>
+              <div className="nav-item" style={{ cursor: 'pointer' }} onClick={() => { navigate('/stats'); setMenuOpen(false); }}>
+                <span>NIV: {String(userStats.level).padStart(2, '0')}</span>
+                <span className="arrow">↗</span>
+              </div>
+            </>
+          )}
+        </div>
 
         <div className="nav-brand">
           <span style={{ fontSize: 20 }}>⬡</span>
@@ -135,6 +139,22 @@ export default function Menu({ onNewGame, onContinue }) {
         </div>
 
         <div className="nav-right">
+          <button
+            className="nav-hamburger"
+            onClick={() => setMenuOpen(!menuOpen)}
+            style={{
+              display: 'none',
+              background: 'none',
+              border: 'none',
+              color: 'var(--parchment)',
+              fontSize: 18,
+              cursor: 'pointer',
+              padding: '8px 12px',
+            }}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
           {isAuthenticated ? (
             <button className="nav-cta" onClick={onContinue}>
               CONTINUAR ▶

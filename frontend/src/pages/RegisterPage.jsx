@@ -98,10 +98,13 @@ export default function RegisterPage() {
           <div style={{
             background: 'var(--blood)',
             border: '4px solid var(--ink)',
-            padding: '10px 14px',
+            padding: '12px 14px',
+            minHeight: 44,
             fontFamily: 'var(--font-code)',
             fontSize: 13,
             color: 'var(--parchment)',
+            display: 'flex',
+            alignItems: 'center',
           }}>
             ✗ {error}
           </div>

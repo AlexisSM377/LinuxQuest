@@ -452,6 +452,23 @@ button {
   .nav-label-short { display: inline; }
   .nav-label-full { display: none; }
 
+  /* Hamburger menu */
+  .nav-hamburger { display: flex !important; }
+  .nav-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--bg-2);
+    border: 2px solid var(--ink);
+    border-top: none;
+    flex-direction: column;
+    gap: 0;
+    z-index: 1000;
+  }
+  .nav-menu-open {
+    display: flex !important;
+  }
+
   /* Cards */
   .pcard { padding: 12px; }
 

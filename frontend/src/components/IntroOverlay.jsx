@@ -22,11 +22,20 @@ export default function IntroOverlay({ onComplete }) {
   const [showPrompt, setShowPrompt] = useState(false);
   const [done, setDone] = useState(false);
   const [started, setStarted] = useState(false);
+  const [cols, setCols] = useState(() => Math.max(40, Math.floor(window.innerWidth / 12)));
+
+  useEffect(() => {
+    const handleResize = () => {
+      setCols(Math.max(40, Math.floor(window.innerWidth / 12)));
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const runIntro = useCallback(async () => {
     if (started) return;
     setStarted(true);
-    const sep = '═══════════════════════════════════════════════════════════════\n';
+    const sep = '═'.repeat(Math.min(cols, 63)) + '\n';
     const c = (t, s) => writeChar(setText, t, s);
 
     await wait(500);
@@ -88,7 +97,7 @@ export default function IntroOverlay({ onComplete }) {
     await c('\n', 300);
 
     setShowPrompt(true);
-  }, [started]);
+  }, [started, cols]);
 
   useEffect(() => {
     runIntro();
