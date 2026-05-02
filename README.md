@@ -243,6 +243,43 @@ LinuxQuest implementa seguridad integral para prevenir abusos y proteger el sist
 
 ---
 
+## 📱 Responsividad Móvil (100% Completo)
+
+LinuxQuest funciona perfectamente en **Desktop, Tablet y Móvil** con una experiencia optimizada para cada dispositivo.
+
+### Características Móvil
+
+**Terminal en Móvil:**
+- Input invisible que captura teclado virtual de iOS/Android
+- Barra de teclas rápidas: Tab, Enter, Ctrl+C, Esc, ↑, ↓, ←, →
+- Focus automático al tocar el área del terminal
+
+**Navegación Móvil:**
+- Menú hamburguesa `☰` en pantallas < 768px
+- Dropdown nav con XP, nivel, y opciones
+- Menú se cierra automáticamente al navegar
+
+**Touch Targets (WCAG):**
+- Todos los botones/inputs: mínimo 44x44px
+- Cumplimiento de estándares de accesibilidad
+- PixelInput, QuestCard, Login/Register optimizados
+
+**Responsive Layout:**
+- Media queries en 768px (tablet) y 480px (móvil)
+- Tipografía fluida con `clamp()`
+- Grid de stats: 4 cols (desktop) → 2 cols (móbil)
+- Scroll suave en iOS: `-webkit-overflow-scrolling: touch`
+
+**Componentes Actualizados:**
+- Menu.jsx — Hamburguesa + dropdown
+- Terminal.jsx — Input proxy + quick keys
+- IntroOverlay.jsx — Separadores dinámicos
+- PixelInput.jsx — Touch target sizing
+- QuestCard.jsx — Buttons más grandes
+- LoginPage/RegisterPage — Errores accesibles
+
+---
+
 ## 🚀 Desarrollo
 
 ### Requisitos Previos

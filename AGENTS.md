@@ -148,6 +148,41 @@ frontend/src/
 - Boss quests (15, 35, 50, 70, 90) require completing all previous quests in the world
 - Understanding-type quests use related commands (e.g., `cat /etc/os-release` for distribution concepts, `which` for software concepts)
 
+## Mobile Responsiveness (100% complete) ✅
+
+**Terminal Input on Mobile:**
+- Invisible `<input>` proxy captures virtual keyboard on iOS/Android
+- Mobile quick keys bar with 8 buttons (Tab, Enter, Ctrl+C, Esc, ↑, ↓, ←, →)
+- Terminal focus on tap: `onClick={focusMobileInput}`
+
+**Touch Targets (WCAG compliance):**
+- All buttons/inputs: `min-height: 44px` minimum
+- PixelInput.jsx, QuestCard.jsx, LoginPage, RegisterPage all updated
+- Error messages also meet 44px minimum
+
+**Navigation:**
+- Menu.jsx: Hamburger menu `☰` appears on mobile (<768px)
+- Dropdown nav-menu with XP, NIV, and navigation items
+- Items hidden by default, shown when menu is open
+
+**Responsive Typography & Layout:**
+- `@media (max-width: 768px)` — font sizes, padding, button sizes
+- `@media (max-width: 480px)` — ultra-compact mode
+- `@media (max-width: 600px)` — stats grid 4 cols → 2 cols
+- iOS smooth scrolling: `-webkit-overflow-scrolling: touch`
+
+**Components Updated:**
+- Menu.jsx — hamburger toggle + dropdown menu
+- Terminal.jsx — mobile input proxy + quick keys bar
+- IntroOverlay.jsx — dynamic separators based on window width
+- PixelInput.jsx — minHeight 44px
+- QuestCard.jsx — minHeight 44px + center alignment
+- LoginPage.jsx — error box sizing
+- RegisterPage.jsx — error box sizing
+
+**Session: 2026-05-02 (2)**
+- Commits: `feat: complete mobile responsiveness overhaul` + `docs: update STATUS.md`
+
 ## Gotchas
 
 - Express 5 is used (not 4) — route params work differently, middleware must use `next()` carefully
@@ -156,3 +191,5 @@ frontend/src/
 - `DIFF_MAP` and `WORLD_COLORS` extracted to `frontend/src/config/gameConfig.js` (was duplicated)
 - `axios` removed from frontend dependencies (was dead weight)
 - `npm ci --omit=dev` used in Dockerfile (fixed from deprecated `--only=production`)
+- Mobile hamburger menu in Menu.jsx requires menuOpen state to toggle visibility
+- Touch targets must always be >= 44x44px (height + width) for accessibility
