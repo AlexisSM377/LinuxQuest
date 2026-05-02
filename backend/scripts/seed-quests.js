@@ -3066,7 +3066,10 @@ const quests = [
 async function seedQuests() {
   const client = await pool.connect();
   try {
-    await client.query('TRUNCATE TABLE quests CASCADE;');
+    // Delete all existing quests first
+    await client.query('DELETE FROM user_quest_progress;');
+    await client.query('DELETE FROM quests;');
+
     for (const quest of quests) {
       await client.query(
         `INSERT INTO quests (id, title, description, world, "order", difficulty, npc, story, hints, required_commands, objectives, prerequisites, rewards)
