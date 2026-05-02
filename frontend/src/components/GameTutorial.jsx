@@ -3,35 +3,39 @@ import { useState, useEffect, useCallback } from 'react';
 const STEPS = [
   {
     target: '[data-tutorial="nav"]',
-    title: 'BARRA DE NAVEGACIÓN',
-    text: 'Aquí ves tu nivel, XP, monedas. Puedes acceder a estadísticas y logros. Es tu panel de control superior.',
+    title: 'BARRA DE NAVEGACION',
+    text: 'Aqui ves tu nivel, XP, monedas. Puedes acceder a estadisticas y logros. Es tu panel de control superior.',
   },
   {
     target: '[data-tutorial="quest-detail"]',
-    title: 'DETALLE DE LA MISIÓN',
-    text: 'Aquí ves la historia, los comandos que debes usar y las pistas. Lee bien la historia — te guía hacia la solución.',
+    title: 'DETALLE DE LA MISION',
+    text: 'Aqui ves la historia, los comandos que debes usar y las pistas. Lee bien la historia — te guia hacia la solucion.',
   },
   {
     target: '[data-tutorial="quest-list"]',
     title: 'LISTA DE MISIONES',
-    text: 'Cada mundo tiene misiones. 🔒 = bloqueada, ► = en progreso, ✓ = completada. Click para seleccionar.',
+    text: 'Cada mundo tiene misiones. Bloqueada = pendiente, En progreso = activa, Completada = hecha. Toca para seleccionar.',
   },
   {
     target: '[data-tutorial="terminal-bar"]',
     title: 'BARRA DE LA TERMINAL',
-    text: 'Muestra en qué misión estás. Los puntos de colores son decorativos. Puedes cambiar el tema si tu nivel lo permite.',
+    text: 'Muestra en que mision estas. Los puntos de colores son decorativos. Puedes cambiar el tema si tu nivel lo permite.',
   },
   {
     target: '[data-tutorial="terminal"]',
     title: 'TERMINAL',
-    text: 'Aquí escribes los comandos de Linux. Solo se permiten los comandos que la misión requiere. Escribe "help" si necesitas ayuda.',
+    text: 'Aqui escribes los comandos de Linux. Solo se permiten los comandos que la mision requiere. Escribe "help" si necesitas ayuda.',
   },
 ];
 
-export default function GameTutorial({ onComplete }) {
+export default function GameTutorial({ onComplete, onStepChange }) {
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState(null);
   const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    onStepChange?.(step);
+  }, [step, onStepChange]);
 
   useEffect(() => {
     setReady(false);
@@ -106,29 +110,24 @@ export default function GameTutorial({ onComplete }) {
   const PAD = 10;
   const vw = window.innerWidth;
   const vh = window.innerHeight;
+  const isMobile = vw < 768;
 
   const spotTop = rect.top - PAD;
   const spotLeft = rect.left - PAD;
   const spotW = rect.width + PAD * 2;
   const spotH = rect.height + PAD * 2;
 
-  const tooltipW = 340;
-  const tooltipH = 160;
+  const tooltipW = Math.min(340, vw - 32);
+  const tooltipH = isMobile ? 180 : 160;
 
   let ttTop = spotTop + spotH + 14;
-  let ttLeft = spotLeft;
+  let ttLeft = Math.max(16, Math.min(spotLeft, vw - tooltipW - 16));
 
   if (ttTop + tooltipH > vh - 16) {
     ttTop = spotTop - tooltipH - 14;
   }
   if (ttTop < 16) {
     ttTop = 16;
-  }
-  if (ttLeft + tooltipW > vw - 16) {
-    ttLeft = vw - tooltipW - 16;
-  }
-  if (ttLeft < 16) {
-    ttLeft = 16;
   }
 
   return (
@@ -169,7 +168,7 @@ export default function GameTutorial({ onComplete }) {
           background: 'var(--bg-2, #1a1a2e)',
           border: '2px solid var(--amber, #f5a623)',
           borderRadius: 8,
-          padding: '14px 18px',
+          padding: isMobile ? '12px 14px' : '14px 18px',
           boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
           animation: 'tutorialFadeIn 0.25s ease',
         }}
@@ -184,7 +183,7 @@ export default function GameTutorial({ onComplete }) {
             background: 'var(--amber, #f5a623)',
             color: '#000',
             fontFamily: 'var(--font-display, monospace)',
-            fontSize: 10,
+            fontSize: isMobile ? 9 : 10,
             fontWeight: 700,
             padding: '2px 8px',
             borderRadius: 4,
@@ -194,7 +193,7 @@ export default function GameTutorial({ onComplete }) {
           </span>
           <span style={{
             fontFamily: 'var(--font-display, monospace)',
-            fontSize: 11,
+            fontSize: isMobile ? 10 : 11,
             fontWeight: 700,
             color: 'var(--amber, #f5a623)',
             letterSpacing: 1,
@@ -205,7 +204,7 @@ export default function GameTutorial({ onComplete }) {
 
         <p style={{
           fontFamily: 'var(--font-body, monospace)',
-          fontSize: 13,
+          fontSize: isMobile ? 14 : 13,
           color: 'var(--parchment, #e0d8c0)',
           lineHeight: 1.5,
           margin: 0,
@@ -216,7 +215,7 @@ export default function GameTutorial({ onComplete }) {
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <button
-            onClick={skip}
+            onClick={(e) => { e.stopPropagation(); skip(); }}
             style={{
               background: 'none',
               border: 'none',
@@ -225,19 +224,24 @@ export default function GameTutorial({ onComplete }) {
               fontSize: 9,
               cursor: 'pointer',
               letterSpacing: 1,
-              padding: '4px 0',
+              padding: '8px 4px',
+              minHeight: 44,
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
             SALTAR [ESC]
           </button>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <span style={{
-              color: 'var(--parchment-2, #666)',
-              fontFamily: 'var(--font-display, monospace)',
-              fontSize: 9,
-            }}>
-              ENTER ▶
-            </span>
+            {!isMobile && (
+              <span style={{
+                color: 'var(--parchment-2, #666)',
+                fontFamily: 'var(--font-display, monospace)',
+                fontSize: 9,
+              }}>
+                ENTER
+              </span>
+            )}
             <button
               onClick={(e) => { e.stopPropagation(); next(); }}
               style={{
@@ -245,15 +249,16 @@ export default function GameTutorial({ onComplete }) {
                 color: '#000',
                 border: 'none',
                 borderRadius: 4,
-                padding: '8px 18px',
+                padding: isMobile ? '12px 20px' : '8px 18px',
                 fontFamily: 'var(--font-display, monospace)',
-                fontSize: 10,
+                fontSize: isMobile ? 11 : 10,
                 fontWeight: 700,
                 letterSpacing: 1,
                 cursor: 'pointer',
+                minHeight: 44,
               }}
             >
-              {step < STEPS.length - 1 ? 'SIGUIENTE' : '¡ENTENDIDO!'}
+              {step < STEPS.length - 1 ? 'SIGUIENTE' : 'ENTENDIDO!'}
             </button>
           </div>
         </div>

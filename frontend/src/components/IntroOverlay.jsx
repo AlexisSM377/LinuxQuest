@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 const writeChar = (setter, text, speed = 18) =>
   new Promise(resolve => {
@@ -22,81 +22,117 @@ export default function IntroOverlay({ onComplete }) {
   const [showPrompt, setShowPrompt] = useState(false);
   const [done, setDone] = useState(false);
   const [started, setStarted] = useState(false);
-  const [cols, setCols] = useState(() => Math.max(40, Math.floor(window.innerWidth / 12)));
+  const [cols, setCols] = useState(() => Math.max(30, Math.floor(window.innerWidth / 12)));
+  const cancelledRef = useRef(false);
 
   useEffect(() => {
     const handleResize = () => {
-      setCols(Math.max(40, Math.floor(window.innerWidth / 12)));
+      setCols(Math.max(30, Math.floor(window.innerWidth / 12)));
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const handleComplete = useCallback(() => {
+    if (done) return;
+    cancelledRef.current = true;
+    setDone(true);
+    localStorage.setItem('lq-intro-shown', '1');
+    setTimeout(onComplete, 400);
+  }, [done, onComplete]);
+
   const runIntro = useCallback(async () => {
     if (started) return;
     setStarted(true);
-    const sep = '═'.repeat(Math.min(cols, 63)) + '\n';
-    const c = (t, s) => writeChar(setText, t, s);
+    const isMobile = window.innerWidth < 768;
+    const speedMul = isMobile ? 0.6 : 1;
+    const waitMul = isMobile ? 0.5 : 1;
+    const sep = '═'.repeat(Math.min(cols, 50)) + '\n';
+    const c = async (t, s) => {
+      if (cancelledRef.current) return;
+      await writeChar(setText, t, Math.round(s * speedMul));
+    };
+    const w = async (ms) => {
+      if (cancelledRef.current) return;
+      await wait(Math.round(ms * waitMul));
+    };
 
-    await wait(500);
+    await w(500);
     await c('\n', 50);
     await c(sep, 12);
     await c('\n', 100);
-    await c('                    LINUXQUEST\n', 45);
-    await c('              El Reino del Kernel\n', 30);
+    await c('         LINUXQUEST\n', 45);
+    await c('    El Reino del Kernel\n', 30);
     await c('\n', 300);
     await c(sep, 12);
     await c('\n', 500);
 
-    await c('  En el principio, solo existia el Caos Binario.\n', 20);
-    await c('  Ceros y unos vagaban sin proposito por el vacio\n', 20);
-    await c('  digital.\n', 20);
-    await wait(400);
+    await c('  En el principio, solo existia\n', 20);
+    await c('  el Caos Binario. Ceros y unos\n', 20);
+    await c('  vagaban sin proposito por el\n', 20);
+    await c('  vacio digital.\n', 20);
+    await w(400);
 
     await c('\n', 200);
-    await c('  Entonces, un joven herrero finlandes llamado Linus\n', 20);
-    await c('  forjo el Primer Kernel — un corazon de codigo que\n', 20);
-    await c('  daria vida a todo un reino.\n', 20);
-    await wait(400);
+    await c('  Entonces, un joven herrero\n', 20);
+    await c('  finlandes llamado Linus forjo\n', 20);
+    await c('  el Primer Kernel — un corazon\n', 20);
+    await c('  de codigo que daria vida a\n', 20);
+    await c('  todo un reino.\n', 20);
+    await w(400);
 
     await c('\n', 200);
-    await c('  Pero el codigo solo no bastaba. Richard el Sabio\n', 20);
-    await c('  creo las Cuatro Libertades, leyes sagradas que\n', 20);
-    await c('  permitirian a todo ser digital copiar, estudiar,\n', 20);
-    await c('  modificar y compartir el conocimiento.\n', 20);
-    await wait(400);
+    await c('  Pero el codigo solo no bastaba.\n', 20);
+    await c('  Richard el Sabio creo las\n', 20);
+    await c('  Cuatro Libertades, leyes\n', 20);
+    await c('  sagradas que permitirian a\n', 20);
+    await c('  todo ser digital copiar,\n', 20);
+    await c('  estudiar, modificar y\n', 20);
+    await c('  compartir el conocimiento.\n', 20);
+    await w(400);
 
     await c('\n', 200);
     await c('  Asi nacio el Reino del Kernel.\n', 28);
-    await wait(500);
+    await w(500);
 
     await c('\n', 300);
-    await c('  Cinco guardianes protegen los cinco dominios:\n', 20);
+    await c('  Cinco guardianes protegen\n', 20);
+    await c('  los cinco dominios:\n', 20);
     await c('\n', 200);
-    await c('    I.   Linux el Sabio     — El Castillo del Conocimiento\n', 16);
-    await c('    II.  Grep-ild           — Los Senderos del Sistema\n', 16);
-    await c('    III. Chmod-ard          — Las Torres del Procesamiento\n', 16);
-    await c('    IV.  Kernel el Forjador — La Forja del Nucleo\n', 16);
-    await c('    V.   Sudo-Man           — Las Bovedas de la Seguridad\n', 16);
-    await wait(400);
+    await c('  I.  Linux el Sabio\n', 16);
+    await c('      El Castillo del Conocimiento\n', 16);
+    await c('  II. Grep-ild\n', 16);
+    await c('      Los Senderos del Sistema\n', 16);
+    await c('  III.Chmod-ard\n', 16);
+    await c('      Las Torres del Procesamiento\n', 16);
+    await c('  IV. Kernel el Forjador\n', 16);
+    await c('      La Forja del Nucleo\n', 16);
+    await c('  V.  Sudo-Man\n', 16);
+    await c('      Las Bovedas de la Seguridad\n', 16);
+    await w(400);
 
     await c('\n', 300);
-    await c('  Pero las fuerzas del Caos Propietario acechan.\n', 20);
-    await c('  Virus textuales, procesos zombies y permisos\n', 20);
-    await c('  corruptos amenazan el reino.\n', 20);
-    await wait(400);
+    await c('  Pero las fuerzas del Caos\n', 20);
+    await c('  Propietario acechan. Virus\n', 20);
+    await c('  textuales, procesos zombies\n', 20);
+    await c('  y permisos corruptos amenazan\n', 20);
+    await c('  el reino.\n', 20);
+    await w(400);
 
     await c('\n', 200);
-    await c('  Tu, joven Aprendiz del Codigo, debes dominar los\n', 20);
-    await c('  comandos sagrados para convertirte en Maestro Linux\n', 20);
-    await c('  y obtener el Pergamino de la Certificacion LPI.\n', 20);
-    await wait(500);
+    await c('  Tu, joven Aprendiz del Codigo,\n', 20);
+    await c('  debes dominar los comandos\n', 20);
+    await c('  sagrados para convertirte en\n', 20);
+    await c('  Maestro Linux y obtener el\n', 20);
+    await c('  Pergamino de la Certificacion\n', 20);
+    await c('  LPI.\n', 20);
+    await w(500);
 
     await c('\n', 200);
     await c(sep, 12);
     await c('\n', 300);
 
-    setShowPrompt(true);
+    if (!cancelledRef.current) setShowPrompt(true);
   }, [started, cols]);
 
   useEffect(() => {
@@ -107,39 +143,69 @@ export default function IntroOverlay({ onComplete }) {
     if (!showPrompt) return;
     const handler = (e) => {
       if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
-        setDone(true);
-        localStorage.setItem('lq-intro-shown', '1');
-        setTimeout(onComplete, 400);
+        e.preventDefault();
+        handleComplete();
       }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [showPrompt, onComplete]);
+  }, [showPrompt, handleComplete]);
 
   return (
-    <div style={{
-      position: 'fixed',
-      inset: 0,
-      zIndex: 9999,
-      background: '#050a08',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      transition: 'opacity 0.4s ease',
-      opacity: done ? 0 : 1,
-      pointerEvents: done ? 'none' : 'auto',
-    }}>
+    <div
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 9999,
+        background: '#050a08',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        transition: 'opacity 0.4s ease',
+        opacity: done ? 0 : 1,
+        pointerEvents: done ? 'none' : 'auto',
+        cursor: showPrompt ? 'pointer' : 'default',
+        padding: '20px',
+      }}
+      onClick={showPrompt ? handleComplete : undefined}
+    >
+      {/* Botón saltar — siempre visible */}
+      <button
+        onClick={(e) => { e.stopPropagation(); handleComplete(); }}
+        style={{
+          position: 'absolute',
+          top: 16,
+          right: 16,
+          zIndex: 10,
+          background: 'transparent',
+          border: '2px solid #5fff7f44',
+          color: '#5fff7f88',
+          fontFamily: "'Press Start 2P', monospace",
+          fontSize: 'clamp(7px, 1.5vw, 9px)',
+          padding: '10px 16px',
+          cursor: 'pointer',
+          letterSpacing: 1,
+          minHeight: 44,
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        SALTAR ▸
+      </button>
+
       <pre style={{
         fontFamily: "'VT323', 'Courier New', monospace",
-        fontSize: 'clamp(14px, 2vw, 20px)',
+        fontSize: 'clamp(13px, 2.5vw, 20px)',
         color: '#5fff7f',
         lineHeight: 1.5,
-        maxWidth: 720,
-        width: '90%',
+        maxWidth: 600,
+        width: '100%',
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
         textShadow: '0 0 8px rgba(95,255,127,0.3)',
+        overflowY: 'auto',
+        maxHeight: 'calc(100vh - 120px)',
       }}>
         {text}
         <span style={{ opacity: 0.6 }}>█</span>
@@ -147,14 +213,16 @@ export default function IntroOverlay({ onComplete }) {
 
       {showPrompt && (
         <div style={{
-          marginTop: 32,
+          marginTop: 24,
           fontFamily: "'Press Start 2P', monospace",
-          fontSize: 12,
+          fontSize: 'clamp(8px, 2vw, 12px)',
           color: '#f5a623',
           animation: 'introBlink 1s infinite',
           letterSpacing: 2,
+          textAlign: 'center',
+          padding: '12px 20px',
         }}>
-          PRESIONA ENTER PARA CONTINUAR
+          PRESIONA ENTER O TOCA PARA CONTINUAR
         </div>
       )}
 
@@ -162,6 +230,9 @@ export default function IntroOverlay({ onComplete }) {
         @keyframes introBlink {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.3; }
+        }
+        @media (max-width: 480px) {
+          pre { font-size: 13px !important; }
         }
       `}</style>
     </div>

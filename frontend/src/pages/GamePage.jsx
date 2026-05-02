@@ -31,7 +31,10 @@ export default function GamePage() {
   } = useGameStore();
   const [notification, setNotification] = useState(null);
   const [showAchievements, setShowAchievements] = useState(false);
-  const [introDone, setIntroDone] = useState(() => !!localStorage.getItem('lq-intro-shown'));
+  const [introDone, setIntroDone] = useState(() => {
+    if (sessionStorage.getItem('lq-intro-session')) return true;
+    return !!localStorage.getItem('lq-intro-shown');
+  });
   const [showTutorial, setShowTutorial] = useState(false);
   const [canComplete, setCanComplete] = useState(false);
   const [activeTab, setActiveTab] = useState('quest');
@@ -151,6 +154,14 @@ export default function GamePage() {
     handleCommandExec(command, response);
   }, [handleCommandExec]);
 
+  const handleTutorialStep = useCallback((step) => {
+    if (isMobile && step >= 3) {
+      setActiveTab('terminal');
+    } else if (isMobile && step < 3) {
+      setActiveTab('quest');
+    }
+  }, [isMobile]);
+
   const questPanel = (
     <div data-tutorial="quest-panel" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Quest
@@ -257,6 +268,7 @@ export default function GamePage() {
       {!introDone && (
         <IntroOverlay onComplete={() => {
           setIntroDone(true);
+          sessionStorage.setItem('lq-intro-session', '1');
           setTimeout(() => setShowTutorial(!localStorage.getItem('lq-tutorial-done')), 500);
         }} />
       )}
@@ -274,7 +286,7 @@ export default function GamePage() {
       )}
 
       {showTutorial && introDone && (
-        <GameTutorial onComplete={() => setShowTutorial(false)} />
+        <GameTutorial onComplete={() => setShowTutorial(false)} onStepChange={handleTutorialStep} />
       )}
     </div>
   );

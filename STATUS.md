@@ -732,3 +732,64 @@ feat: complete mobile responsiveness overhaul
 - **100% audit logging** - Complete security trails
 
 **SIGUIENTE PASO:** Iniciar servidor de desarrollo y verificar mobile en navegadores reales
+
+### Session 2026-05-02 (3) — Seed Scripts Debugging & Fixes ✅
+
+**Problemas encontrados y resueltos:**
+1. ✅ seed-quests.js — Función `seedQuests` declarada dos veces (duplicada)
+   - Fix: Removida la segunda declaración
+2. ✅ seed-quests.js — Instructions siendo mezcladas con objectives
+   - Fix: Separadas `instructions` de `objectives` en el INSERT
+3. ✅ seed-quests.js — TRUNCATE TABLE no estaba limpiando correctamente
+   - Fix: Cambiado a DELETE FROM con manejo de foreign keys
+4. ✅ Creado script reset-db.js para limpiar completamente la BD
+   - Agrega comando `npm run reset-db` a package.json
+
+**Secuencia correcta para inicializar:**
+```bash
+cd backend
+npm run reset-db      # Elimina todas las tablas
+npm run init-db       # Recrea tablas vacías
+npm run seed-quests   # Carga 85 misiones
+npm run seed-achievements  # Carga 12 logros
+```
+
+**Commits realizados:**
+- `dba9c8f` fix: remove duplicate seedQuests() call causing duplicate key errors
+- `a12316e` fix: use DELETE instead of TRUNCATE in seed-quests for reliability
+- `6925963` fix: remove instructions from objectives array in seed
+- `143f5b4` fix: remove duplicate seedQuests function in seed-quests.js
+
+**STATUS:** ✅ Seeds funcionando correctamente, BD poblada con 85 misiones + 12 logros
+
+### Session 2026-05-02 (4) — IntroOverlay Fix + CSS Responsive Fix ✅
+
+**Problema principal:** IntroOverlay (pantalla de inicio con lore) no aparecía al iniciar sesión.
+
+**Causa raíz:** `introDone` se inicializaba desde `localStorage.getItem('lq-intro-shown')`. Si el usuario ya tenía ese valor (sesión anterior, refresh), el overlay nunca se mostraba.
+
+**Fixes realizados:**
+
+- [x] `GamePage.jsx` — `introDone` ahora verifica `sessionStorage` (flag por sesión) + `localStorage` (ya visto永久)
+- [x] `authStore.js` — `login()` limpia `lq-intro-shown` y `lq-tutorial-done` del localStorage
+- [x] `IntroOverlay.jsx` — Botón "SALTAR ▸" en esquina superior derecha (siempre visible)
+- [x] `IntroOverlay.jsx` — `cancelledRef` para detener animación al saltar (evita setState post-desmontar)
+- [x] `IntroOverlay.jsx` — Velocidad typing 40% más rápida en móvil (`speedMul: 0.6`)
+- [x] `IntroOverlay.jsx` — Tiempos de espera 50% más cortos en móvil (`waitMul: 0.5`)
+- [x] `index.css` — `button { min-height: 44px }` cambiado a selector selectivo (no afecta botones themes del terminal)
+
+**Flujo corregido:**
+```
+Login → GamePage → IntroOverlay (lore) → ENTER/TOCA/SALTAR → Tutorial (5 pasos) → Juego
+         ↓
+    Si ya vio intro en esta sesión → salta directo al juego
+```
+
+**Archivos modificados:**
+- `frontend/src/pages/GamePage.jsx`
+- `frontend/src/store/authStore.js`
+- `frontend/src/components/IntroOverlay.jsx`
+- `frontend/src/index.css`
+
+**Build:** ✅ Sin errores nuevos
+**Lint:** Solo errores pre-existentes (ninguno nuevo introducido)
