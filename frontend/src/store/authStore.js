@@ -7,16 +7,22 @@ export const useAuthStore = create((set, get) => ({
 
   login: (userData, token) => {
     localStorage.setItem('token', token);
+    localStorage.removeItem('lq-intro-shown');
+    localStorage.removeItem('lq-tutorial-done');
     set({ user: userData, token, isAuthenticated: true });
   },
 
   register: (userData, token) => {
     localStorage.setItem('token', token);
+    localStorage.removeItem('lq-intro-shown');
+    localStorage.removeItem('lq-tutorial-done');
     set({ user: userData, token, isAuthenticated: true });
   },
 
   logout: () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('lq-intro-shown');
+    localStorage.removeItem('lq-tutorial-done');
     set({ user: null, token: null, isAuthenticated: false });
   },
 

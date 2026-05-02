@@ -761,3 +761,35 @@ npm run seed-achievements  # Carga 12 logros
 - `143f5b4` fix: remove duplicate seedQuests function in seed-quests.js
 
 **STATUS:** ✅ Seeds funcionando correctamente, BD poblada con 85 misiones + 12 logros
+
+### Session 2026-05-02 (4) — IntroOverlay Fix + CSS Responsive Fix ✅
+
+**Problema principal:** IntroOverlay (pantalla de inicio con lore) no aparecía al iniciar sesión.
+
+**Causa raíz:** `introDone` se inicializaba desde `localStorage.getItem('lq-intro-shown')`. Si el usuario ya tenía ese valor (sesión anterior, refresh), el overlay nunca se mostraba.
+
+**Fixes realizados:**
+
+- [x] `GamePage.jsx` — `introDone` ahora verifica `sessionStorage` (flag por sesión) + `localStorage` (ya visto永久)
+- [x] `authStore.js` — `login()` limpia `lq-intro-shown` y `lq-tutorial-done` del localStorage
+- [x] `IntroOverlay.jsx` — Botón "SALTAR ▸" en esquina superior derecha (siempre visible)
+- [x] `IntroOverlay.jsx` — `cancelledRef` para detener animación al saltar (evita setState post-desmontar)
+- [x] `IntroOverlay.jsx` — Velocidad typing 40% más rápida en móvil (`speedMul: 0.6`)
+- [x] `IntroOverlay.jsx` — Tiempos de espera 50% más cortos en móvil (`waitMul: 0.5`)
+- [x] `index.css` — `button { min-height: 44px }` cambiado a selector selectivo (no afecta botones themes del terminal)
+
+**Flujo corregido:**
+```
+Login → GamePage → IntroOverlay (lore) → ENTER/TOCA/SALTAR → Tutorial (5 pasos) → Juego
+         ↓
+    Si ya vio intro en esta sesión → salta directo al juego
+```
+
+**Archivos modificados:**
+- `frontend/src/pages/GamePage.jsx`
+- `frontend/src/store/authStore.js`
+- `frontend/src/components/IntroOverlay.jsx`
+- `frontend/src/index.css`
+
+**Build:** ✅ Sin errores nuevos
+**Lint:** Solo errores pre-existentes (ninguno nuevo introducido)

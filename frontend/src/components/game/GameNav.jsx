@@ -106,10 +106,11 @@ export default function GameNav({ onShowAchievements }) {
             onClick={() => { navigate('/stats'); setMenuOpen(false); }}
             style={{
               display: 'block', width: '100%', textAlign: 'left',
-              padding: '14px 16px', borderBottom: '3px solid var(--ink)',
+              padding: '14px 16px',
               fontFamily: 'var(--font-display)', fontSize: 9,
-              color: 'var(--parchment)', background: 'none', border: 'none',
-              borderBottom: '3px solid var(--ink)', cursor: 'pointer',
+              color: 'var(--parchment)', background: 'none',
+              border: 'none', borderBottom: '3px solid var(--ink)',
+              cursor: 'pointer',
             }}
           >
             STATS ↗

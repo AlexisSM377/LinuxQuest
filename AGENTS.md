@@ -133,7 +133,7 @@ frontend/src/
   components/Terminal.jsx — xterm.js + Socket.io terminal + world unlock interludes
   components/Quest.jsx   — Quest panel with world expansion + data-tutorial attrs
   components/BattleSystem.jsx — Boss battle (ref-based comm with Terminal)
-  components/IntroOverlay.jsx — Full-screen lore intro with typing effect
+  components/IntroOverlay.jsx — Full-screen lore intro with typing effect + skip button
   components/GameTutorial.jsx — 5-step spotlight overlay tutorial
   components/ErrorBoundary.jsx — React error boundary
   pages/GamePage.jsx     — Main game layout (orchestrates intro → tutorial → game)
@@ -185,6 +185,7 @@ npm run seed-achievements  # Reload 12 achievements
 - All buttons/inputs: `min-height: 44px` minimum
 - PixelInput.jsx, QuestCard.jsx, LoginPage, RegisterPage all updated
 - Error messages also meet 44px minimum
+- CSS selector is selective: `.nav-item button, .mobile-keys-bar button, .btn` (doesn't break terminal theme buttons)
 
 **Navigation:**
 - Menu.jsx: Hamburger menu `☰` appears on mobile (<768px)
@@ -200,7 +201,7 @@ npm run seed-achievements  # Reload 12 achievements
 **Components Updated:**
 - Menu.jsx — hamburger toggle + dropdown menu
 - Terminal.jsx — mobile input proxy + quick keys bar
-- IntroOverlay.jsx — dynamic separators based on window width
+- IntroOverlay.jsx — dynamic separators based on window width, skip button, mobile speed boost
 - PixelInput.jsx — minHeight 44px
 - QuestCard.jsx — minHeight 44px + center alignment
 - LoginPage.jsx — error box sizing
@@ -208,6 +209,10 @@ npm run seed-achievements  # Reload 12 achievements
 
 **Session: 2026-05-02 (2)**
 - Commits: `feat: complete mobile responsiveness overhaul` + `docs: update STATUS.md`
+
+**Session: 2026-05-02 (4)**
+- IntroOverlay fix: shows on every login, skip button, mobile speed boost
+- CSS fix: selective min-height 44px (no longer breaks terminal theme buttons)
 
 ## Gotchas
 
@@ -219,3 +224,6 @@ npm run seed-achievements  # Reload 12 achievements
 - `npm ci --omit=dev` used in Dockerfile (fixed from deprecated `--only=production`)
 - Mobile hamburger menu in Menu.jsx requires menuOpen state to toggle visibility
 - Touch targets must always be >= 44x44px (height + width) for accessibility
+- Mobile hamburger menu in Menu.jsx requires menuOpen state to toggle visibility
+- IntroOverlay shows on every login (authStore.login clears `lq-intro-shown`), but only once per session (sessionStorage flag `lq-intro-session`)
+- IntroOverlay has a "SALTAR" button and is faster on mobile (40% typing speed, 50% wait times)
