@@ -173,6 +173,8 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
   const onCommandExecRef = useRef(onCommandExec);
   const resizeHandlerRef = useRef(null);
   const [connectionStatus, setConnectionStatus] = useState('connecting');
+  const mobileInputRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
 
   // Sync refs outside render
   useEffect(() => {
@@ -181,6 +183,13 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
   useEffect(() => {
     onCommandExecRef.current = onCommandExec;
   }, [onCommandExec]);
+
+  // Detector de móvil
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const [selectedThemeId, setSelectedThemeId] = useState(() => {
     const saved = localStorage.getItem('linuxquest-terminal-theme');
@@ -221,6 +230,53 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
       term.write(`\x1b[${moveBack}D`);
     }
   }, []);
+
+  // Handlers para input móvil
+  const sendKeyToTerminal = useCallback((keyCode) => {
+    const term = termInstanceRef.current;
+    if (!term) return;
+    term.onData?.(keyCode);
+  }, []);
+
+  const handleMobileInput = useCallback((e) => {
+    const text = e.currentTarget.value;
+    if (!text || text.length === 0) return;
+    const lastChar = text[text.length - 1];
+    if (lastChar >= ' ' && lastChar <= '~') {
+      sendKeyToTerminal(lastChar);
+      e.currentTarget.value = '';
+    }
+  }, [sendKeyToTerminal]);
+
+  const handleMobileKeydown = useCallback((e) => {
+    if (e.key === 'Enter') {
+      sendKeyToTerminal('\r');
+      e.currentTarget.value = '';
+      e.preventDefault();
+    } else if (e.key === 'Backspace') {
+      sendKeyToTerminal('\x7f');
+      e.currentTarget.value = '';
+      e.preventDefault();
+    } else if (e.key === 'ArrowUp') {
+      sendKeyToTerminal('\x1b[A');
+      e.preventDefault();
+    } else if (e.key === 'ArrowDown') {
+      sendKeyToTerminal('\x1b[B');
+      e.preventDefault();
+    } else if (e.key === 'ArrowLeft') {
+      sendKeyToTerminal('\x1b[D');
+      e.preventDefault();
+    } else if (e.key === 'ArrowRight') {
+      sendKeyToTerminal('\x1b[C');
+      e.preventDefault();
+    }
+  }, [sendKeyToTerminal]);
+
+  const focusMobileInput = useCallback(() => {
+    if (isMobile && mobileInputRef.current) {
+      mobileInputRef.current.focus();
+    }
+  }, [isMobile]);
 
   // Aplicar tema sin recrear terminal
   useEffect(() => {
@@ -548,8 +604,41 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
 
       <div
         ref={terminalRef}
-        style={{ flex: 1, padding: '4px', minHeight: 0 }}
+        onClick={focusMobileInput}
+        style={{ flex: 1, padding: '4px', minHeight: 0, cursor: isMobile ? 'text' : 'default' }}
       />
+
+      {isMobile && (
+        <>
+          <input
+            ref={mobileInputRef}
+            type="text"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="none"
+            spellCheck={false}
+            onInput={handleMobileInput}
+            onKeyDown={handleMobileKeydown}
+            style={{
+              position: 'absolute',
+              opacity: 0,
+              width: 1,
+              height: 1,
+              pointerEvents: 'none',
+            }}
+          />
+          <div className="mobile-keys-bar">
+            <button onClick={() => sendKeyToTerminal('\t')} title="Tab">Tab</button>
+            <button onClick={() => sendKeyToTerminal('\r')} title="Enter">↵</button>
+            <button onClick={() => sendKeyToTerminal('\x03')} title="Ctrl+C">C⃗</button>
+            <button onClick={() => sendKeyToTerminal('\x1b')} title="Esc">Esc</button>
+            <button onClick={() => sendKeyToTerminal('\x1b[A')} title="↑">↑</button>
+            <button onClick={() => sendKeyToTerminal('\x1b[B')} title="↓">↓</button>
+            <button onClick={() => sendKeyToTerminal('\x1b[D')} title="←">←</button>
+            <button onClick={() => sendKeyToTerminal('\x1b[C')} title="→">→</button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
