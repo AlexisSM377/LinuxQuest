@@ -1,0 +1,15 @@
+#!/bin/sh
+# Mock educativo de last - Muestra historial de logins
+# Simula la salida de last con datos de ejemplo
+
+cat << 'EOF'
+sandbox  pts/0        10.0.2.2         Thu May  1 10:23   still logged in
+root     pts/1        10.0.2.2         Wed Apr 30 18:45 - 20:12  (01:27)
+sandbox  pts/0        10.0.2.2         Wed Apr 30 14:20 - 18:44  (04:24)
+admin    pts/0        192.168.1.100    Tue Apr 29 09:15 - 17:30  (08:15)
+sandbox  pts/0        10.0.2.2         Mon Apr 28 11:00 - 14:20  (03:20)
+
+wtmp begins Mon Apr 28 11:00:00 2026
+EOF
+
+exit 0

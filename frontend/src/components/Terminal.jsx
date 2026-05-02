@@ -5,6 +5,130 @@ import { io } from 'socket.io-client';
 import { useAuthStore } from '../store/authStore';
 import 'xterm/css/xterm.css';
 
+const writeLine = (term, text, delay = 0) =>
+  new Promise(resolve => {
+    setTimeout(() => { term.write(text + '\r\n'); resolve(); }, delay);
+  });
+
+const writeChar = (term, text, speed = 18) =>
+  new Promise(resolve => {
+    let i = 0;
+    const iv = setInterval(() => {
+      if (i < text.length) { term.write(text[i]); i++; }
+      else { clearInterval(iv); term.write('\r\n'); resolve(); }
+    }, speed);
+  });
+
+const INTRO_LINES = [
+  { text: '', color: '', delay: 300 },
+  { text: '═══════════════════════════════════════════════════════════════', color: '\x1b[93m', delay: 80 },
+  { text: '', color: '', delay: 100 },
+  { text: '                    LINUXQUEST', color: '\x1b[93m', delay: 200, typing: true, speed: 50 },
+  { text: '              El Reino del Kernel', color: '\x1b[90m', delay: 150, typing: true, speed: 35 },
+  { text: '', color: '', delay: 400 },
+  { text: '═══════════════════════════════════════════════════════════════', color: '\x1b[93m', delay: 80 },
+  { text: '', color: '', delay: 500 },
+  { text: '  En el principio, solo existia el Caos Binario.', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  Ceros y unos vagaban sin proposito por el vacio', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  digital.', color: '\x1b[97m', delay: 300, typing: true, speed: 22 },
+  { text: '', color: '', delay: 400 },
+  { text: '  Entonces, un joven herrero finlandes llamado Linus', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  forjo el Primer Kernel — un corazon de codigo que', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  daria vida a todo un reino.', color: '\x1b[97m', delay: 400, typing: true, speed: 22 },
+  { text: '', color: '', delay: 300 },
+  { text: '  Pero el codigo solo no bastaba. Richard el Sabio', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  creo las Cuatro Libertades, leyes sagradas que', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  permitirian a todo ser digital copiar, estudiar,', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  modificar y compartir el conocimiento.', color: '\x1b[97m', delay: 400, typing: true, speed: 22 },
+  { text: '', color: '', delay: 300 },
+  { text: '  Asi nacio el Reino del Kernel.', color: '\x1b[93m', delay: 500, typing: true, speed: 30 },
+  { text: '', color: '', delay: 500 },
+  { text: '  Cinco guardianes protegen los cinco dominios:', color: '\x1b[96m', delay: 100, typing: true, speed: 22 },
+  { text: '', color: '', delay: 200 },
+  { text: '    I.   Linux el Sabio     — El Castillo del Conocimiento', color: '\x1b[93m', delay: 120, typing: true, speed: 18 },
+  { text: '    II.  Grep-ild           — Los Senderos del Sistema', color: '\x1b[92m', delay: 120, typing: true, speed: 18 },
+  { text: '    III. Chmod-ard          — Las Torres del Procesamiento', color: '\x1b[94m', delay: 120, typing: true, speed: 18 },
+  { text: '    IV.  Kernel el Forjador — La Forja del Nucleo', color: '\x1b[95m', delay: 120, typing: true, speed: 18 },
+  { text: '    V.   Sudo-Man           — Las Bovedas de la Seguridad', color: '\x1b[91m', delay: 300, typing: true, speed: 18 },
+  { text: '', color: '', delay: 500 },
+  { text: '  Pero las fuerzas del Caos Propietario acechan.', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  Virus textuales, procesos zombies y permisos', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  corruptos amenazan el reino.', color: '\x1b[97m', delay: 400, typing: true, speed: 22 },
+  { text: '', color: '', delay: 300 },
+  { text: '  Tu, joven Aprendiz del Codigo, debes dominar los', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  comandos sagrados para convertirte en Maestro Linux', color: '\x1b[97m', delay: 80, typing: true, speed: 22 },
+  { text: '  y obtener el Pergamino de la Certificacion LPI.', color: '\x1b[97m', delay: 400, typing: true, speed: 22 },
+  { text: '', color: '', delay: 300 },
+  { text: '═══════════════════════════════════════════════════════════════', color: '\x1b[93m', delay: 80 },
+  { text: '', color: '', delay: 200 },
+  { text: '  Domina los comandos. Obtén la certificación.', color: '\x1b[90m', delay: 100, typing: true, speed: 25 },
+  { text: '  Escribe "help" para ver tus comandos disponibles.', color: '\x1b[90m', delay: 100, typing: true, speed: 25 },
+  { text: '', color: '', delay: 300 },
+];
+
+const WORLD_INTERLUDES = {
+  2: {
+    title: 'MUNDO 2 DESBLOQUEADO',
+    lines: [
+      'Las puertas del Castillo se abren lentamente.',
+      'Mas alla, un sendero serpentea entre arboles',
+      'de codigo centenarios.',
+      '',
+      'Grep-ild te espera al inicio del camino,',
+      'con una sonrisa y un mapa enrollado.',
+      '',
+      '"Cada directorio es una nueva aventura.',
+      ' Listo para explorar?"',
+    ],
+    color: '\x1b[92m',
+  },
+  3: {
+    title: 'MUNDO 3 DESBLOQUEADO',
+    lines: [
+      'Los senderos te llevan hasta unas torres',
+      'que se alzan hacia el cielo digital.',
+      '',
+      'Chmod-ard, el mago de los datos, te recibe',
+      'con su capa azul bordada de runas de regex.',
+      '',
+      '"Los datos fluyen como rios.',
+      ' Con pipes los diriges, con grep los filtras.',
+      ' Domina el flujo y seras invencible."',
+    ],
+    color: '\x1b[94m',
+  },
+  4: {
+    title: 'MUNDO 4 DESBLOQUEADO',
+    lines: [
+      'Detras de las torres, una forja humea.',
+      'El martillo de Kernel el Forjador resuena',
+      'con cada golpe sobre el acero digital.',
+      '',
+      '"El hardware es el acero, el kernel es el fuego.',
+      ' Aqui forjamos procesos, monitoreamos recursos',
+      ' y conectamos redes."',
+      '',
+      '"El nucleo es el corazon. Si falla, todo falla."',
+    ],
+    color: '\x1b[95m',
+  },
+  5: {
+    title: 'MUNDO 5 DESBLOQUEADO',
+    lines: [
+      'La forja se esconde tras una puerta de hierro.',
+      'Mas alla, bovedas selladas guardan los secretos',
+      'mas valiosos del reino.',
+      '',
+      'Sudo-Man, el guardian supremo, bloquea el paso',
+      'con su escudo dorado marcado con el simbolo #.',
+      '',
+      '"Sin permisos no hay orden. Sin usuarios no hay sistema.',
+      ' El poder absoluto requiere responsabilidad absoluta."',
+    ],
+    color: '\x1b[91m',
+  },
+};
+
 const TERMINAL_THEMES = {
   1: {
     name: 'CLASSIC',
@@ -327,11 +451,21 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
             auth: { token: authToken },
           });
 
-          socketRef.current.on('connect', () => {
+          socketRef.current.on('connect', async () => {
             setConnectionStatus('connected');
             if (term) {
+              const introShown = localStorage.getItem('lq-intro-shown');
+              if (!introShown) {
+                for (const line of INTRO_LINES) {
+                  if (line.typing) {
+                    await writeChar(term, (line.color || '') + line.text + '\x1b[0m', line.speed || 22);
+                  } else {
+                    await writeLine(term, (line.color || '') + line.text + '\x1b[0m', line.delay || 0);
+                  }
+                }
+                localStorage.setItem('lq-intro-shown', '1');
+              }
               term.write('\x1b[92m● CONECTADO AL SERVIDOR\x1b[0m\r\n');
-              term.write('\x1b[90mLinuxQuest Terminal v1.0 — escribe "help" para ayuda\x1b[0m\r\n\r\n');
               term.write('\x1b[94m$\x1b[0m ');
             }
           });
@@ -386,6 +520,32 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
     };
   }, [token]); // NO incluir theme aquí
 
+  useEffect(() => {
+    const handler = async (e) => {
+      const world = e.detail?.world;
+      const interlude = WORLD_INTERLUDES[world];
+      const term = termInstanceRef.current;
+      if (!interlude || !term) return;
+      term.write('\r\n');
+      term.write('\x1b[93m═══════════════════════════════════════════════════════════════\x1b[0m\r\n');
+      await writeLine(term, '', 200);
+      await writeChar(term, `  ${interlude.title}`, 30);
+      await writeLine(term, '', 200);
+      term.write('\x1b[93m═══════════════════════════════════════════════════════════════\x1b[0m\r\n');
+      await writeLine(term, '', 300);
+      for (const l of interlude.lines) {
+        await writeChar(term, interlude.color + '  ' + l + '\x1b[0m', 22);
+        await new Promise(r => setTimeout(r, 80));
+      }
+      await writeLine(term, '', 400);
+      term.write('\x1b[93m═══════════════════════════════════════════════════════════════\x1b[0m\r\n');
+      term.write('\r\n');
+      term.write('\x1b[94m$\x1b[0m ');
+    };
+    window.addEventListener('world:unlock', handler);
+    return () => window.removeEventListener('world:unlock', handler);
+  }, []);
+
   const statusColors = {
     connected: 'var(--leaf)',
     disconnected: 'var(--blood)',
@@ -401,7 +561,7 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
 
   return (
     <div className="term" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div className="term-bar">
+      <div className="term-bar" data-tutorial="terminal-bar">
         <div className="term-dots">
           <span className="term-dot"></span>
           <span className="term-dot y"></span>

@@ -1,0 +1,29 @@
+#!/bin/sh
+# Mock educativo de groups - Muestra grupos del usuario
+# Simula la salida de groups
+
+user="${1:-sandbox}"
+
+# Sanitizar input
+safe_user=$(printf '%s' "$user" | tr -cd 'a-zA-Z0-9_-')
+if [ -z "$safe_user" ]; then
+  echo "groups: invalid user name"
+  exit 1
+fi
+
+case "$safe_user" in
+  root)
+    echo "root"
+    ;;
+  sandbox)
+    echo "sandbox student wheel"
+    ;;
+  admin)
+    echo "admin sudo docker"
+    ;;
+  *)
+    echo "$safe_user"
+    ;;
+esac
+
+exit 0

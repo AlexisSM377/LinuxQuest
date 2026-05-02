@@ -1,0 +1,68 @@
+#!/bin/sh
+# Mock educativo de whatis - Muestra descripción corta de un comando
+# Simula la salida de whatis para comandos comunes
+
+if [ -z "$1" ]; then
+  echo "whatis: what option are you looking for?"
+  echo "Usage: whatis COMMAND..."
+  echo ""
+  echo "Display one-line manual page descriptions."
+  echo "Example: whatis ls"
+  exit 1
+fi
+
+cmd=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')
+
+case "$cmd" in
+  ls)       echo "ls (1)              - list directory contents" ;;
+  cd)       echo "cd (1)              - change the working directory" ;;
+  pwd)      echo "pwd (1)             - print name of current/working directory" ;;
+  cp)       echo "cp (1)              - copy files and directories" ;;
+  mv)       echo "mv (1)              - move (rename) files" ;;
+  rm)       echo "rm (1)              - remove files or directories" ;;
+  mkdir)    echo "mkdir (1)           - make directories" ;;
+  touch)    echo "touch (1)           - change file timestamps" ;;
+  cat)      echo "cat (1)             - concatenate files and print on standard output" ;;
+  head)     echo "head (1)            - output the first part of files" ;;
+  tail)     echo "tail (1)            - output the last part of files" ;;
+  grep)     echo "grep (1)            - print lines that match patterns" ;;
+  find)     echo "find (1)            - search for files in a directory hierarchy" ;;
+  sort)     echo "sort (1)            - sort lines of text files" ;;
+  uniq)     echo "uniq (1)            - report or omit repeated lines" ;;
+  cut)      echo "cut (1)             - remove sections from each line of files" ;;
+  tr)       echo "tr (1)              - translate or delete characters" ;;
+  wc)       echo "wc (1)              - word, line, character, and byte count" ;;
+  echo)     echo "echo (1)            - display a line of text" ;;
+  man)      echo "man (1)             - an interface to the system reference manuals" ;;
+  chmod)    echo "chmod (1)           - change file mode bits" ;;
+  chown)    echo "chown (1)           - change file owner and group" ;;
+  ps)       echo "ps (1)              - report a snapshot of the current processes" ;;
+  top)      echo "top (1)             - display Linux processes" ;;
+  kill)     echo "kill (1)            - terminate a process" ;;
+  df)       echo "df (1)              - report file system disk space usage" ;;
+  du)       echo "du (1)              - estimate file space usage" ;;
+  free)     echo "free (1)            - display amount of free and used memory" ;;
+  uname)    echo "uname (1)           - print system information" ;;
+  whoami)   echo "whoami (1)          - print effective user id" ;;
+  id)       echo "id (1)              - print real and effective user and group IDs" ;;
+  who)      echo "who (1)             - show who is logged on" ;;
+  ping)     echo "ping (8)            - send ICMP ECHO_REQUEST to network hosts" ;;
+  curl)     echo "curl (1)            - transfer a URL" ;;
+  ssh)      echo "ssh (1)             - OpenSSH remote login client" ;;
+  tar)      echo "tar (1)             - an archiving utility" ;;
+  gzip)     echo "gzip (1)            - compress or expand files" ;;
+  sed)      echo "sed (1)             - stream editor for filtering and transforming text" ;;
+  awk)      echo "awk (1)             - pattern-directed processing language" ;;
+  file)     echo "file (1)            - determine file type" ;;
+  ln)       echo "ln (1)              - make links between files" ;;
+  stat)     echo "stat (1)            - display file or file system status" ;;
+  ip)       echo "ip (8)              - show / manipulate routing, devices, policy routing" ;;
+  ss)       echo "ss (8)              - another utility to investigate sockets" ;;
+  host)     echo "host (1)            - DNS lookup utility" ;;
+  passwd)   echo "passwd (1)          - change user password" ;;
+  useradd)  echo "useradd (8)         - create a new user" ;;
+  groupadd) echo "groupadd (8)        - create a new group" ;;
+  *)        echo "$1: nothing appropriate." ;;
+esac
+
+exit 0

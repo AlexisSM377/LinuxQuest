@@ -1,0 +1,76 @@
+#!/bin/sh
+# Mock educativo de nslookup - Consultas DNS interactivas
+# Simula la salida de nslookup para dominios comunes
+
+if [ -z "$1" ]; then
+  echo "Usage: nslookup [-option] [name | -] [server]"
+  echo ""
+  echo "nslookup - DNS lookup utility"
+  echo "Example: nslookup google.com"
+  exit 1
+fi
+
+domain=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]')
+
+# Sanitizar
+safe_domain=$(printf '%s' "$domain" | tr -cd 'a-z0-9.-')
+if [ -z "$safe_domain" ]; then
+  echo "*** Invalid domain name"
+  exit 1
+fi
+
+case "$safe_domain" in
+  localhost)
+    cat << 'EOF'
+Server:         127.0.0.1
+Address:        127.0.0.1#53
+
+Name:   localhost
+Address: 127.0.0.1
+Name:   localhost
+Address: ::1
+EOF
+    ;;
+  google.com)
+    cat << 'EOF'
+Server:         8.8.8.8
+Address:        8.8.8.8#53
+
+Non-authoritative answer:
+Name:   google.com
+Address: 142.250.80.46
+EOF
+    ;;
+  github.com)
+    cat << 'EOF'
+Server:         8.8.8.8
+Address:        8.8.8.8#53
+
+Non-authoritative answer:
+Name:   github.com
+Address: 140.82.121.3
+EOF
+    ;;
+  example.com)
+    cat << 'EOF'
+Server:         8.8.8.8
+Address:        8.8.8.8#53
+
+Non-authoritative answer:
+Name:   example.com
+Address: 93.184.216.34
+EOF
+    ;;
+  *)
+    cat << EOF
+Server:         8.8.8.8
+Address:        8.8.8.8#53
+
+** server can't find $safe_domain: NXDOMAIN
+
+NOTE: DNS resolution requires network access in sandbox
+EOF
+    ;;
+esac
+
+exit 0

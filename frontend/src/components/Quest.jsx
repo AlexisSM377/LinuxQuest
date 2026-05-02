@@ -223,7 +223,7 @@ export default function Quest({ onCompleteClick, battleRef, canComplete = false,
     }}>
 
       {/* Quest detail — scrollable */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '10px 12px' }}>
+      <div data-tutorial="quest-detail" style={{ flex: 1, overflowY: 'auto', padding: '10px 12px' }}>
         <QuestInfo quest={questWithNPC || currentQuest} />
 
         {/* Boss battle */}
@@ -277,7 +277,7 @@ export default function Quest({ onCompleteClick, battleRef, canComplete = false,
       </div>
 
       {/* World / Quest list */}
-      <div style={{
+      <div data-tutorial="quest-list" style={{
         borderTop: '4px solid var(--ink)',
         maxHeight: 240, overflowY: 'auto', flexShrink: 0,
         background: 'var(--bg)',

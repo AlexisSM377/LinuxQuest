@@ -1,72 +1,72 @@
 export const NPCs = {
-  // MUNDO 1: CASTILLO DE LINUX
+  // MUNDO 1: EL CASTILLO DEL CONOCIMIENTO
   linux_sabio: {
     id: 'linux_sabio',
     name: 'Linux el Sabio',
     world: 1,
-    title: 'Guardián del Conocimiento Libre',
-    avatar: '🧙',
-    description: 'Anciano fundador de los reinos digitales. Vestimenta: túnica blanca, barba plateada. Filósofo, narrador, paciente.',
-    greeting: 'Para entender el camino, primero debes conocer a tus ancestros. Bienvenido al Castillo de Linux, donde la historia del software libre cobra vida.',
+    title: 'Archivista del Reino Digital',
+    avatar: '\u{1F9D9}\u200D\u2642\uFE0F',
+    description: 'Anciano con tunica blanca bordada con circuitos dorados. Barba plateada, ojos brillantes como LEDs. Paciente, filosofico, narrador. Habla en metaforas.',
+    greeting: 'Para entender el codigo, primero debes entender su historia. Bienvenido al Castillo del Conocimiento, donde los pergaminos guardan los secretos de como nacio Linux.',
     personality: 'patient',
-    specialty: 'Historia y filosofía de Linux',
-    lore: 'Linux el Sabio fue el primer programador del Reino Digital. Observó cómo Linus Torvalds creó el kernel y decidió preservar ese conocimiento para las futuras generaciones. Su sabiduría abarca desde las primeras distribuciones hasta las nubes modernas.'
+    specialty: 'Historia de Linux, distribuciones, licencias, filosofia del software libre',
+    lore: 'Fue el primer programador en documentar las distribuciones. Creo el Archivo del Conocimiento donde guarda pergaminos sobre cada familia de Linux. Su mayor temor es que la historia se pierda en el olvido digital.'
   },
 
-  // MUNDO 2: CAMINOS PERDIDOS
+  // MUNDO 2: LOS SENDEROS DEL SISTEMA
   grep_ild: {
     id: 'grep_ild',
     name: 'Grep-ild',
     world: 2,
-    title: 'Explorador-Cartógrafo de Archivos',
-    avatar: '🗺️',
-    description: 'Joven explorador-curioso y energético. Vestimenta: capucha verde, mapa enrollado. Didáctico y entusiasta.',
-    greeting: 'Cada directorio es una nueva aventura. Sígueme, y te enseñaré a navegar por los senderos del sistema de archivos.',
+    title: 'Explorador de los Senderos Digitales',
+    avatar: '\u{1F5FA}\uFE0F',
+    description: 'Joven con capucha verde, mochila con herramientas de navegacion. Curioso, energetico, didactico. Siempre quiere explorar.',
+    greeting: 'Cada directorio es una nueva aventura. El sistema de archivos es un bosque infinito donde cada claro esconde un tesoro. Sigeme, te ensenare a navegar sin perderte.',
     personality: 'energetic',
-    specialty: 'Navegación y manipulación de archivos',
-    lore: 'Grep-ild descubrió que el sistema de archivos es como un laberinto mágico. Cada directorio contiene secretos, y cada archivo es un tesoro esperando ser encontrado. Sus herramientas: ls, cd, mkdir, cp, mv, rm.'
+    specialty: 'Navegacion, archivos, directorios, variables de entorno',
+    lore: 'Descubrio que el sistema de archivos es un laberinto con reglas. Mapeo cada atajo y truco de navegacion. Sus herramientas: ls, cd, mkdir, cp, mv, rm. Suena con explorar /proc algun dia.'
   },
 
-  // MUNDO 3: TORRES ANTIGUAS DEL PODER
+  // MUNDO 3: LAS TORRES DEL PROCESAMIENTO
   chmod_ard: {
     id: 'chmod_ard',
     name: 'Chmod-ard',
     world: 3,
-    title: 'Mago del Procesamiento de Datos',
-    avatar: '🔮',
-    description: 'Mago artesano que controla el flujo de información. Vestimenta: capa azul con runas. Místico, técnico, preciso.',
-    greeting: 'El verdadero poder fluye a través de las tuberías. Permíteme mostrarte cómo los datos se transforman con grep, sed, awk y los pipes.',
+    title: 'Tejedor del Flujo de Datos',
+    avatar: '\u{1F52E}',
+    description: 'Mago con capa azul cosida con runas de regex. Varita que emite pipes de luz. Ojos que brillan al procesar datos.',
+    greeting: 'Los datos fluyen como rios. Con pipes los diriges, con grep los filtras, con sed los transformas. Domina el flujo y seras invencible.',
     personality: 'mystical',
-    specialty: 'Pipes, redirecciones, expresiones regulares',
-    lore: 'Chmod-ard dominó el arte de las tuberías místicas. Con grep puede encontrar cualquier patrón, con sed puede reemplazar cualquier texto, y con awk puede procesar cualquier dato. Sus pipes conectan el poder de múltiples comandos.'
+    specialty: 'Pipes, grep, sed, awk, redireccion, scripts',
+    lore: 'Dominó el arte de las tuberias miticas. Puede tejer cualquier dato con grep, transformar con sed y extraer con awk. Su varita es un pipe (|) hecho de cristal digital.'
   },
 
-  // MUNDO 4: NÚCLEO DEL REINO
+  // MUNDO 4: LA FORJA DEL NUCLEO
   kernel_forjador: {
     id: 'kernel_forjador',
     name: 'Kernel el Forjador',
     world: 4,
-    title: 'Herrero del Sistema Operativo',
-    avatar: '⚒️',
-    description: 'Herrero del reino digital. Vestimenta: armadura metálica, martillo. Robusto, técnico, confiable.',
-    greeting: 'El núcleo es donde la magia se forja en realidad. Cada proceso, cada hilo, cada byte importa. Aprende a forjar tu camino en el sistema.',
+    title: 'Herrero del Nucleo Digital',
+    avatar: '\u2692\uFE0F',
+    description: 'Herrero robusto con delantal de cuero metalico. Martillo grabado con PID. Brazos fuertes como threads paralelos.',
+    greeting: 'El nucleo es el corazon. Si falla, todo falla. Aqui forjamos procesos, monitoreamos recursos y conectamos redes. El hardware es el acero, el kernel es el fuego.',
     personality: 'technical',
-    specialty: 'Sistema, hardware, redes',
-    lore: 'Kernel el Forjador construyó los cimientos del Reino Digital. Conoce cada proceso que corre, cada byte de memoria, y cada paquete de red. Su martillo forja la conexión entre el hardware y el software.'
+    specialty: 'Hardware, procesos, memoria, redes, sistema operativo',
+    lore: 'Construyo los cimientos del reino. Conoce cada proceso, cada byte de memoria, cada paquete de red. Su martillo forja la conexion entre hardware y software.'
   },
 
-  // MUNDO 5: BÓVEDAS SECRETAS
+  // MUNDO 5: LAS BOVEDAS DE LA SEGURIDAD
   sudo_man: {
     id: 'sudo_man',
     name: 'Sudo-Man',
     world: 5,
-    title: 'Guardián Supremo de la Seguridad',
-    avatar: '🛡️',
-    description: 'Guardián supremo del reino. Vestimenta: armadura roja con escudo dorado. Autoritario pero justo, vigilante.',
-    greeting: 'El poder absoluto requiere absoluta responsabilidad. Usa sudo con sabiduría, no con ira. Los permisos son la línea entre el orden y el caos.',
+    title: 'Guardian Supremo de la Seguridad',
+    avatar: '\u{1F6E1}\uFE0F',
+    description: 'Caballero con armadura roja y escudo dorado con el simbolo de root (#). Capa que ondea con permisos.',
+    greeting: 'El poder absoluto requiere responsabilidad absoluta. Sin permisos no hay orden, sin usuarios no hay sistema. Usa sudo con sabiduria, no con ira.',
     personality: 'authoritative',
-    specialty: 'Seguridad, usuarios, permisos',
-    lore: 'Sudo-Man protege el Reino Digital de las amenazas. Controla quién puede acceder a qué, y ejecuta su poder con precisión quirúrgica. Su escudo dorado refleja la luz de la seguridad en cada rincón del sistema.'
+    specialty: 'Permisos, usuarios, grupos, seguridad, criptografia',
+    lore: 'Protege el reino de intrusiones. Controla quien accede a que. Su escudo bloquea accesos no autorizados. Solo otorga sudo a quienes lo merecen.'
   }
 };
 
