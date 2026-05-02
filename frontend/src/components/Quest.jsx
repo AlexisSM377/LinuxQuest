@@ -49,6 +49,20 @@ function QuestInfo({ quest }) {
         </div>
       )}
 
+      {/* Instructions */}
+      {quest.instructions?.length > 0 && (
+        <div className="pcard" style={{ background: 'var(--bg-3)', padding: 10 }}>
+          <SectionLabel color="var(--leaf)">INSTRUCCIONES</SectionLabel>
+          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 6 }}>
+            {quest.instructions.map((inst, i) => (
+              <li key={i} className="vt" style={{ color: 'var(--parchment-2)', fontSize: 15 }}>
+                {inst}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {/* Objectives */}
       {quest.objectives?.length > 0 && (
         <div className="pcard" style={{ background: 'var(--bg-3)', padding: 10 }}>
