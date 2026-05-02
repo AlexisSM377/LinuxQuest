@@ -3092,32 +3092,4 @@ async function seedQuests() {
 
 seedQuests();
 
-
-async function seedQuests() {
-  const client = await pool.connect();
-  try {
-    await client.query('TRUNCATE TABLE quests CASCADE;');
-    for (const quest of quests) {
-      await client.query(
-        `INSERT INTO quests (id, title, description, world, "order", difficulty, npc, story, hints, required_commands, objectives, prerequisites, rewards)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
-        [
-          quest.id, quest.title, quest.description, quest.world, quest.order,
-          quest.difficulty, quest.npc, quest.story,
-          JSON.stringify(quest.hints),
-          JSON.stringify(quest.requiredCommands),
-          JSON.stringify([...(quest.objectives || []), ...(quest.instructions ? [{ instructions: quest.instructions }] : [])]),
-          JSON.stringify(quest.prerequisites || []),
-          JSON.stringify(quest.rewards || {})
-        ]
-      );
-    }
-    console.log(`✅ Seeded ${quests.length} quests`);
-  } catch (e) {
-    console.error('❌ Seed error:', e.message);
-  } finally {
-    client.release();
-  }
-}
-
 seedQuests();
