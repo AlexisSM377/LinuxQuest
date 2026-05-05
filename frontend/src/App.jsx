@@ -5,6 +5,7 @@ import GamePage from './pages/GamePage'
 import StatsPage from './pages/StatsPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import VerifyEmailPage from './pages/VerifyEmailPage'
 import ToastContainer from './components/Toast'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useAuthStore } from './store/authStore'
@@ -26,6 +27,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/stats" element={<StatsPage />} />
+          <Route path="/verificar-email" element={<VerifyEmailPage />} />
         </Routes>
       </Router>
     </ErrorBoundary>

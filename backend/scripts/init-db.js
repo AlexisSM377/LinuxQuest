@@ -24,6 +24,9 @@ const initializeDatabase = async () => {
         xp INT DEFAULT 0,
         level INT DEFAULT 1,
         coins INT DEFAULT 0,
+        email_verified BOOLEAN DEFAULT FALSE,
+        verification_token VARCHAR(255),
+        verification_token_expires_at TIMESTAMP,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
@@ -35,7 +38,10 @@ const initializeDatabase = async () => {
       ALTER TABLE users
       ADD COLUMN IF NOT EXISTS xp INT DEFAULT 0,
       ADD COLUMN IF NOT EXISTS level INT DEFAULT 1,
-      ADD COLUMN IF NOT EXISTS coins INT DEFAULT 0;
+      ADD COLUMN IF NOT EXISTS coins INT DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT FALSE,
+      ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255),
+      ADD COLUMN IF NOT EXISTS verification_token_expires_at TIMESTAMP;
     `);
     console.log('✓ Columnas XP/level/coins verificadas');
 

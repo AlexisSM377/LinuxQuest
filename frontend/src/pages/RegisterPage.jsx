@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../store/authStore';
 import { apiClient } from '../utils/api';
 import AuthCard from '../components/auth/AuthCard';
 import PixelInput from '../components/auth/PixelInput';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
-  const { register } = useAuthStore();
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [registered, setRegistered] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,9 +24,9 @@ export default function RegisterPage() {
     }
     setLoading(true);
     try {
-      const response = await apiClient.post('/api/auth/register', { email, username, password });
-      register(response.user, response.token);
-      navigate('/game');
+      await apiClient.post('/api/auth/register', { email, username, password });
+      setRegisteredEmail(email);
+      setRegistered(true);
     } catch (err) {
       setError(err.message || 'Error al registrarse');
     } finally {
@@ -34,19 +34,54 @@ export default function RegisterPage() {
     }
   };
 
+  if (registered) {
+    return (
+      <AuthCard
+        title="¡REVISA TU CORREO!"
+        subtitle={`Enviamos un link a ${registeredEmail}`}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{
+            background: 'var(--bg-3)',
+            border: '4px solid var(--leaf)',
+            padding: '16px',
+            fontFamily: 'var(--font-code)',
+            fontSize: 13,
+            color: 'var(--leaf)',
+            textAlign: 'center',
+            lineHeight: 1.6,
+          }}>
+            ✓ CUENTA CREADA<br />
+            <span style={{ color: 'var(--parchment-2)', fontSize: 12 }}>
+              Haz clic en el link del correo para activar tu cuenta
+            </span>
+          </div>
+
+          <p className="vt" style={{ color: 'var(--parchment-2)', fontSize: 15, textAlign: 'center' }}>
+            ¿No llegó el correo? Revisa la carpeta de spam o vuelve al login para reenviar.
+          </p>
+
+          <button
+            className="btn btn-amber"
+            onClick={() => navigate('/login')}
+            style={{ width: '100%' }}
+          >
+            IR AL LOGIN ▶
+          </button>
+        </div>
+      </AuthCard>
+    );
+  }
+
   const footer = (
     <>
       ¿Ya tienes cuenta?{' '}
       <button
         onClick={() => navigate('/login')}
         style={{
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          color: 'var(--amber)',
-          fontFamily: 'var(--font-body)',
-          fontSize: 'inherit',
-          textDecoration: 'underline',
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: 'var(--amber)', fontFamily: 'var(--font-body)',
+          fontSize: 'inherit', textDecoration: 'underline',
         }}
       >
         INICIAR SESIÓN
@@ -96,12 +131,9 @@ export default function RegisterPage() {
 
         {error && (
           <div style={{
-            background: 'var(--blood)',
-            border: '4px solid var(--ink)',
-            padding: '10px 14px',
-            fontFamily: 'var(--font-code)',
-            fontSize: 13,
-            color: 'var(--parchment)',
+            background: 'var(--blood)', border: '4px solid var(--ink)',
+            padding: '10px 14px', fontFamily: 'var(--font-code)',
+            fontSize: 13, color: 'var(--parchment)',
           }}>
             ✗ {error}
           </div>

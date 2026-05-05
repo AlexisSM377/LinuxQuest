@@ -9,6 +9,7 @@
     "seed": "node scripts/seed-lessons.js",
     "seed-quests": "node scripts/seed-quests.js",
     "seed-achievements": "node scripts/seed-achievements.js",
+    "migrate-email": "node scripts/add-email-verification.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -25,6 +26,7 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.20.0",
+    "resend": "^6.12.2",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {
