@@ -66,10 +66,13 @@ const GLOBAL_ALLOWED_COMMANDS = {
   lsblk: 'Lista dispositivos de bloque',
   lscpu: 'Información de CPU',
   lsusb: 'Lista dispositivos USB',
+  lspci: 'Lista dispositivos PCI',
   dmesg: 'Mensajes del kernel',
   ps: 'Procesos en ejecución',
   top: 'Monitor de procesos',
   kill: 'Termina un proceso',
+  killall: 'Termina procesos por nombre',
+  pkill: 'Termina procesos por patrón',
   ip: 'Configuración de red',
   ss: 'Estado de sockets',
   netstat: 'Estado de la red',
@@ -129,6 +132,9 @@ const GLOBAL_ALLOWED_COMMANDS = {
   vim: 'Editor de texto vim (mock)',
   nano: 'Editor de texto nano (mock)',
   htop: 'Monitor de procesos mejorado (mock)',
+  finger: 'Información de usuarios',
+  screen: 'Multiplexador de terminal',
+  tmux: 'Multiplexador de terminal (tmux)',
   hostname: 'Nombre del host',
   nproc: 'Número de procesadores',
   clear: 'Limpia la pantalla',
@@ -161,9 +167,6 @@ const GLOBAL_ALLOWED_COMMANDS = {
   umask: 'Máscara de permisos',
   timeout: 'Ejecuta con timeout',
   yes: 'Repite string infinitamente',
-  tac: 'Concatena en reversa',
-  head: 'Primeras líneas',
-  tail: 'Últimas líneas',
 };
 
 /**
