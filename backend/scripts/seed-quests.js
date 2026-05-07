@@ -28,7 +28,7 @@ const quests = [
         validationFn: 'output.includes("Linux")'
       }
     ],
-    prerequisites: [],
+    prerequisites: [85],
     rewards: { xp: 50, coins: 5 }
   },
 

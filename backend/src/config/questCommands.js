@@ -515,30 +515,37 @@ export const QUEST_COMMANDS_MAP = {
   // ==========================================
   // QUESTS EXTRA (5 misiones)
   // ==========================================
+  // ==========================================
+  // MUNDO 0: REFUERZO DE COMANDOS (5 misiones)
+  // ==========================================
   81: {
-    world: 1, title: 'El Editor de los Antiguos',
-    allowedCommands: ['vi', 'echo', 'help'],
+    world: 0, title: 'Refuerzo: Comandos Básicos Repaso',
+    allowedCommands: ['ls', 'cd', 'pwd', 'cat', 'head', 'tail', 'cp', 'mv', 'rm', 'help'],
+    allowedFlags: ['-l', '-a', '-h', '-R'],
     dangerousPatterns: []
   },
   82: {
-    world: 1, title: 'El Editor Moderno',
-    allowedCommands: ['nano', 'echo', 'help'],
+    world: 0, title: 'Refuerzo: Búsqueda y Procesamiento',
+    allowedCommands: ['find', 'grep', 'sed', 'help'],
+    allowedFlags: ['-name', '-type', '-i', '-n'],
+    allowedPipes: true,
     dangerousPatterns: []
   },
   83: {
-    world: 2, title: 'El Tipo de Archivo',
-    allowedCommands: ['file', 'echo', 'help'],
+    world: 0, title: 'Refuerzo: Scripting Bash',
+    allowedCommands: ['bash', 'echo', 'for', 'if', 'help'],
+    allowedFlags: ['-c', '-x'],
     dangerousPatterns: []
   },
   84: {
-    world: 3, title: 'La Búsqueda Rápida',
-    allowedCommands: ['locate', 'echo', 'help'],
+    world: 0, title: 'Refuerzo: Permisos y Seguridad',
+    allowedCommands: ['chmod', 'chown', 'touch', 'ls', 'help'],
+    allowedFlags: ['-R', '-la'],
     dangerousPatterns: []
   },
   85: {
-    world: 5, title: 'El Permisos de /var/tmp',
-    allowedCommands: ['ls', 'echo', 'help'],
-    allowedFlags: ['-l', '-d', '-a'],
+    world: 0, title: '🏆 FINAL: Maestre de Linux',
+    allowedCommands: ['help', 'pwd', 'ls', 'whoami'],
     dangerousPatterns: []
   }
 };
