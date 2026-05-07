@@ -2927,7 +2927,7 @@ const quests = [
         validationFn: 'output.length > 0'
       }
     ],
-    prerequisites: [],
+    prerequisites: [80],
     rewards: { xp: 50, coins: 10 }
   },
 
@@ -2935,7 +2935,7 @@ const quests = [
     id: 82,
     title: 'Refuerzo: Búsqueda y Procesamiento',
     description: 'Repasa find, grep, sed, awk',
-    world: 0, order: 2, difficulty: 2,
+    world: 6, order: 2, difficulty: 2,
     npc: 'Grep-ild el Rastreador',
     story: '"Buscar y procesar datos son habilidades clave. find localiza. grep filtra. sed y awk transforman. El poder de los datos está en tu mano."',
     instructions: [
@@ -2968,7 +2968,7 @@ const quests = [
     id: 83,
     title: 'Refuerzo: Scripting Bash',
     description: 'Repasa loops, condicionales, funciones',
-    world: 0, order: 3, difficulty: 3,
+    world: 6, order: 3, difficulty: 3,
     npc: 'Linux el Sabio',
     story: '"Los scripts automatizan. for loops, if condicionales, funciones: la trilogía del scripting. Automatización = poder."',
     instructions: [
@@ -3001,7 +3001,7 @@ const quests = [
     id: 84,
     title: 'Refuerzo: Permisos y Seguridad',
     description: 'Repasa chmod, chown, permisos',
-    world: 0, order: 4, difficulty: 2,
+    world: 6, order: 4, difficulty: 2,
     npc: 'Chmod-ard el Guardián de Permisos',
     story: '"La seguridad empieza con permisos. chmod controla acceso. chown cambia propietario. Errores = brechas de seguridad."',
     instructions: [
@@ -3034,7 +3034,7 @@ const quests = [
     id: 85,
     title: '🏆 FINAL: Maestre de Linux',
     description: 'Demuestra tu dominio completo de Linux',
-    world: 0, order: 5, difficulty: 3,
+    world: 6, order: 5, difficulty: 3,
     npc: 'Linux el Sabio',
     story: '"Completaste el Reino del Kernel. 85 misiones, 5 mundos, 5 bosses. Ahora eres Maestre de Linux. El viaje fue largo, pero valió cada paso. Bienvenido al círculo de los verdaderos guerreros del terminal."',
     instructions: [
