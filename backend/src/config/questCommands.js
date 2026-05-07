@@ -516,35 +516,35 @@ export const QUEST_COMMANDS_MAP = {
   // QUESTS EXTRA (5 misiones)
   // ==========================================
   // ==========================================
-  // MUNDO 0: REFUERZO DE COMANDOS (5 misiones)
+  // MUNDO 6: COMANDOS DE REFUERZO (5 misiones)
   // ==========================================
   81: {
-    world: 0, title: 'Refuerzo: Comandos Básicos Repaso',
+    world: 6, title: 'Refuerzo: Comandos Básicos Repaso',
     allowedCommands: ['ls', 'cd', 'pwd', 'cat', 'head', 'tail', 'cp', 'mv', 'rm', 'help'],
     allowedFlags: ['-l', '-a', '-h', '-R'],
     dangerousPatterns: []
   },
   82: {
-    world: 0, title: 'Refuerzo: Búsqueda y Procesamiento',
+    world: 6, title: 'Refuerzo: Búsqueda y Procesamiento',
     allowedCommands: ['find', 'grep', 'sed', 'help'],
     allowedFlags: ['-name', '-type', '-i', '-n'],
     allowedPipes: true,
     dangerousPatterns: []
   },
   83: {
-    world: 0, title: 'Refuerzo: Scripting Bash',
+    world: 6, title: 'Refuerzo: Scripting Bash',
     allowedCommands: ['bash', 'echo', 'for', 'if', 'help'],
     allowedFlags: ['-c', '-x'],
     dangerousPatterns: []
   },
   84: {
-    world: 0, title: 'Refuerzo: Permisos y Seguridad',
+    world: 6, title: 'Refuerzo: Permisos y Seguridad',
     allowedCommands: ['chmod', 'chown', 'touch', 'ls', 'help'],
     allowedFlags: ['-R', '-la'],
     dangerousPatterns: []
   },
   85: {
-    world: 0, title: '🏆 FINAL: Maestre de Linux',
+    world: 6, title: '🏆 FINAL: Maestre de Linux',
     allowedCommands: ['help', 'pwd', 'ls', 'whoami'],
     dangerousPatterns: []
   }

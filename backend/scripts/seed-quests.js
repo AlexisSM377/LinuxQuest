@@ -2901,7 +2901,7 @@ const quests = [
     id: 81,
     title: 'Refuerzo: Comandos Básicos Repaso',
     description: 'Repasa ls, cd, pwd, cat, cp, mv, rm',
-    world: 0, order: 1, difficulty: 1,
+    world: 6, order: 1, difficulty: 1,
     npc: 'Linux el Sabio',
     story: '"La práctica hace perfecto. Repasemos los fundamentales sin los cuales no hay maestría. Básicos, pero absolutamente esenciales."',
     instructions: [
