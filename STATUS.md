@@ -831,6 +831,20 @@ Login → GamePage → IntroOverlay (lore) → ENTER/TOCA/SALTAR → Tutorial (5
 
 **STATUS:** 🟢 PRODUCTION READY — Mundo 0 now enforces tutorial progression
 
+### Session 2026-05-07 (3) — Fix path traversal en rutas /reino y /misiones ✅
+
+**Problema:** `ls /reino/distros` devolvía "Path traversal detected: /reino/distros" aunque el directorio existía en el sandbox.
+
+**Causa raíz:** `path.resolve(base, absolutePath)` ignora el `base` cuando el segundo argumento es absoluto. `/reino` resolvía a `/reino` (fuera del sandbox), no a `sandboxRoot/reino`.
+
+**Fixes:**
+- [x] `sandboxValidator.js` — `validatePathTraversal` ahora remapea `/reino/...` y `/misiones/...` anteponiéndoles `sandboxRoot` antes del check
+- [x] `commandService.js` — eliminado `existsSync` guard en la sustitución de game paths (antes no sustituía si el directorio no existía aún)
+
+**Commit:** `ebe949d` — fix: resolve /reino and /misiones path traversal false positives
+
+---
+
 ### Session 2026-05-07 (2) — Sequential mission order + auto-advance + /reino path fix ✅
 
 **Bug 1:** Misiones 1-11 del Mundo 1 tenían `prerequisites: []`, permitiendo saltar (ej. estar en misión 2 y completar la 4).

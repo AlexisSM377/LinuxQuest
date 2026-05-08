@@ -188,7 +188,13 @@ Extras: Refuerzo (5 quests, IDs 91-95)
   └─ Comandos variados de los 5 mundos
 ```
 
-## Cambios Recientes (2026-05-02)
+## Cambios Recientes (2026-05-07)
+- ✅ Bugfix: path traversal falso positivo en rutas `/reino` y `/misiones`
+  - `sandboxValidator.validatePathTraversal` remapea game paths al sandbox root
+  - `commandService.preprocessCommand` siempre sustituye, sin existsSync guard
+  - Commit: `ebe949d`
+
+## Cambios Anteriores (2026-05-02)
 - ✅ Semana 18 COMPLETADA: Reorganización LPI + Lore + Intro + Tutorial
   - 85 misiones reescritas alineadas con LPI Linux Essentials 010-160
   - Lore medieval-fantástico "El Reino del Kernel" en todas las misiones
