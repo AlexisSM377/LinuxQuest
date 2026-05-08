@@ -329,6 +329,14 @@ const preprocessCommand = (cmd, sandboxDir) => {
     processed = processed.replace(/\/var\/log\/auth\.log/g, join(sandboxVar, 'log', 'auth.log'));
   }
 
+  // /reino/... → sandbox/reino/... (siempre redirigir, sin importar si el dir existe)
+  const sandboxReino = join(sandboxDir, 'reino');
+  processed = processed.replace(/(?<![\w/])\/reino(?=\/|\b)/g, sandboxReino);
+
+  // /misiones/... → sandbox/misiones/...
+  const sandboxMisiones = join(sandboxDir, 'misiones');
+  processed = processed.replace(/(?<![\w/])\/misiones(?=\/|\b)/g, sandboxMisiones);
+
   // ls -ld /tmp → mostrar info del sandbox tmp
   if (/^ls\s+.*\/tmp\s*$/.test(processed)) {
     processed = `ls -ld ${join(sandboxDir, 'tmp')} 2>/dev/null || echo "drwxrwxrwt 2 sandbox sandbox 4096 /tmp"`;
