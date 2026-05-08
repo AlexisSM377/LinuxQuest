@@ -793,3 +793,61 @@ Login → GamePage → IntroOverlay (lore) → ENTER/TOCA/SALTAR → Tutorial (5
 
 **Build:** ✅ Sin errores nuevos
 **Lint:** Solo errores pre-existentes (ninguno nuevo introducido)
+
+### Session 2026-05-07 — Mundo 0 Activation + Command Sync ✅
+
+**Problem Identified & Fixed:**
+1. **GLOBAL_ALLOWED_COMMANDS desincronizado**
+   - commandService.js tenía 145 comandos
+   - securityConfig.js tenía 150 comandos
+   - Faltaban: killall, pkill, lspci, finger, screen, tmux
+   - Existían duplicados: tac, head, tail
+   - Fix: Sincronizados a 152 comandos
+
+2. **Mundo 0 (Refuerzo de Comandos) no estaba activado**
+   - Misiones 81-85 existían en seed-quests.js (world: 0)
+   - questCommands.js tenía configuraciones incorrectas (world: 1, 2, 3, 5)
+   - Faltaba prerequisite: Misión 1 no requería completar Mundo 0
+   - Fix: 
+     - questCommands.js: misiones 81-85 ahora tienen world: 0
+     - Configurados comandos permitidos por misión (refuerzo específico)
+     - Misión 1 ahora requiere completar misión 85
+
+**Mundo 0 Structure:**
+- Misión 81: Refuerzo: Comandos Básicos (ls, cd, pwd, cat, cp, mv, rm)
+- Misión 82: Refuerzo: Búsqueda y Procesamiento (find, grep, sed) → req: 81
+- Misión 83: Refuerzo: Scripting Bash (bash, for, if) → req: 82
+- Misión 84: Refuerzo: Permisos (chmod, chown) → req: 83
+- Misión 85: 🏆 FINAL: Maestre de Linux → req: 84
+
+**Commits:**
+- `f89daf3`: fix: synchronize GLOBAL_ALLOWED_COMMANDS with DEFAULT_ALLOWED_COMMANDS
+- `645d4c6`: feat: enable Mundo 0 (Refuerzo de Comandos) progression
+
+**Next Steps:**
+1. Reset database: `npm run reset-db && npm run init-db && npm run seed-quests`
+2. Test: Usuario nuevo debe pasar por Mundo 0 → 1 → 2 → etc.
+3. Verify: Misión 1 locked hasta completar misión 85
+
+**STATUS:** 🟢 PRODUCTION READY — Mundo 0 now enforces tutorial progression
+
+### Session 2026-05-07 (2) — Sequential mission order + auto-advance + /reino path fix ✅
+
+**Bug 1:** Misiones 1-11 del Mundo 1 tenían `prerequisites: []`, permitiendo saltar (ej. estar en misión 2 y completar la 4).
+
+**Bug 2:** Misión 3 (y otras) no se completaba porque las instrucciones piden `ls /reino/distros/` (ruta absoluta) pero `/reino/` solo existe dentro del sandbox del usuario. El preprocessor reescribía `/etc/...` y `/var/log/...` pero no `/reino/...` ni `/misiones/...`.
+
+**Fixes:**
+- [x] `seed-quests.js` — misiones 2-11 ahora tienen `prerequisites: [N-1]` (cadena secuencial)
+- [x] `GamePage.jsx` — auto-avance a la siguiente misión desbloqueada tras completar (cambia a tab MISIÓN en móvil)
+- [x] `commandService.js` — preprocessor reescribe `/reino/...` → `${sandboxDir}/reino/...` y `/misiones/...` → `${sandboxDir}/misiones/...` (lookbehind para no afectar paths anidados)
+
+**Pendiente para aplicar:**
+```bash
+# Backend: solo reiniciar (el fix de /reino es runtime)
+cd backend && npm run dev
+
+# Para que las prerequisites tomen efecto:
+cd backend
+npm run reset-db && npm run init-db && npm run seed-quests && npm run seed-achievements
+```

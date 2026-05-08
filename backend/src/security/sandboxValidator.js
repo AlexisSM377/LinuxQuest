@@ -21,7 +21,17 @@ class SandboxValidator {
    */
   validatePathTraversal(requestedPath) {
     try {
-      const resolvedPath = resolve(this.sandboxRoot, requestedPath);
+      // Rutas de juego: /reino y /misiones son relativas al sandbox root
+      const GAME_PATH_PREFIXES = ['/reino', '/misiones'];
+      let pathToCheck = requestedPath;
+      for (const prefix of GAME_PATH_PREFIXES) {
+        if (pathToCheck === prefix || pathToCheck.startsWith(prefix + '/')) {
+          pathToCheck = this.sandboxRoot + pathToCheck;
+          break;
+        }
+      }
+
+      const resolvedPath = resolve(this.sandboxRoot, pathToCheck);
       const resolvedRoot = resolve(this.sandboxRoot);
 
       if (!resolvedPath.startsWith(resolvedRoot + '/') &&

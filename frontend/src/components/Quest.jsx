@@ -190,6 +190,11 @@ export default function Quest({ onCompleteClick, battleRef, canComplete = false,
 
   const worlds = [...new Set(quests.map(q => q.world))].sort((a, b) => a - b);
 
+  const getWorldLabel = (world) => {
+    if (world === 6) return 'COMANDOS DE REFUERZO';
+    return `MUNDO ${world}`;
+  };
+
   const toggleWorld = (world) => setExpandedWorlds(p => ({ ...p, [world]: !p[world] }));
 
   const selectQuest = (quest) => {
@@ -310,7 +315,7 @@ export default function Quest({ onCompleteClick, battleRef, canComplete = false,
               }}
             >
               <span className="tiny up" style={{ color: WORLD_COLORS[wi % WORLD_COLORS.length] }}>
-                MUNDO {world}
+                {getWorldLabel(world)}
               </span>
               <span className="tiny" style={{ color: 'var(--parchment-2)' }}>
                 {expandedWorlds[world] ? '▼' : '▶'}
