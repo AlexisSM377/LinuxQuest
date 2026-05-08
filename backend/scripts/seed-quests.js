@@ -58,7 +58,7 @@ const quests = [
         validationFn: 'output.includes("NAME=")'
       }
     ],
-    prerequisites: [],
+    prerequisites: [1],
     rewards: { xp: 50, coins: 5 }
   },
 
@@ -98,7 +98,7 @@ const quests = [
         validationFn: 'output.includes("Ubuntu") || output.includes("Debian")'
       }
     ],
-    prerequisites: [],
+    prerequisites: [2],
     rewards: { xp: 60, coins: 10 }
   },
 
@@ -130,7 +130,7 @@ const quests = [
         validationFn: 'output.length > 0'
       }
     ],
-    prerequisites: [],
+    prerequisites: [3],
     rewards: { xp: 50, coins: 5 }
   },
 
@@ -171,7 +171,7 @@ const quests = [
         validationFn: 'output.length > 3'
       }
     ],
-    prerequisites: [],
+    prerequisites: [4],
     rewards: { xp: 60, coins: 10 }
   },
 
@@ -202,7 +202,7 @@ const quests = [
         validationFn: 'output.includes("Android") || output.includes("Raspberry")'
       }
     ],
-    prerequisites: [],
+    prerequisites: [5],
     rewards: { xp: 60, coins: 10 }
   },
 
@@ -242,7 +242,7 @@ const quests = [
         validationFn: 'output.includes("LibreOffice") || output.includes("GIMP")'
       }
     ],
-    prerequisites: [],
+    prerequisites: [6],
     rewards: { xp: 70, coins: 15 }
   },
 
@@ -275,7 +275,7 @@ const quests = [
         validationFn: 'output.includes("Libertad") || output.includes("libre")'
       }
     ],
-    prerequisites: [],
+    prerequisites: [7],
     rewards: { xp: 60, coins: 10 }
   },
 
@@ -309,7 +309,7 @@ const quests = [
         validationFn: 'output.includes("GPL") || output.includes("MIT")'
       }
     ],
-    prerequisites: [],
+    prerequisites: [8],
     rewards: { xp: 60, coins: 10 }
   },
 
@@ -341,7 +341,7 @@ const quests = [
         validationFn: 'output.includes("Linus") || output.includes("kernel")'
       }
     ],
-    prerequisites: [],
+    prerequisites: [9],
     rewards: { xp: 70, coins: 15 }
   },
 
@@ -374,7 +374,7 @@ const quests = [
         validationFn: 'output.includes("GNU") || output.includes("Stallman")'
       }
     ],
-    prerequisites: [],
+    prerequisites: [10],
     rewards: { xp: 70, coins: 15 }
   },
 

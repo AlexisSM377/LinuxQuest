@@ -85,7 +85,22 @@ export default function GamePage() {
 
     setNotification(notificationData);
     await fetchUserAchievements();
-  }, [currentQuestId, completeQuest, achievements, fetchUserAchievements]);
+
+    // Auto-avanzar a la siguiente misión desbloqueada
+    const { quests, userProgress: latest, setCurrentQuestId, setCurrentQuest } = useGameStore.getState();
+    const completedIds = new Set(
+      latest.filter(p => p.status === 'completed').map(p => p.quest_id)
+    );
+    const next = quests
+      .filter(q => q.id > currentQuestId)
+      .sort((a, b) => a.id - b.id)
+      .find(q => !q.prerequisites?.length || q.prerequisites.every(id => completedIds.has(id)));
+    if (next) {
+      setCurrentQuestId(next.id);
+      setCurrentQuest(next);
+      if (isMobile) setActiveTab('quest');
+    }
+  }, [currentQuestId, completeQuest, achievements, fetchUserAchievements, isMobile]);
 
   const handleCommandExec = useCallback((command, response) => {
     if (!currentQuest || !response) return;
