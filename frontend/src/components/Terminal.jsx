@@ -175,6 +175,7 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
   const [connectionStatus, setConnectionStatus] = useState('connecting');
   const mobileInputRef = useRef(null);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
+  const [mobileDisplayCmd, setMobileDisplayCmd] = useState('');
 
   // Sync refs outside render
   useEffect(() => {
@@ -241,19 +242,22 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
   const handleMobileInput = useCallback((e) => {
     const text = e.currentTarget.value;
     if (!text) return;
-    for (const char of text) {
-      if (char >= ' ' && char <= '~') sendKeyToTerminal(char);
-    }
+    const filtered = [...text].filter(c => c >= ' ' && c <= '~').join('');
+    if (!filtered) return;
+    for (const char of filtered) sendKeyToTerminal(char);
+    setMobileDisplayCmd(prev => prev + filtered);
     e.currentTarget.value = '';
   }, [sendKeyToTerminal]);
 
   const handleMobileKeydown = useCallback((e) => {
     if (e.key === 'Enter') {
       sendKeyToTerminal('\r');
+      setMobileDisplayCmd('');
       e.currentTarget.value = '';
       e.preventDefault();
     } else if (e.key === 'Backspace') {
       sendKeyToTerminal('\x7f');
+      setMobileDisplayCmd(prev => prev.slice(0, -1));
       e.currentTarget.value = '';
       e.preventDefault();
     } else if (e.key === 'ArrowUp') {
@@ -270,10 +274,6 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
       e.preventDefault();
     }
   }, [sendKeyToTerminal]);
-
-  const focusMobileInput = useCallback(() => {
-    mobileInputRef.current?.focus();
-  }, []);
 
   // Aplicar tema sin recrear terminal
   useEffect(() => {
@@ -292,6 +292,7 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
 
     const initTerminal = async () => {
       try {
+        const isMobileInit = window.innerWidth < 768;
         term = new XTerm({
           cursorBlink: true,
           theme,
@@ -299,6 +300,9 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
           fontSize: 12,
           lineHeight: 1.4,
           allowProposedApi: true,
+          // En móvil: desactivar stdin de xterm para que no robe el foco
+          // de nuestra barra de input. term.input() sigue funcionando.
+          disableStdin: isMobileInit,
         });
 
         fitAddon = new FitAddon();
@@ -604,12 +608,60 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
         <span style={{ color: statusColors[connectionStatus] }}>● {statusLabels[connectionStatus]}</span>
       </div>
 
-      <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+      {/* Viewport xterm */}
+      <div
+        style={{ flex: 1, position: 'relative', minHeight: 0 }}
+        onClick={() => isMobile && mobileInputRef.current?.focus()}
+      >
         <div
           ref={terminalRef}
           style={{ position: 'absolute', inset: 0, padding: '4px' }}
         />
-        {isMobile && (
+      </div>
+
+      {/* Barra de comando móvil — muestra lo que se escribe */}
+      {isMobile && (
+        <div
+          style={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            background: theme.background,
+            borderTop: `2px solid ${theme.foreground}33`,
+            padding: '0 10px',
+            minHeight: 44,
+            cursor: 'text',
+          }}
+        >
+          {/* Prompt visual */}
+          <span style={{
+            color: '#5fb3d4',
+            fontFamily: 'var(--font-code)',
+            fontSize: 13,
+            flexShrink: 0,
+            marginRight: 6,
+            userSelect: 'none',
+          }}>$</span>
+          <span style={{
+            flex: 1,
+            color: theme.foreground,
+            fontFamily: 'var(--font-code)',
+            fontSize: 13,
+            wordBreak: 'break-all',
+            minWidth: 0,
+          }}>
+            {mobileDisplayCmd || <span style={{ opacity: 0.4 }}>tap aquí para escribir</span>}
+            <span style={{
+              display: 'inline-block',
+              width: 7,
+              height: 13,
+              background: theme.cursor,
+              verticalAlign: 'text-bottom',
+              marginLeft: 2,
+              animation: 'cursorBlink 1s step-end infinite',
+            }} />
+          </span>
+          {/* Input invisible cubre toda la barra — iOS lo enfoca al tocarlo directamente */}
           <input
             ref={mobileInputRef}
             type="text"
@@ -620,45 +672,43 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
             inputMode="text"
             onInput={handleMobileInput}
             onKeyDown={handleMobileKeydown}
-            onFocus={() => {}}
             style={{
               position: 'absolute',
               inset: 0,
               opacity: 0,
-              width: '100%',
-              height: '100%',
-              fontSize: 16, // previene zoom automático en iOS
+              fontSize: 16, // previene zoom en iOS
               background: 'transparent',
               color: 'transparent',
               border: 'none',
               outline: 'none',
-              caretColor: 'transparent',
               cursor: 'text',
-              pointerEvents: 'auto',
-              zIndex: 10,
+              zIndex: 5,
             }}
           />
-        )}
-      </div>
+        </div>
+      )}
 
       {isMobile && (
         <div className="mobile-keys-bar">
           {[
-            { label: 'Tab', key: '\t' },
-            { label: '↵', key: '\r', title: 'Enter' },
-            { label: 'C⃗', key: '\x03', title: 'Ctrl+C' },
-            { label: 'Esc', key: '\x1b' },
-            { label: '↑', key: '\x1b[A' },
-            { label: '↓', key: '\x1b[B' },
-            { label: '←', key: '\x1b[D' },
-            { label: '→', key: '\x1b[C' },
-          ].map(({ label, key, title }) => (
+            { label: 'Tab',  key: '\t' },
+            { label: '↵',   key: '\r',      title: 'Enter',     onPress: () => { sendKeyToTerminal('\r');    setMobileDisplayCmd(''); } },
+            { label: 'C⃗',  key: '\x03',    title: 'Ctrl+C',    onPress: () => { sendKeyToTerminal('\x03'); setMobileDisplayCmd(''); } },
+            { label: 'Esc',  key: '\x1b' },
+            { label: '↑',   key: '\x1b[A' },
+            { label: '↓',   key: '\x1b[B' },
+            { label: '←',   key: '\x1b[D' },
+            { label: '→',   key: '\x1b[C' },
+            { label: '⌫',   key: '\x7f',   title: 'Backspace', onPress: () => { sendKeyToTerminal('\x7f'); setMobileDisplayCmd(prev => prev.slice(0, -1)); } },
+          ].map(({ label, key, title, onPress }) => (
             <button
               key={label}
               title={title || label}
               onPointerDown={(e) => {
                 e.preventDefault(); // evita que el input pierda el foco
-                sendKeyToTerminal(key);
+                if (onPress) onPress(); else sendKeyToTerminal(key);
+                // Mantener foco en el input
+                setTimeout(() => mobileInputRef.current?.focus(), 0);
               }}
             >
               {label}

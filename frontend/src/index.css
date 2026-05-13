@@ -639,6 +639,11 @@ button {
   }
 }
 
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 /* Barra de teclas rápidas para móvil */
 .mobile-keys-bar {
   display: none;
