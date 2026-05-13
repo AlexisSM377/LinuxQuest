@@ -5,8 +5,9 @@ const writeChar = (setter, text, speed = 18) =>
     let i = 0;
     const iv = setInterval(() => {
       if (i < text.length) {
-        setter(prev => prev + text[i]);
+        const char = text[i]; // captura por valor antes del increment
         i++;
+        setter(prev => prev + char);
       } else {
         clearInterval(iv);
         setter(prev => prev + '\n');
