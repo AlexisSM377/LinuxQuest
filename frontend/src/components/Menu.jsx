@@ -115,12 +115,17 @@ export default function Menu({ onNewGame, onContinue }) {
 
       {/* Nav */}
       <nav className="nav" style={{ position: 'relative' }}>
-        <div className="nav-item active" style={{ cursor: 'default' }}>
+        {/* INICIO — oculto en móvil */}
+        <div className="nav-item active nav-hide-mobile" style={{ cursor: 'default' }}>
           <span>INICIO</span>
         </div>
 
+        {/* Dropdown hamburger */}
         <div className={`nav-menu ${menuOpen ? 'nav-menu-open' : ''}`} style={{ display: menuOpen ? 'flex' : 'none' }}>
-          {isAuthenticated && (
+          <div className="nav-item nav-hide-mobile" style={{ cursor: 'default' }}>
+            <span>INICIO</span>
+          </div>
+          {isAuthenticated ? (
             <>
               <div className="nav-item">
                 <span>XP: {userStats.xp}</span>
@@ -129,38 +134,38 @@ export default function Menu({ onNewGame, onContinue }) {
                 <span>NIV: {String(userStats.level).padStart(2, '0')}</span>
                 <span className="arrow">↗</span>
               </div>
+              <div className="nav-item" style={{ cursor: 'pointer' }} onClick={() => { onContinue(); setMenuOpen(false); }}>
+                <span>CONTINUAR ▶</span>
+              </div>
             </>
+          ) : (
+            <div className="nav-item" style={{ cursor: 'pointer' }} onClick={() => { navigate('/login'); setMenuOpen(false); }}>
+              <span>INICIAR SESIÓN ↗</span>
+            </div>
           )}
         </div>
 
         <div className="nav-brand">
           <span style={{ fontSize: 20 }}>⬡</span>
-          <span>LINUXQUEST</span>
+          <span className="nav-label-full">LINUXQUEST</span>
+          <span className="nav-label-short">LQ</span>
         </div>
 
         <div className="nav-right">
           <button
             className="nav-hamburger"
             onClick={() => setMenuOpen(!menuOpen)}
-            style={{
-              display: 'none',
-              background: 'none',
-              border: 'none',
-              color: 'var(--parchment)',
-              fontSize: 18,
-              cursor: 'pointer',
-              padding: '8px 12px',
-            }}
             aria-label="Toggle menu"
           >
             {menuOpen ? '✕' : '☰'}
           </button>
+          {/* CTA — solo visible en desktop */}
           {isAuthenticated ? (
-            <button className="nav-cta" onClick={onContinue}>
+            <button className="nav-cta nav-hide-mobile" onClick={onContinue}>
               CONTINUAR ▶
             </button>
           ) : (
-            <button className="nav-cta" onClick={() => navigate('/login')}>
+            <button className="nav-cta nav-hide-mobile" onClick={() => navigate('/login')}>
               INICIAR SESIÓN ↗
             </button>
           )}
@@ -181,7 +186,7 @@ export default function Menu({ onNewGame, onContinue }) {
           <div className="tiny up" style={{ marginBottom: 18, color: 'var(--amber)' }}>
             ▸ APRENDE LINUX JUGANDO
           </div>
-          <h1 style={{ marginBottom: 24, fontSize: 'clamp(28px, 4vw, 52px)' }}>
+          <h1 style={{ marginBottom: 24 }}>
             DESBLOQUEA<br />
             <span style={{ color: 'var(--amber)' }}>EL TERMINAL</span><br />
             PIXEL A PIXEL

@@ -235,17 +235,16 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
   const sendKeyToTerminal = useCallback((keyCode) => {
     const term = termInstanceRef.current;
     if (!term) return;
-    term.onData?.(keyCode);
+    term.input(keyCode, false); // false = no paste mode
   }, []);
 
   const handleMobileInput = useCallback((e) => {
     const text = e.currentTarget.value;
-    if (!text || text.length === 0) return;
-    const lastChar = text[text.length - 1];
-    if (lastChar >= ' ' && lastChar <= '~') {
-      sendKeyToTerminal(lastChar);
-      e.currentTarget.value = '';
+    if (!text) return;
+    for (const char of text) {
+      if (char >= ' ' && char <= '~') sendKeyToTerminal(char);
     }
+    e.currentTarget.value = '';
   }, [sendKeyToTerminal]);
 
   const handleMobileKeydown = useCallback((e) => {
@@ -273,10 +272,8 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
   }, [sendKeyToTerminal]);
 
   const focusMobileInput = useCallback(() => {
-    if (isMobile && mobileInputRef.current) {
-      mobileInputRef.current.focus();
-    }
-  }, [isMobile]);
+    mobileInputRef.current?.focus();
+  }, []);
 
   // Aplicar tema sin recrear terminal
   useEffect(() => {
@@ -454,6 +451,11 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
           });
         }
 
+        // Auto-focus mobile input after init
+        if (mounted && isMobile) {
+          setTimeout(() => mobileInputRef.current?.focus(), 300);
+        }
+
         if (mounted) {
           const authToken = token || localStorage.getItem('token');
           socketRef.current = io(import.meta.env.VITE_API_URL || 'http://localhost:3000', {
@@ -602,14 +604,12 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
         <span style={{ color: statusColors[connectionStatus] }}>● {statusLabels[connectionStatus]}</span>
       </div>
 
-      <div
-        ref={terminalRef}
-        onClick={focusMobileInput}
-        style={{ flex: 1, padding: '4px', minHeight: 0, cursor: isMobile ? 'text' : 'default' }}
-      />
-
-      {isMobile && (
-        <>
+      <div style={{ flex: 1, position: 'relative', minHeight: 0 }}>
+        <div
+          ref={terminalRef}
+          style={{ position: 'absolute', inset: 0, padding: '4px' }}
+        />
+        {isMobile && (
           <input
             ref={mobileInputRef}
             type="text"
@@ -617,27 +617,54 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
             autoCorrect="off"
             autoCapitalize="none"
             spellCheck={false}
+            inputMode="text"
             onInput={handleMobileInput}
             onKeyDown={handleMobileKeydown}
+            onFocus={() => {}}
             style={{
               position: 'absolute',
+              inset: 0,
               opacity: 0,
-              width: 1,
-              height: 1,
-              pointerEvents: 'none',
+              width: '100%',
+              height: '100%',
+              fontSize: 16, // previene zoom automático en iOS
+              background: 'transparent',
+              color: 'transparent',
+              border: 'none',
+              outline: 'none',
+              caretColor: 'transparent',
+              cursor: 'text',
+              pointerEvents: 'auto',
+              zIndex: 10,
             }}
           />
-          <div className="mobile-keys-bar">
-            <button onClick={() => sendKeyToTerminal('\t')} title="Tab">Tab</button>
-            <button onClick={() => sendKeyToTerminal('\r')} title="Enter">↵</button>
-            <button onClick={() => sendKeyToTerminal('\x03')} title="Ctrl+C">C⃗</button>
-            <button onClick={() => sendKeyToTerminal('\x1b')} title="Esc">Esc</button>
-            <button onClick={() => sendKeyToTerminal('\x1b[A')} title="↑">↑</button>
-            <button onClick={() => sendKeyToTerminal('\x1b[B')} title="↓">↓</button>
-            <button onClick={() => sendKeyToTerminal('\x1b[D')} title="←">←</button>
-            <button onClick={() => sendKeyToTerminal('\x1b[C')} title="→">→</button>
-          </div>
-        </>
+        )}
+      </div>
+
+      {isMobile && (
+        <div className="mobile-keys-bar">
+          {[
+            { label: 'Tab', key: '\t' },
+            { label: '↵', key: '\r', title: 'Enter' },
+            { label: 'C⃗', key: '\x03', title: 'Ctrl+C' },
+            { label: 'Esc', key: '\x1b' },
+            { label: '↑', key: '\x1b[A' },
+            { label: '↓', key: '\x1b[B' },
+            { label: '←', key: '\x1b[D' },
+            { label: '→', key: '\x1b[C' },
+          ].map(({ label, key, title }) => (
+            <button
+              key={label}
+              title={title || label}
+              onPointerDown={(e) => {
+                e.preventDefault(); // evita que el input pierda el foco
+                sendKeyToTerminal(key);
+              }}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
       )}
     </div>
   );

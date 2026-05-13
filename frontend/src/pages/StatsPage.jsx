@@ -44,52 +44,41 @@ export default function StatsPage() {
   const cells = STAT_CELLS(userStats, totalCompleted, totalQuests, userAchievements.length);
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+    <div className="stats-page">
       <GameNav onShowAchievements={() => setShowAchievements(true)} />
 
       {/* Breadcrumb */}
-      <div style={{
-        padding: '12px 24px',
-        borderBottom: '4px solid var(--ink)',
-        background: 'var(--bg-2)',
-        display: 'flex', alignItems: 'center', gap: 12,
-        flexShrink: 0,
-      }}>
+      <div className="stats-breadcrumb">
         <button
           className="btn btn-ghost"
           onClick={() => navigate('/game')}
-          style={{ fontSize: 9, padding: '8px 12px' }}
+          style={{ fontSize: 9, padding: '8px 12px', whiteSpace: 'nowrap' }}
         >
           ◀ VOLVER AL JUEGO
         </button>
         <div style={{ flex: 1 }} />
-        <div className="tiny up" style={{ color: 'var(--amber)' }}>▸ ESTADÍSTICAS</div>
+        <div className="tiny up" style={{ color: 'var(--amber)', whiteSpace: 'nowrap' }}>▸ ESTADÍSTICAS</div>
       </div>
 
       {/* Player hero */}
-      <div style={{
-        padding: 'clamp(24px, 4vw, 48px)',
-        borderBottom: '4px solid var(--ink)',
-        backgroundImage: 'radial-gradient(circle at 20% 50%, var(--bg-2) 0%, var(--bg) 60%)',
-        display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap',
-      }}>
+      <div className="stats-hero">
         <div style={{
-          width: 100, height: 100, flexShrink: 0,
+          width: 80, height: 80, flexShrink: 0,
           background: 'var(--bg-2)',
           border: '4px solid var(--ink)',
           boxShadow: '6px 6px 0 var(--shadow)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 48,
+          fontSize: 40,
         }}>
           ⬡
         </div>
-        <div style={{ flex: 1, minWidth: 200 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
           <div className="tiny up" style={{ color: 'var(--amber)', marginBottom: 8 }}>▸ APRENDIZ DE KERNEL</div>
-          <h1 style={{ fontSize: 'clamp(24px, 4vw, 44px)', marginBottom: 8 }}>
+          <h1 className="stats-hero-username">
             {user?.username?.toUpperCase() || 'JUGADOR'}
           </h1>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <div className="bar" style={{ width: 200, flex: 'none' }}>
+            <div className="bar" style={{ width: 160, flex: 'none' }}>
               <i style={{ width: totalPct + '%', transition: 'width 0.3s' }} />
             </div>
             <span className="tiny up muted">{totalCompleted} DE {totalQuests} MISIONES</span>
@@ -106,25 +95,14 @@ export default function StatsPage() {
       </div>
 
       {/* Stats strip */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(5, 1fr)',
-        borderBottom: '4px solid var(--ink)',
-      }}>
+      <div className="stats-strip">
         {cells.map((s, i) => (
-          <div key={i} style={{
-            padding: '20px 24px',
+          <div key={i} className="stats-strip-cell" style={{
             borderRight: i < 4 ? '4px solid var(--ink)' : 'none',
             background: i % 2 ? 'var(--bg-2)' : 'var(--bg)',
           }}>
             <div className="tiny up muted">{s.k}</div>
-            <div style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 20,
-              marginTop: 8,
-              color: s.c,
-              textShadow: '3px 3px 0 var(--ink)',
-            }}>
+            <div className="stat-value" style={{ color: s.c }}>
               {s.v}
             </div>
           </div>
@@ -132,13 +110,7 @@ export default function StatsPage() {
       </div>
 
       {/* Body */}
-      <div style={{
-        padding: 'clamp(20px, 4vw, 40px)',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-        gap: 32,
-        alignItems: 'start',
-      }}>
+      <div className="stats-body">
 
         {/* Mundos */}
         <div>
