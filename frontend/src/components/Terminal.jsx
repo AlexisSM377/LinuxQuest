@@ -176,6 +176,7 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
   const mobileInputRef = useRef(null);
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768);
   const [mobileDisplayCmd, setMobileDisplayCmd] = useState('');
+  const isComposing = useRef(false);
 
   // Sync refs outside render
   useEffect(() => {
@@ -258,9 +259,17 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
       return;
     }
 
-    const text = e.currentTarget.value;
-    if (!text) return;
-    const filtered = [...text].filter(c => c >= ' ' && c <= '~').join('');
+    // Ignorar eventos mid-composition (Android IME word prediction)
+    // onCompositionEnd se encarga del texto final
+    if (isComposing.current || inputType === 'insertCompositionText') {
+      return;
+    }
+
+    // e.nativeEvent.data es más fiable que value en Android
+    const raw = e.nativeEvent?.data ?? e.currentTarget.value;
+    if (!raw) { e.currentTarget.value = ''; return; }
+
+    const filtered = [...raw].filter(c => c >= ' ' && c <= '~').join('');
     if (!filtered) { e.currentTarget.value = ''; return; }
     for (const char of filtered) sendKeyToTerminal(char);
     setMobileDisplayCmd(prev => prev + filtered);
@@ -690,6 +699,17 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
             inputMode="text"
             onInput={handleMobileInput}
             onKeyDown={handleMobileKeydown}
+            onCompositionStart={() => { isComposing.current = true; }}
+            onCompositionEnd={(e) => {
+              isComposing.current = false;
+              const text = e.data;
+              if (!text) { e.currentTarget.value = ''; return; }
+              const filtered = [...text].filter(c => c >= ' ' && c <= '~').join('');
+              if (!filtered) { e.currentTarget.value = ''; return; }
+              for (const char of filtered) sendKeyToTerminal(char);
+              setMobileDisplayCmd(prev => prev + filtered);
+              e.currentTarget.value = '';
+            }}
             style={{
               position: 'absolute',
               inset: 0,
