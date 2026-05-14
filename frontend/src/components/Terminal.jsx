@@ -240,10 +240,28 @@ export default function Terminal({ questId = null, onCommandExec = null, userLev
   }, []);
 
   const handleMobileInput = useCallback((e) => {
+    const inputType = e.nativeEvent?.inputType;
+
+    // Android no dispara keydown confiable — backspace llega como inputType
+    if (inputType === 'deleteContentBackward' || inputType === 'deleteWordBackward') {
+      sendKeyToTerminal('\x7f');
+      setMobileDisplayCmd(prev => prev.slice(0, -1));
+      e.currentTarget.value = '';
+      return;
+    }
+
+    // Enter en Android puede llegar como insertLineBreak
+    if (inputType === 'insertLineBreak' || inputType === 'insertParagraph') {
+      sendKeyToTerminal('\r');
+      setMobileDisplayCmd('');
+      e.currentTarget.value = '';
+      return;
+    }
+
     const text = e.currentTarget.value;
     if (!text) return;
     const filtered = [...text].filter(c => c >= ' ' && c <= '~').join('');
-    if (!filtered) return;
+    if (!filtered) { e.currentTarget.value = ''; return; }
     for (const char of filtered) sendKeyToTerminal(char);
     setMobileDisplayCmd(prev => prev + filtered);
     e.currentTarget.value = '';
