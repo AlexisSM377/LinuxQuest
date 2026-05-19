@@ -402,25 +402,37 @@ Extras: Refuerzo (5 quests, IDs 91-95)
 
 ### Components Updated
 - [x] Menu.jsx — hamburger + dropdown nav
-- [x] Terminal.jsx — input proxy ya hecho en Semana 15
-- [x] IntroOverlay.jsx — separadores dinámicos ya hecho en Semana 15
 - [x] PixelInput.jsx — touch target sizing
 - [x] QuestCard.jsx — touch target sizing
-- [x] LoginPage.jsx — error box sizing
-- [x] RegisterPage.jsx — error box sizing
+- [x] LoginPage.jsx / RegisterPage.jsx — error box sizing
 
-### Testing Mobile
-- [x] Terminal funciona con teclado virtual
-- [x] Menú hamburguesa funciona en < 768px
-- [x] Todos los botones/inputs >= 44px
-- [x] Texto legible sin zoom
-- [x] Scroll suave en iOS
+## Semana 19: Terminal Móvil — Reemplazo Definitivo ✅ (2026-05-18)
 
-### Commits
-- `feat: complete mobile responsiveness overhaul` — Hamburger menu + touch targets
-- `docs: update STATUS.md with mobile responsiveness completion`
+**Problema raíz:** xterm.js usa canvas + stdin que interfiere con teclados virtuales en iOS/Android.
 
-## Semana 19+ (opcional): Localización & Polish
+### MobileTerminal.jsx (componente nuevo)
+- [x] Reemplaza xterm.js en móvil por terminal HTML/CSS pura
+- [x] `<input type="text">` nativo — teclado virtual funciona en iOS y Android sin hacks
+- [x] Parser ANSI inline — convierte códigos de color del backend a `<span>` CSS
+- [x] Misma conexión socket.io que Terminal.jsx (mismo protocolo, mismas respuestas)
+- [x] Mismos 4 temas desbloqueables (CLASSIC/PHOSPHOR/AMBER/COPPERPLATE)
+- [x] Auto-scroll con `WebkitOverflowScrolling: touch`
+- [x] Historial de comandos con flechas ↑/↓
+- [x] Botón ↵ visible para enviar sin depender del Enter del teclado virtual
+- [x] Mobile keys bar: Tab, ↑, ↓, Ctrl+C, ⌫
+- [x] `-webkit-text-fill-color` para color de texto en Safari/iOS
+- [x] `-webkit-appearance: none` para eliminar estilo nativo iOS
+- [x] CSS autofill neutralizado (fondo azul Android)
+- [x] Placeholder `.term-mobile-input` con color explícito
+
+### GamePage.jsx actualizado
+- [x] `isMobile` → usa `<MobileTerminal>`, desktop sigue con `<Terminal>` (xterm.js)
+
+### index.css
+- [x] `.term input:-webkit-autofill` — neutraliza autofill del navegador
+- [x] `.term-mobile-input::placeholder` — placeholder en gris oscuro
+
+## Semana 20+ (pendiente): Localización & Polish
 - [ ] Traducir UI frontend al español (PRIORIDAD ALTA)
   - [ ] Componentes React: textos, placeholders, botones, etiquetas
   - [ ] Mensajes de error y validación

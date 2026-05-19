@@ -465,7 +465,26 @@ All tables: CREATED
 - `frontend/src/App.jsx` (ToastContainer global)
 
 ## Last Updated
-2026-04-30 - Terminal Themes + Responsive + Email Verification (staged) ✅
+2026-05-18 - Terminal Móvil Definitivo (MobileTerminal.jsx — sin xterm.js) ✅
+
+### Session 2026-05-18 — Terminal Móvil: Reemplazo Definitivo
+
+**Problema:** xterm.js (canvas + stdin) incompatible con teclados virtuales iOS/Android.
+
+**Solución:** Componente `MobileTerminal.jsx` completamente independiente.
+
+**Archivos nuevos:**
+- `frontend/src/components/MobileTerminal.jsx` — terminal HTML/CSS pura sin xterm.js
+  - `<input type="text">` nativo para entrada sin hacks de focus/proxy
+  - Parser ANSI inline (`AnsiText`) → ANSI codes → `<span>` con color CSS
+  - Misma conexión socket.io y mismos 4 temas que Terminal.jsx
+  - `-webkit-text-fill-color` + `-webkit-appearance: none` para iOS Safari
+  - Auto-scroll con `WebkitOverflowScrolling: touch`
+  - Historial ↑/↓, botón ↵ visible, mobile keys bar
+
+**Archivos modificados:**
+- `frontend/src/pages/GamePage.jsx` — `isMobile ? <MobileTerminal> : <Terminal>`
+- `frontend/src/index.css` — CSS autofill neutralizado + placeholder styling
 
 ### Session 2026-04-30 (2) — Terminal Themes + Responsive + Email Verification
 
