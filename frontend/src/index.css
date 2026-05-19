@@ -93,6 +93,19 @@
   box-sizing: border-box;
 }
 
+/* Evitar que autofill del navegador sobreescriba colores en inputs del terminal */
+.term input:-webkit-autofill,
+.term input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Placeholder del input del terminal móvil */
+.term-mobile-input::placeholder {
+  color: #666;
+  opacity: 1;
+}
+
 html,
 body {
   background: var(--bg);

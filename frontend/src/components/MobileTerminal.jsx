@@ -291,6 +291,7 @@ export default function MobileTerminal({ questId = null, onCommandExec = null, u
         }}>$</span>
         <input
           ref={inputRef}
+          className="term-mobile-input"
           type="text"
           value={input}
           onChange={e => setInput(e.target.value)}
@@ -300,13 +301,15 @@ export default function MobileTerminal({ questId = null, onCommandExec = null, u
           autoCapitalize="none"
           spellCheck={false}
           inputMode="text"
-          placeholder="escribe un comando..."
+          placeholder="escribe un comando"
           style={{
             flex: 1,
             background: 'transparent',
             border: 'none',
             outline: 'none',
             color: theme.foreground,
+            WebkitTextFillColor: theme.foreground,
+            WebkitAppearance: 'none',
             fontFamily: '"JetBrains Mono", "Courier New", monospace',
             fontSize: 14,
             caretColor: theme.cursor,
