@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Terminal from '../components/Terminal';
+import MobileTerminal from '../components/MobileTerminal';
 import Quest from '../components/Quest';
 import XpNotification from '../components/XpNotification';
 import AchievementsPanel from '../components/AchievementsPanel';
@@ -190,11 +191,19 @@ export default function GamePage() {
 
   const terminalPanel = (
     <div data-tutorial="terminal" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <Terminal
-        questId={currentQuestId}
-        userLevel={userStats?.level || 1}
-        onCommandExec={isMobile ? handleCommandExecMobile : handleCommandExec}
-      />
+      {isMobile ? (
+        <MobileTerminal
+          questId={currentQuestId}
+          userLevel={userStats?.level || 1}
+          onCommandExec={handleCommandExecMobile}
+        />
+      ) : (
+        <Terminal
+          questId={currentQuestId}
+          userLevel={userStats?.level || 1}
+          onCommandExec={handleCommandExec}
+        />
+      )}
     </div>
   );
 
